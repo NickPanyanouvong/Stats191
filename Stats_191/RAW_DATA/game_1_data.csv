@@ -1,0 +1,1001 @@
+student label,game score,coast,game scheduled,percent training sessions attended,overall fitness score,# extra strategy sessions attended,hours of sleep the night before game,early bird/night owl,previous competitive sports,# meals on day prior to game,university year
+1,10.950000000000000,east coast,noon,0.39,0.38,5,5,night owl,curling,4,frosh
+2,35.08,east coast,noon,0.75,0.51,9,10,night owl,curling,3,senior
+3,9.47,east coast,noon,0.68,0.17,3,5,night owl,gymnastics,5,sophomore
+4,32.55,east coast,noon,0.68,0.84,3,12,night owl,baseball,6,sophomore
+5,49.35,east coast,noon,0.93,0.6900000000000000,9,5,night owl,martial arts,4,junior
+6,17.900000000000000,east coast,noon,0.51,0.33,4,5,night owl,martial arts,6,sophomore
+7,21.01,east coast,noon,0.62,0.05,8,2,night owl,gymnastics,3,sophomore
+8,8.46,east coast,noon,0.19,0.54,7,12,night owl,frisbee,1,junior
+9,12.38,east coast,noon,0.45,0.62,2,9,night owl,table tennis,4,junior
+10,8.64,east coast,noon,0.37,0.35000000000000000,6,2,night owl,basketball,3,frosh
+11,71.13,east coast,evening,0.59,0.89,9,11,night owl,martial arts,2,senior
+12,41.87,east coast,evening,0.66,0.35000000000000000,3,4,early bird,curling,5,sophomore
+13,61.59,east coast,evening,0.6,0.6900000000000000,8,7,night owl,basketball,3,frosh
+14,35.22,east coast,evening,0.39,0.06,6,3,night owl,gymnastics,4,sophomore
+15,64.33,east coast,evening,0.9500000000000000,0.39,10,10,night owl,table tennis,5,frosh
+16,37.63,east coast,evening,0.03,0.02,3,5,night owl,football,3,frosh
+17,51.370000000000000,east coast,evening,0.92,0.53,8,3,early bird,curling,5,sophomore
+18,36.2,east coast,evening,0.34,0.47000000000000000,2,3,night owl,table tennis,4,junior
+19,53.03,east coast,evening,0.38,0.45,7,5,night owl,martial arts,2,junior
+20,46.7,east coast,evening,0.41000000000000000,0.5700000000000000,4,6,night owl,martial arts,3,sophomore
+21,36.72,east coast,evening,0.17,0.22,8,11,night owl,curling,2,sophomore
+22,53.33,east coast,evening,0.97,0.75,8,10,early bird,baseball,6,frosh
+23,30.5,east coast,evening,0.18,0.66,1,1,night owl,martial arts,2,junior
+24,27,east coast,evening,0.78,0.26,6,1,night owl,gymnastics,5,junior
+25,64.8,east coast,evening,0.9500000000000000,0.73,9,10,night owl,football,5,junior
+26,12.36,east coast,evening,0.05,0.41000000000000000,0,1,night owl,martial arts,3,sophomore
+27,59.75,east coast,evening,0.6,0.51,9,1,night owl,martial arts,2,junior
+28,45.25,east coast,evening,0.71,0.84,6,8,early bird,table tennis,4,senior
+29,41.550000000000000,east coast,evening,0.59,0.54,8,11,night owl,baseball,3,junior
+30,31.82,east coast,evening,0.11,0.11,7,9,night owl,football,2,junior
+31,67.7,east coast,noon,0.96,0.97,6,10,night owl,curling,4,senior
+32,47.93,east coast,noon,0.97,0.4,10,7,night owl,football,5,sophomore
+33,47.37,east coast,noon,0.8200000000000000,0.58,6,7,night owl,football,5,junior
+34,49.5,east coast,noon,0.9500000000000000,0.63,7,2,night owl,football,3,junior
+35,22.2,east coast,noon,0.01,0.3,0,0,night owl,martial arts,4,frosh
+36,60.65,east coast,noon,0.89,0.77,8,11,early bird,table tennis,5,junior
+37,57.480000000000000,east coast,noon,0.91,0.27,10,10,night owl,football,3,junior
+38,36.25,east coast,noon,0.51,0.29,6,5,early bird,martial arts,5,frosh
+39,65.32000000000000,east coast,noon,0.77,0.87,10,11,night owl,martial arts,2,senior
+40,26.54,east coast,noon,0.11,0.28,1,4,night owl,martial arts,4,sophomore
+41,41.72,east coast,evening,0.89,0.73,3,5,early bird,martial arts,6,sophomore
+42,48.61,east coast,evening,0.88,0.39,7,2,night owl,curling,5,sophomore
+43,47.92,east coast,evening,0.58,0.68,3,4,night owl,basketball,4,sophomore
+44,30.7,east coast,evening,0.26,0.54,1,2,night owl,frisbee,5,frosh
+45,29.02,east coast,evening,0.19,0.36,5,7,night owl,frisbee,3,frosh
+46,74.8,east coast,evening,0.9400000000000000,0.9400000000000000,9,10,night owl,football,3,senior
+47,22.51,east coast,evening,0.41000000000000000,0.1,5,5,night owl,gymnastics,6,junior
+48,0,east coast,evening,0.18,0.19,6,1,early bird,table tennis,3,frosh
+49,28.150000000000000,east coast,evening,0.27,0.86,1,11,night owl,baseball,3,senior
+50,20.900000000000000,east coast,evening,0.1,0.05,2,2,night owl,baseball,5,frosh
+51,19.07,east coast,noon,0.09,0.09,5,5,night owl,curling,2,frosh
+52,52.44,east coast,noon,0.87,0.74,6,2,night owl,frisbee,4,junior
+53,26.82,east coast,noon,0.27,0.12,3,10,night owl,table tennis,4,frosh
+54,43.86,east coast,noon,0.9500000000000000,0.33,10,5,night owl,table tennis,5,sophomore
+55,51.01,east coast,noon,0.81,0.72,5,7,night owl,martial arts,5,sophomore
+56,23.46,east coast,noon,0.79,0.18,5,2,night owl,football,6,sophomore
+57,21.54,east coast,noon,0.2,0.72,0,2,night owl,football,6,junior
+58,21.91,east coast,noon,0.16,0.01,7,4,night owl,football,3,frosh
+59,42.49,east coast,noon,0.78,0.76,5,2,night owl,baseball,3,senior
+60,44.49,east coast,noon,0.76,0.51,7,1,night owl,martial arts,3,senior
+61,44.37,east coast,morning,0.35000000000000000,0.79,1,7,early bird,frisbee,3,junior
+62,42.7,east coast,morning,0.3,0.72,4,5,early bird,basketball,2,sophomore
+63,29.64,east coast,morning,0.44,0.74,6,11,night owl,curling,3,junior
+64,58.89,east coast,morning,0.72,0.72,9,11,night owl,martial arts,2,junior
+65,42.88,east coast,morning,0.85,0.5700000000000000,4,3,night owl,football,4,junior
+66,36,east coast,morning,0.03,0.11,6,7,night owl,table tennis,1,junior
+67,30.57,east coast,morning,0.36,0.27,2,3,night owl,football,6,frosh
+68,34.85,east coast,morning,0.76,0.35000000000000000,6,10,night owl,gymnastics,4,sophomore
+69,49.92,east coast,morning,0.84,0.66,8,9,night owl,football,5,junior
+70,25.71,east coast,morning,0.42,0,8,1,night owl,gymnastics,3,sophomore
+71,35.39,east coast,evening,0.53,0.15,9,3,night owl,curling,1,junior
+72,8.5,east coast,evening,0.29,0.49,4,3,early bird,curling,3,junior
+73,14.41,east coast,evening,0.48,0.49,5,4,night owl,table tennis,4,sophomore
+74,31.88,east coast,evening,0.9500000000000000,0.43,9,10,early bird,football,5,sophomore
+75,4.95,east coast,evening,0.68,0.27,2,0,night owl,football,5,sophomore
+76,15.73,east coast,evening,0.78,0.14,5,0,night owl,baseball,4,sophomore
+77,52.65,east coast,evening,0.77,0.34,10,9,night owl,baseball,2,senior
+78,4.92,east coast,evening,0.45,0.5700000000000000,2,3,night owl,curling,6,junior
+79,7,east coast,evening,0.05,0.2,1,3,night owl,football,3,junior
+80,19.69,east coast,evening,0.51,0.49,7,8,night owl,curling,5,frosh
+81,53.410000000000000,east coast,morning,0.9500000000000000,0.84,9,2,night owl,curling,3,senior
+82,51.6,east coast,morning,0.8,0.72,4,4,night owl,martial arts,4,sophomore
+83,55.21,east coast,morning,0.98,0.77,7,4,night owl,martial arts,6,sophomore
+84,44.13,east coast,morning,0.77,0.77,3,4,night owl,martial arts,4,sophomore
+85,57.14,east coast,morning,0.86,0.71,9,11,night owl,curling,4,junior
+86,49.620000000000000,east coast,morning,0.85,0.24,10,11,night owl,martial arts,3,sophomore
+87,41.31,east coast,morning,0.6900000000000000,0.48,8,7,night owl,baseball,4,junior
+88,0,east coast,morning,0.02,0.27,1,3,night owl,football,3,senior
+89,36.87,east coast,morning,0.46,0.71,5,7,night owl,basketball,3,sophomore
+90,75.21000000000000,east coast,morning,0.78,0.98,8,11,night owl,frisbee,2,senior
+91,43.300000000000000,east coast,morning,0.75,0.36,8,6,night owl,baseball,6,sophomore
+92,80.92,east coast,morning,0.84,1,4,12,early bird,basketball,3,senior
+93,69.13,east coast,morning,0.03,0.02,0,1,night owl,curling,6,frosh
+94,42.06,east coast,morning,0.84,0.52,6,3,night owl,football,6,junior
+95,26.32,east coast,morning,0.51,0.63,5,10,night owl,curling,3,junior
+96,40.54,east coast,morning,0.45,0.51,7,6,night owl,martial arts,3,sophomore
+97,52.01,east coast,morning,0.93,0.46,6,2,night owl,martial arts,4,frosh
+98,49.1,east coast,morning,0.62,0.77,5,10,early bird,curling,4,junior
+99,42.1,east coast,morning,0.33,0.87,8,12,night owl,table tennis,1,senior
+100,54.74,east coast,morning,0.9400000000000000,0.51,9,8,night owl,gymnastics,5,sophomore
+101,28.96,east coast,morning,0.58,0.14,9,4,night owl,baseball,4,frosh
+102,47.44,east coast,morning,0.6900000000000000,0.53,8,4,night owl,martial arts,3,sophomore
+103,27.560000000000000,east coast,morning,0.75,0.49,5,3,early bird,curling,4,junior
+104,30.990000000000000,east coast,morning,0.43,0.5,9,9,night owl,table tennis,2,senior
+105,0,east coast,morning,0.28,0.37,1,3,night owl,baseball,5,junior
+106,20.03,east coast,morning,0.46,0.35000000000000000,3,0,night owl,frisbee,3,junior
+107,0,east coast,morning,0.24,0.8,3,10,night owl,football,3,junior
+108,59.71,east coast,morning,0.92,0.8300000000000000,8,10,night owl,frisbee,4,junior
+109,0,east coast,morning,0.23,0.44,2,4,night owl,baseball,5,sophomore
+110,0,east coast,morning,0.06,0.01,5,2,night owl,baseball,3,sophomore
+111,42.480000000000000,east coast,evening,0.36,0.5,6,6,night owl,table tennis,3,sophomore
+112,21.45,east coast,evening,0.11,0.28,3,3,night owl,table tennis,2,sophomore
+113,50.160000000000000,east coast,evening,0.96,0.31,9,8,night owl,gymnastics,5,sophomore
+114,39.46,east coast,evening,0.24,0.39,4,5,night owl,martial arts,3,sophomore
+115,20.05,east coast,evening,0.11,0.2,1,5,early bird,baseball,3,junior
+116,9.700000000000000,east coast,evening,0.13,0.14,4,1,night owl,football,2,junior
+117,25.650000000000000,east coast,evening,0.11,0.2,2,1,night owl,martial arts,3,frosh
+118,55,east coast,evening,0.14,1,0,8,night owl,basketball,2,senior
+119,52.43,east coast,evening,0.84,0.5,6,4,night owl,baseball,5,junior
+120,28.240000000000000,east coast,evening,0.07,0.59,0,3,night owl,table tennis,4,sophomore
+121,24.88,east coast,evening,0.43,0.74,4,7,early bird,football,3,senior
+122,33.89,east coast,evening,0.48,0.56,3,3,night owl,frisbee,4,junior
+123,36.15,east coast,evening,0.11,0.8200000000000000,1,2,night owl,basketball,5,frosh
+124,42.67,east coast,evening,0.8,0.08,7,5,night owl,gymnastics,5,frosh
+125,45.87,east coast,evening,0.66,0.63,2,8,night owl,table tennis,6,sophomore
+126,63.89,east coast,evening,0.7000000000000000,0.97,5,10,early bird,basketball,3,senior
+127,49.07,east coast,evening,0.23,0.14,6,7,night owl,martial arts,3,sophomore
+128,31.55,east coast,evening,0.31,0.48,2,3,night owl,curling,3,junior
+129,91.81,east coast,evening,1,0.99,9,12,night owl,martial arts,8,junior
+130,36.160000000000000,east coast,evening,0.11,0.48,1,2,night owl,curling,6,frosh
+131,26.09,east coast,noon,0.11,0.61,4,9,night owl,basketball,3,junior
+132,56.86,east coast,noon,0.85,0.59,9,5,night owl,frisbee,2,junior
+133,65.48,east coast,noon,0.78,0.99,4,10,night owl,frisbee,4,senior
+134,35.82,east coast,noon,0.09,0.19,2,7,night owl,football,3,sophomore
+135,47.7,east coast,noon,0.81,0.34,10,8,night owl,baseball,4,sophomore
+136,20.92,east coast,noon,0.14,0.8,0,8,night owl,martial arts,7,sophomore
+137,54.33,east coast,noon,0.93,0.87,7,10,early bird,baseball,4,senior
+138,69.03,east coast,noon,0.93,0.7000000000000000,9,4,night owl,martial arts,4,junior
+139,35.33,east coast,noon,0.32,0.04,6,9,night owl,baseball,5,frosh
+140,47.730000000000000,east coast,noon,0.85,0.09,9,9,night owl,baseball,6,frosh
+141,8.17,east coast,evening,0.05,0.46,0,6,night owl,football,3,junior
+142,17.17,east coast,evening,0.07,0.03,6,4,early bird,martial arts,2,frosh
+143,44.22,east coast,evening,0.91,0.09,9,6,early bird,baseball,3,frosh
+144,76.42,east coast,evening,0.97,0.89,10,9,night owl,table tennis,3,senior
+145,35.03,east coast,evening,0.35000000000000000,0.32,5,10,night owl,baseball,3,junior
+146,50.9,east coast,evening,0.4,0.67,5,5,night owl,frisbee,2,senior
+147,39.88,east coast,evening,0.45,0.96,2,10,night owl,table tennis,3,senior
+148,32.67,east coast,evening,0.05,0.03,3,3,night owl,football,3,sophomore
+149,15.370000000000000,east coast,evening,0.14,0.53,3,4,night owl,table tennis,3,frosh
+150,39.67,east coast,evening,0.35000000000000000,0.54,3,10,early bird,baseball,3,junior
+151,44.82,east coast,evening,0.65,0.85,5,9,night owl,table tennis,5,junior
+152,0,east coast,evening,0.4,0.02,4,1,night owl,gymnastics,5,sophomore
+153,11.47,east coast,evening,0.09,0.11,2,4,early bird,baseball,3,junior
+154,18.12,east coast,evening,0.33,0.09,4,2,night owl,curling,4,sophomore
+155,22.32,east coast,evening,0.51,0.56,7,9,early bird,table tennis,3,sophomore
+156,43.68,east coast,evening,0.91,0.08,10,9,night owl,baseball,3,junior
+157,0,east coast,evening,0.21,0.33,3,7,early bird,gymnastics,5,sophomore
+158,20.92,east coast,evening,0.11,0.21,1,2,night owl,martial arts,3,sophomore
+159,44.39,east coast,evening,0.7000000000000000,0.54,4,2,night owl,baseball,6,junior
+160,13.200000000000000,east coast,evening,0.6,0.59,4,1,night owl,curling,4,sophomore
+161,34.2,east coast,evening,0.3,0.56,7,3,night owl,frisbee,2,senior
+162,55.38,east coast,evening,0.85,0.29,10,9,night owl,football,3,sophomore
+163,50.34,east coast,evening,0.78,0.54,5,0,night owl,frisbee,4,frosh
+164,23.92,east coast,evening,0.39,0.49,5,9,night owl,table tennis,3,sophomore
+165,16.17,east coast,evening,0.5,0.09,4,0,night owl,curling,5,frosh
+166,50.22,east coast,evening,0.61,0.54,8,9,night owl,gymnastics,3,senior
+167,13.780000000000000,east coast,evening,0.24,0.35000000000000000,4,6,night owl,table tennis,3,frosh
+168,22.82,east coast,evening,0.08,0.19,4,2,early bird,martial arts,2,junior
+169,19.990000000000000,east coast,evening,0.15,0.25,3,5,early bird,gymnastics,3,senior
+170,47.43,east coast,evening,0.78,0.86,7,11,early bird,curling,5,junior
+171,23.71,east coast,evening,0.34,0.24,5,2,night owl,frisbee,3,frosh
+172,30.28,east coast,evening,0.24,0.9,1,8,night owl,martial arts,3,junior
+173,27.310000000000000,east coast,evening,0.5700000000000000,0.52,6,6,night owl,football,3,senior
+174,22.6,east coast,evening,0.25,0.91,1,11,night owl,frisbee,4,sophomore
+175,11.06,east coast,evening,0.46,0.11,6,1,early bird,football,4,sophomore
+176,49.99,east coast,evening,0.92,0.73,4,9,night owl,curling,5,frosh
+177,17.72,east coast,evening,0.4,0.42,3,3,early bird,martial arts,4,sophomore
+178,31.900000000000000,east coast,evening,0.37,0.77,2,9,night owl,curling,4,senior
+179,15.530000000000000,east coast,evening,0.01,0.37,0,6,night owl,table tennis,3,junior
+180,68.71000000000000,east coast,evening,0.92,0.96,2,8,night owl,frisbee,7,sophomore
+181,0,east coast,noon,0.09,0.14,4,8,night owl,football,2,sophomore
+182,35.04,east coast,noon,0.75,0.6900000000000000,6,7,early bird,baseball,6,junior
+183,38.25,east coast,noon,0.49,0.87,6,7,night owl,frisbee,3,senior
+184,26.12,east coast,noon,0.59,0.15,9,10,night owl,football,3,junior
+185,42.62,east coast,noon,0.68,0.4,8,9,night owl,martial arts,3,junior
+186,0,east coast,noon,0.18,0.09,5,4,night owl,curling,3,junior
+187,5.12,east coast,noon,0.02,0.72,1,3,night owl,basketball,1,junior
+188,11.46,east coast,noon,0.72,0.05,7,1,night owl,curling,5,frosh
+189,6.67,east coast,noon,0.26,0.03,4,3,night owl,baseball,5,frosh
+190,40.19,east coast,noon,0.86,0.78,6,9,night owl,curling,6,junior
+191,42.75,east coast,morning,0.73,0.84,1,2,night owl,table tennis,6,junior
+192,28.650000000000000,east coast,morning,0.39,0.96,0,7,night owl,frisbee,6,junior
+193,22.22,east coast,morning,0.58,0.47000000000000000,7,5,night owl,football,2,senior
+194,43.68,east coast,morning,0.4,0.79,5,8,early bird,table tennis,2,senior
+195,23.650000000000000,east coast,morning,0.5700000000000000,0.47000000000000000,2,7,night owl,football,5,sophomore
+196,50.81,east coast,morning,0.51,0.96,4,11,night owl,martial arts,3,senior
+197,41.96,east coast,morning,0.61,0.9,7,12,night owl,table tennis,4,junior
+198,27.68,east coast,morning,0.11,0.3,2,5,night owl,table tennis,3,sophomore
+199,22.900000000000000,east coast,morning,0.72,0.08,6,0,night owl,football,6,sophomore
+200,17.080000000000000,east coast,morning,0.13,0.14,4,5,night owl,football,2,sophomore
+201,73.12,east coast,evening,0.92,0.96,8,12,early bird,frisbee,5,senior
+202,65.97,east coast,evening,0.88,0.62,9,8,night owl,martial arts,4,junior
+203,42.18,east coast,evening,0.72,0.19,8,1,night owl,table tennis,5,frosh
+204,61.84,east coast,evening,0.8200000000000000,0.87,4,1,night owl,martial arts,4,sophomore
+205,27.53,east coast,evening,0.13,0.22,5,7,night owl,table tennis,3,sophomore
+206,57.18,east coast,evening,0.93,0.14,8,5,night owl,gymnastics,4,junior
+207,45.57,east coast,evening,0.75,0.03,9,7,night owl,gymnastics,6,frosh
+208,16,east coast,evening,0.24,0.2,4,10,night owl,curling,4,frosh
+209,35.050000000000000,east coast,evening,0.5,0.51,2,2,night owl,football,5,junior
+210,21.37,east coast,evening,0.28,0.17,5,2,night owl,table tennis,3,sophomore
+211,55.65,east coast,morning,0.71,0.98,1,1,night owl,basketball,3,senior
+212,27.580000000000000,east coast,morning,0.25,0.64,4,3,night owl,basketball,3,sophomore
+213,0,east coast,morning,0.07,0.16,2,8,night owl,baseball,4,frosh
+214,0,east coast,morning,0.41000000000000000,0.08,4,1,night owl,baseball,4,frosh
+215,35.230000000000000,east coast,morning,0.18,0.89,1,7,night owl,basketball,3,sophomore
+216,27.45,east coast,morning,0.4,0.48,6,5,night owl,table tennis,3,sophomore
+217,16.37,east coast,morning,0.55,0.06,6,1,night owl,gymnastics,5,frosh
+218,0,east coast,morning,0.26,0.29,2,1,night owl,baseball,4,junior
+219,1.9000000000000000,east coast,morning,0.26,0.17,4,10,night owl,curling,6,frosh
+220,43.94,east coast,morning,0.71,0.48,8,10,night owl,baseball,3,junior
+221,5.08,east coast,evening,0.12,0.09,0,0,night owl,baseball,3,sophomore
+222,30.67,east coast,evening,0.39,0.17,5,4,night owl,football,3,sophomore
+223,27.93,east coast,evening,0.18,0.03,6,0,early bird,curling,2,frosh
+224,34.02,east coast,evening,0.15,0.73,3,11,night owl,table tennis,3,junior
+225,44.11,east coast,evening,0.23,0.75,4,5,night owl,basketball,2,sophomore
+226,66.12,east coast,evening,0.91,0.85,7,8,night owl,table tennis,6,junior
+227,63.27,east coast,evening,0.79,0.88,7,12,early bird,martial arts,5,sophomore
+228,66.07000000000000,east coast,evening,0.79,0.91,7,11,night owl,table tennis,4,senior
+229,42.38,east coast,evening,0.62,0.45,8,6,night owl,curling,3,sophomore
+230,0,east coast,evening,0.12,0.15,1,1,night owl,football,5,sophomore
+231,58.34,east coast,noon,0.8300000000000000,0.93,7,6,night owl,table tennis,3,senior
+232,31.37,east coast,noon,0.72,0.55,5,11,night owl,baseball,5,junior
+233,37.88,east coast,noon,0.87,0.29,7,11,night owl,gymnastics,5,junior
+234,24.82,east coast,noon,0.26,0.17,2,2,night owl,football,5,sophomore
+235,74.85000000000000,east coast,noon,0.96,0.9,9,5,night owl,basketball,5,junior
+236,59.76,east coast,noon,0.5700000000000000,0.96,4,11,night owl,frisbee,4,sophomore
+237,47.96,east coast,noon,0.12,0.11,5,9,night owl,curling,3,sophomore
+238,44.72,east coast,noon,0.39,0.31,9,9,night owl,curling,3,sophomore
+239,57.870000000000000,east coast,noon,0.78,0.88,2,9,night owl,curling,4,senior
+240,38.87,east coast,noon,0.35000000000000000,0.47000000000000000,3,1,night owl,martial arts,3,junior
+241,71.38,east coast,evening,0.78,0.8300000000000000,7,8,night owl,martial arts,4,junior
+242,36.56,east coast,evening,0.21,0.28,2,5,night owl,martial arts,5,frosh
+243,41.660000000000000,east coast,evening,0.6900000000000000,0.2,9,11,night owl,football,5,sophomore
+244,51.21,east coast,evening,0.72,0.58,8,10,night owl,football,3,junior
+245,44.77,east coast,evening,0.24,0.2,8,10,night owl,curling,2,junior
+246,26.62,east coast,evening,0.56,0.74,1,1,night owl,martial arts,5,frosh
+247,49.19,east coast,evening,0.04,0.09,0,1,night owl,curling,5,frosh
+248,40.77,east coast,evening,0.32,0.86,4,6,night owl,basketball,3,junior
+249,52.800000000000000,east coast,evening,0.8200000000000000,0.53,9,11,night owl,table tennis,5,frosh
+250,25.62,east coast,evening,0.18,0.31,4,6,night owl,gymnastics,1,senior
+251,22.97,east coast,evening,0.13,0.16,4,6,night owl,curling,3,sophomore
+252,27.22,east coast,evening,0.19,0.52,2,7,night owl,baseball,3,senior
+253,50.28,east coast,evening,0.54,0.81,4,2,early bird,frisbee,1,senior
+254,48.2,east coast,evening,0.41000000000000000,0.89,4,8,night owl,martial arts,3,senior
+255,37.13,east coast,evening,0.38,0.28,6,6,night owl,martial arts,4,frosh
+256,51.21,east coast,evening,0.76,0.29,9,7,night owl,table tennis,3,junior
+257,18.53,east coast,evening,0.24,0.86,0,0,night owl,frisbee,3,senior
+258,13.76,east coast,evening,0.39,0.38,1,0,night owl,basketball,4,sophomore
+259,35.24,east coast,evening,0.06,0.37,1,1,night owl,martial arts,2,junior
+260,34.92,east coast,evening,0.2,0.45,3,10,night owl,frisbee,3,junior
+261,0,east coast,morning,0.18,0.64,3,12,night owl,curling,2,senior
+262,56.65,east coast,morning,0.86,0.66,8,11,night owl,baseball,3,senior
+263,37.63,east coast,morning,0.88,0.6,8,0,early bird,table tennis,5,sophomore
+264,58.44,east coast,morning,0.6900000000000000,0.88,6,9,night owl,martial arts,3,junior
+265,18.78,east coast,morning,0.02,0.01,4,1,early bird,gymnastics,1,sophomore
+266,25.77,east coast,morning,0.49,0.01,8,1,night owl,gymnastics,6,frosh
+267,17.87,east coast,morning,0.5700000000000000,0.5,4,9,night owl,baseball,5,sophomore
+268,63.07,east coast,morning,0.87,0.85,9,6,night owl,table tennis,3,senior
+269,67.87,east coast,morning,0.9,0.79,9,10,night owl,martial arts,4,sophomore
+270,38.52,east coast,morning,0.65,0.72,4,7,night owl,curling,4,junior
+271,48.480000000000000,east coast,evening,0.53,0.86,7,11,night owl,martial arts,3,sophomore
+272,19.7,east coast,evening,0,0.74,0,2,night owl,basketball,3,sophomore
+273,37.99,east coast,evening,0.98,0.3,10,4,night owl,baseball,6,sophomore
+274,16.17,east coast,evening,0.58,0.18,7,11,night owl,gymnastics,5,sophomore
+275,24.830000000000000,east coast,evening,0.19,0.62,5,6,night owl,martial arts,2,sophomore
+276,20.52,east coast,evening,0.21,0.64,2,5,night owl,table tennis,2,junior
+277,22.76,east coast,evening,0.65,0.46,2,2,night owl,curling,7,sophomore
+278,56.4,east coast,evening,0.77,0.9,5,11,night owl,football,3,senior
+279,31.1,east coast,evening,0.62,0.35000000000000000,7,5,early bird,frisbee,4,sophomore
+280,62.940000000000000,east coast,evening,0.75,0.78,9,10,night owl,frisbee,3,senior
+281,39.1,west coast,evening,0.52,0.28,7,4,night owl,curling,4,frosh
+282,34.49,west coast,evening,0.15,0.68,2,3,night owl,basketball,3,junior
+283,45.1,west coast,evening,0.61,0.4,7,9,early bird,curling,3,senior
+284,44.07,west coast,evening,0.98,0.65,5,6,night owl,curling,6,frosh
+285,47.52,west coast,evening,0.39,0.81,1,8,night owl,basketball,3,junior
+286,61.620000000000000,west coast,evening,0.93,0.81,5,8,night owl,football,6,senior
+287,64.51,west coast,evening,0.88,0.73,6,2,night owl,frisbee,5,frosh
+288,46.6,west coast,evening,0.47000000000000000,0.75,2,2,night owl,table tennis,4,junior
+289,54.78,west coast,evening,0.68,0.62,6,10,night owl,frisbee,5,frosh
+290,25.310000000000000,west coast,evening,0.12,0.84,0,1,night owl,basketball,3,sophomore
+291,22.48,west coast,morning,0.5,0.79,1,9,night owl,table tennis,4,senior
+292,21.92,west coast,morning,0.28,0.17,6,5,night owl,baseball,2,junior
+293,60.83,west coast,morning,0.9400000000000000,0.87,6,4,early bird,football,4,senior
+294,23.91,west coast,morning,0.51,0.27,5,7,night owl,baseball,6,sophomore
+295,40.31,west coast,morning,0.98,0.65,8,6,night owl,baseball,5,senior
+296,27.92,west coast,morning,0.43,0.8200000000000000,3,8,night owl,martial arts,4,junior
+297,15.52,west coast,morning,0.11,0.74,1,11,early bird,frisbee,4,sophomore
+298,55.13,west coast,morning,0.9,0.35000000000000000,8,3,early bird,martial arts,7,frosh
+299,41.31,west coast,morning,0.78,0.67,5,7,night owl,football,7,sophomore
+300,47.410000000000000,west coast,morning,0.8,0.21,8,0,early bird,baseball,4,junior
+301,0,west coast,noon,0.37,0.44,2,7,night owl,football,6,sophomore
+302,0,west coast,noon,0.16,0.18,2,1,early bird,curling,2,junior
+303,0,west coast,noon,0.05,0.12,2,0,early bird,frisbee,3,frosh
+304,29.04,west coast,noon,0.42,0.52,5,5,night owl,frisbee,3,junior
+305,41.24,west coast,noon,0.9400000000000000,0.81,7,7,night owl,curling,7,junior
+306,9.99,west coast,noon,0.54,0.39,4,7,night owl,baseball,6,frosh
+307,0,west coast,noon,0.15,0.14,3,2,night owl,gymnastics,4,sophomore
+308,7.19,west coast,noon,0.2,0.39,3,6,early bird,frisbee,3,junior
+309,33.22,west coast,noon,0.8,0.71,6,5,night owl,curling,5,junior
+310,15.01,west coast,noon,0.33,0.7000000000000000,6,12,early bird,football,2,senior
+311,34.43,west coast,noon,0.1,0.11,2,6,night owl,baseball,4,junior
+312,29.45,west coast,noon,0.36,0.79,1,2,night owl,martial arts,4,junior
+313,33.37,west coast,noon,0.33,0.47000000000000000,1,11,night owl,martial arts,5,frosh
+314,53.56,west coast,noon,0.13,0.08,5,4,night owl,curling,2,sophomore
+315,42.980000000000000,west coast,noon,0.55,0.52,4,3,night owl,frisbee,4,sophomore
+316,41.97,west coast,noon,0.55,0.19,5,2,night owl,football,4,sophomore
+317,31.11,west coast,noon,0.29,0.42,4,6,night owl,table tennis,3,junior
+318,47.74,west coast,noon,0.84,0.32,5,6,night owl,baseball,5,frosh
+319,7.97,west coast,noon,0.12,0.59,1,2,night owl,martial arts,3,sophomore
+320,57.17,west coast,noon,0.9500000000000000,0.75,8,3,early bird,frisbee,7,frosh
+321,48.34,west coast,evening,0.53,0.4,8,4,night owl,basketball,3,frosh
+322,33.1,west coast,evening,0.42,0.35000000000000000,4,3,night owl,baseball,4,junior
+323,27.28,west coast,evening,0.03,0.16,6,12,night owl,table tennis,2,frosh
+324,48.67,west coast,evening,0.5700000000000000,0.6900000000000000,6,11,night owl,table tennis,3,junior
+325,49.72,west coast,evening,0.46,0.77,6,9,night owl,frisbee,4,frosh
+326,62.230000000000000,west coast,evening,0.89,0.54,8,9,night owl,baseball,4,sophomore
+327,30.34,west coast,evening,0.48,0.5,7,10,early bird,table tennis,5,sophomore
+328,16.44,west coast,evening,0.04,0.15,3,8,night owl,football,3,sophomore
+329,69.74,west coast,evening,0.85,0.97,5,8,night owl,football,3,senior
+330,59.36,west coast,evening,0.8300000000000000,0.84,7,10,night owl,football,3,senior
+331,52.7,west coast,noon,0.85,0.3,10,12,night owl,gymnastics,3,sophomore
+332,47.68,west coast,noon,0.52,0.92,5,8,night owl,basketball,3,junior
+333,14.34,west coast,noon,0.36,0.35000000000000000,4,6,early bird,gymnastics,4,junior
+334,56.26,west coast,noon,0.86,0.5700000000000000,9,10,early bird,martial arts,4,sophomore
+335,7.88,west coast,noon,0.12,0.02,6,4,night owl,gymnastics,4,frosh
+336,40.78,west coast,noon,0.44,0.53,8,11,night owl,curling,2,sophomore
+337,8.67,west coast,noon,0.1,0.04,2,3,night owl,baseball,5,frosh
+338,41.08,west coast,noon,0.6,0.24,9,8,early bird,baseball,2,senior
+339,58.07,west coast,noon,0.78,0.79,8,7,night owl,table tennis,3,junior
+340,65.18,west coast,noon,0.9500000000000000,0.89,10,12,night owl,frisbee,3,junior
+341,51.870000000000000,west coast,evening,0.65,0.9500000000000000,2,10,early bird,basketball,5,junior
+342,48.24,west coast,evening,0.68,0.68,3,5,night owl,table tennis,5,sophomore
+343,66.72,west coast,evening,0.71,0.5700000000000000,9,9,night owl,martial arts,4,sophomore
+344,64.02,west coast,evening,0.6,0.96,4,7,night owl,basketball,4,junior
+345,78.8,west coast,evening,0.92,0.98,3,9,night owl,frisbee,5,sophomore
+346,34.04,west coast,evening,0.58,0.48,4,9,night owl,baseball,4,junior
+347,15.450000000000000,west coast,evening,0.27,0.4,2,4,night owl,football,4,sophomore
+348,51.730000000000000,west coast,evening,0.81,0.92,3,8,night owl,curling,7,senior
+349,60.83,west coast,evening,0.78,0.85,8,3,early bird,basketball,3,junior
+350,26.16,west coast,evening,0.3,0.11,4,3,night owl,baseball,4,sophomore
+351,55.6,west coast,evening,0.73,0.16,10,2,night owl,curling,3,sophomore
+352,56.620000000000000,west coast,evening,0.41000000000000000,0.35000000000000000,6,6,night owl,table tennis,4,sophomore
+353,32.81,west coast,evening,0.36,0.02,8,2,night owl,baseball,3,sophomore
+354,48.71,west coast,evening,0.32,0.72,3,9,night owl,frisbee,4,sophomore
+355,67.31,west coast,evening,0.9,0.67,9,12,night owl,football,4,sophomore
+356,28.92,west coast,evening,0.13,0.2,2,2,night owl,curling,3,sophomore
+357,37.43,west coast,evening,0.06,0.12,0,8,night owl,baseball,4,frosh
+358,39.050000000000000,west coast,evening,0.29,0.1,7,5,night owl,curling,3,frosh
+359,74.37,west coast,evening,0.8300000000000000,0.7000000000000000,8,9,night owl,martial arts,2,senior
+360,32.28,west coast,evening,0.46,0.37,3,1,night owl,frisbee,6,frosh
+361,29.46,west coast,evening,0.41000000000000000,0.28,7,9,night owl,frisbee,3,frosh
+362,43.87,west coast,evening,0.77,0.81,3,1,night owl,martial arts,6,junior
+363,41.410000000000000,west coast,evening,0.3,0.62,6,9,night owl,frisbee,2,junior
+364,1.86,west coast,evening,0.31,0.12,1,5,night owl,gymnastics,6,frosh
+365,3.2,west coast,evening,0.03,0.26,1,6,early bird,martial arts,2,sophomore
+366,31.88,west coast,evening,0.34,0.9,2,9,night owl,frisbee,4,junior
+367,46.07,west coast,evening,0.63,0.9,2,2,night owl,martial arts,5,senior
+368,37.56,west coast,evening,0.45,0.5,5,5,night owl,curling,3,senior
+369,15.5,west coast,evening,0.17,0.25,3,8,night owl,table tennis,5,sophomore
+370,20.94,west coast,evening,0.14,0.29,2,1,night owl,football,3,sophomore
+371,42.79,west coast,evening,0.55,0.33,7,5,night owl,curling,3,sophomore
+372,62.36,west coast,evening,0.91,0.9,9,7,early bird,football,4,junior
+373,35.71,west coast,evening,0.33,0.39,6,6,night owl,table tennis,3,sophomore
+374,33.53,west coast,evening,0.46,0.12,6,7,night owl,baseball,3,sophomore
+375,15.84,west coast,evening,0.31,0.08,5,11,night owl,gymnastics,5,frosh
+376,22.55,west coast,evening,0.38,0.63,3,10,night owl,football,4,junior
+377,0,west coast,evening,0.18,0.14,2,1,night owl,curling,4,frosh
+378,20.87,west coast,evening,0.14,0.5,2,8,night owl,baseball,4,sophomore
+379,43.84,west coast,evening,0.3,0.91,1,10,night owl,curling,4,sophomore
+380,57.86,west coast,evening,0.89,0.64,9,8,night owl,curling,3,sophomore
+381,52.99,west coast,noon,0.09,0.24,2,1,night owl,football,3,senior
+382,60.96,west coast,noon,0.8,0.98,5,11,early bird,table tennis,5,senior
+383,39.39,west coast,noon,0.07,0.61,1,4,night owl,curling,3,senior
+384,15.8,west coast,noon,0.15,0.04,5,4,night owl,baseball,3,sophomore
+385,34.980000000000000,west coast,noon,0.52,0.31,8,10,night owl,table tennis,5,frosh
+386,53.71,west coast,noon,0.58,0.76,8,12,night owl,football,3,senior
+387,51.64,west coast,noon,0.41000000000000000,0.96,0,4,night owl,martial arts,3,senior
+388,33.660000000000000,west coast,noon,0.33,0.05,5,6,early bird,football,5,frosh
+389,9.47,west coast,noon,0.25,0.17,5,3,early bird,football,5,frosh
+390,32.02,west coast,noon,0.43,0.39,5,2,night owl,curling,2,senior
+391,40.15,west coast,noon,0.2,0.46,4,3,night owl,martial arts,3,sophomore
+392,48.52,west coast,noon,0.81,0.74,6,6,early bird,basketball,5,sophomore
+393,35.42,west coast,noon,0.56,0.61,3,3,night owl,martial arts,7,frosh
+394,30.34,west coast,noon,0.4,0.21,6,8,night owl,football,4,sophomore
+395,42.230000000000000,west coast,noon,0.17,0.54,1,1,early bird,frisbee,4,sophomore
+396,27.62,west coast,noon,0.14,0.4,2,1,night owl,football,3,junior
+397,36.53,west coast,noon,0.84,0.02,9,2,night owl,gymnastics,4,frosh
+398,33.2,west coast,noon,0.74,0.31,8,10,night owl,table tennis,4,sophomore
+399,58.31,west coast,noon,0.76,0.8300000000000000,9,10,night owl,frisbee,2,senior
+400,11.57,west coast,noon,0.13,0.86,1,3,night owl,table tennis,2,senior
+401,32.06,west coast,noon,0.36,0.36,3,3,night owl,table tennis,4,frosh
+402,43.800000000000000,west coast,noon,0.6,0.56,8,4,night owl,football,2,junior
+403,12.700000000000000,west coast,noon,0.13,0.32,2,8,night owl,baseball,2,senior
+404,48.83,west coast,noon,0.53,0.86,3,10,night owl,frisbee,4,senior
+405,34.59,west coast,noon,0.01,0.19,0,1,night owl,martial arts,3,sophomore
+406,4.01,west coast,noon,0.04,0.38,1,10,early bird,baseball,3,junior
+407,53.5,west coast,noon,0.8,0.8200000000000000,4,5,night owl,frisbee,5,senior
+408,53.61,west coast,noon,0.62,0.8200000000000000,5,7,night owl,basketball,4,frosh
+409,32.67,west coast,noon,0.2,0.38,6,4,night owl,table tennis,2,junior
+410,67.54,west coast,noon,0.75,0.93,8,11,night owl,frisbee,2,senior
+411,53.67,west coast,evening,0.85,0.74,4,8,night owl,baseball,7,junior
+412,35.49,west coast,evening,0.35000000000000000,0.75,1,9,early bird,curling,5,junior
+413,60.53,west coast,evening,0.78,0.54,8,6,night owl,table tennis,3,junior
+414,22.650000000000000,west coast,evening,0.22,0.43,1,4,night owl,football,4,sophomore
+415,52.550000000000000,west coast,evening,0.9,0.19,8,9,night owl,gymnastics,7,senior
+416,39.52,west coast,evening,0.79,0.13,7,1,early bird,table tennis,7,sophomore
+417,47.77,west coast,evening,0.67,0.45,7,8,night owl,curling,4,senior
+418,31.71,west coast,evening,0.22,0.17,2,5,night owl,football,5,sophomore
+419,33.9,west coast,evening,0.05,0.05,2,6,night owl,football,3,frosh
+420,64.21000000000000,west coast,evening,0.86,0.79,7,3,night owl,basketball,6,sophomore
+421,41.07,west coast,evening,0.05,0.4,4,8,night owl,martial arts,1,senior
+422,39.21,west coast,evening,0.46,0.13,8,7,night owl,baseball,3,sophomore
+423,79.7,west coast,evening,0.8,0.9500000000000000,7,11,night owl,martial arts,3,junior
+424,50.18,west coast,evening,0.39,0.88,3,8,early bird,frisbee,3,junior
+425,32.15,west coast,evening,0.59,0.18,7,7,early bird,baseball,6,sophomore
+426,57.86,west coast,evening,0.76,0.71,5,5,night owl,table tennis,4,senior
+427,55.27,west coast,evening,0.78,0.84,3,9,night owl,curling,7,junior
+428,73.54,west coast,evening,0.9400000000000000,0.98,6,6,night owl,table tennis,7,senior
+429,28.54,west coast,evening,0.43,0.4,2,2,night owl,gymnastics,3,junior
+430,50.980000000000000,west coast,evening,0.74,0.65,6,9,night owl,curling,5,junior
+431,30.61,west coast,evening,0.53,0.43,2,0,night owl,frisbee,4,frosh
+432,69.60000000000000,west coast,evening,0.8,1,1,9,night owl,frisbee,5,senior
+433,23.25,west coast,evening,0.35000000000000000,0.13,7,7,night owl,table tennis,3,sophomore
+434,0,west coast,evening,0.24,0.31,1,5,night owl,curling,6,frosh
+435,40.18,west coast,evening,0.8,0.56,5,4,night owl,baseball,5,junior
+436,25.73,west coast,evening,0.4,0.66,4,9,night owl,baseball,3,senior
+437,27.42,west coast,evening,0.77,0.4,5,5,night owl,football,6,sophomore
+438,52.18,west coast,evening,0.68,0.71,9,12,night owl,football,3,senior
+439,82.19,west coast,evening,0.93,0.98,9,11,night owl,frisbee,2,senior
+440,29.09,west coast,evening,0.55,0.64,5,5,night owl,football,4,junior
+441,48.120000000000000,west coast,evening,0.46,0.73,5,11,night owl,curling,3,senior
+442,61.19,west coast,evening,0.9400000000000000,0.66,9,6,night owl,curling,4,junior
+443,42.64,west coast,evening,0.32,0.22,3,6,night owl,baseball,5,frosh
+444,39.84,west coast,evening,0.72,0.31,9,9,early bird,table tennis,5,frosh
+445,33.09,west coast,evening,0.49,0.35000000000000000,7,3,early bird,table tennis,3,sophomore
+446,41.550000000000000,west coast,evening,0.6900000000000000,0.61,2,0,night owl,football,6,sophomore
+447,34.43,west coast,evening,0.39,0.54,2,3,night owl,martial arts,5,sophomore
+448,35.22,west coast,evening,0.43,0.02,9,1,night owl,gymnastics,3,frosh
+449,38.06,west coast,evening,0.51,0.19,8,6,night owl,gymnastics,3,junior
+450,50.97,west coast,evening,0.54,0.02,10,1,night owl,baseball,2,junior
+451,25.95,west coast,evening,0.33,0.26,0,3,night owl,gymnastics,7,sophomore
+452,36.69,west coast,evening,0.41000000000000000,0.68,1,3,night owl,martial arts,3,junior
+453,42.86,west coast,evening,0.81,0.11,8,8,night owl,baseball,6,frosh
+454,54.160000000000000,west coast,evening,0.74,0.93,3,6,night owl,curling,5,junior
+455,36.28,west coast,evening,0.44,0.52,5,8,night owl,table tennis,5,sophomore
+456,28.150000000000000,west coast,evening,0.07,0.46,2,6,night owl,basketball,3,sophomore
+457,42.26,west coast,evening,0.4,0.74,5,6,night owl,martial arts,2,sophomore
+458,32.82,west coast,evening,0.46,0.7000000000000000,2,1,early bird,martial arts,4,junior
+459,0,west coast,evening,0.05,0.04,2,1,night owl,baseball,3,frosh
+460,56.57,west coast,evening,0.8200000000000000,0.85,6,7,night owl,curling,4,sophomore
+461,76.19,west coast,noon,0.9400000000000000,1,7,8,early bird,frisbee,3,senior
+462,44.86,west coast,noon,0.8300000000000000,0.86,6,3,early bird,table tennis,4,junior
+463,22.95,west coast,noon,0.35000000000000000,0.14,5,2,night owl,martial arts,4,sophomore
+464,57.07,west coast,noon,0.75,0.74,8,9,night owl,basketball,3,junior
+465,37.51,west coast,noon,0.74,0.65,3,2,night owl,football,5,junior
+466,23.67,west coast,noon,0.34,0.43,5,3,night owl,table tennis,2,senior
+467,16.51,west coast,noon,0.14,0.01,4,6,night owl,gymnastics,4,sophomore
+468,10.25,west coast,noon,0.47000000000000000,0.71,0,1,night owl,curling,7,sophomore
+469,30.71,west coast,noon,0.65,0.34,7,10,night owl,table tennis,5,frosh
+470,22.92,west coast,noon,0.66,0.46,2,6,night owl,curling,7,sophomore
+471,14.93,west coast,morning,0.13,0.39,1,5,night owl,table tennis,4,frosh
+472,51.18,west coast,morning,0.6900000000000000,0.67,6,0,early bird,frisbee,3,junior
+473,60.97,west coast,morning,0.91,0.9400000000000000,8,11,night owl,table tennis,5,junior
+474,22.95,west coast,morning,0.07,0.21,4,11,night owl,martial arts,2,sophomore
+475,46.62,west coast,morning,0.72,0.71,5,8,night owl,martial arts,4,sophomore
+476,0,west coast,morning,0.38,0.42,1,0,night owl,football,4,junior
+477,6.37,west coast,morning,0.37,0.48,5,9,night owl,baseball,4,sophomore
+478,4.16,west coast,morning,0.39,0.17,3,2,early bird,football,3,sophomore
+479,23.42,west coast,morning,0.25,0.53,7,12,night owl,curling,3,junior
+480,46.54,west coast,morning,0.6,0.91,3,12,early bird,gymnastics,5,senior
+481,36.69,west coast,evening,0.07,0.34,2,4,night owl,martial arts,1,sophomore
+482,42.980000000000000,west coast,evening,0.56,0.31,6,6,night owl,football,4,junior
+483,51.74,west coast,evening,0.3,0.6900000000000000,4,5,night owl,basketball,3,sophomore
+484,60.21,west coast,evening,0.48,0.67,7,11,night owl,curling,3,junior
+485,36.480000000000000,west coast,evening,0.43,0.01,9,6,night owl,gymnastics,4,sophomore
+486,79.19,west coast,evening,0.96,1,6,5,night owl,basketball,4,junior
+487,59.51,west coast,evening,0.85,0.41000000000000000,9,8,night owl,curling,6,junior
+488,28.18,west coast,evening,0.33,0.78,2,8,early bird,table tennis,3,junior
+489,53.76,west coast,evening,0.84,0.8300000000000000,4,11,early bird,curling,4,sophomore
+490,57.76,west coast,evening,0.49,0.51,8,6,night owl,frisbee,2,sophomore
+491,42.85,west coast,noon,0.18,0.6900000000000000,0,6,night owl,martial arts,3,sophomore
+492,67,west coast,noon,0.56,0.91,7,11,night owl,frisbee,3,sophomore
+493,48.120000000000000,west coast,noon,0.28,0.23,4,8,night owl,baseball,3,junior
+494,34.39,west coast,noon,0.33,0.6,1,3,night owl,baseball,3,senior
+495,49.02,west coast,noon,0.41000000000000000,0.47000000000000000,6,6,night owl,table tennis,3,sophomore
+496,43.58,west coast,noon,0.37,0.36,2,3,night owl,frisbee,4,frosh
+497,57.870000000000000,west coast,noon,0.6900000000000000,0.89,2,1,early bird,frisbee,6,junior
+498,62.79,west coast,noon,0.73,0.81,2,10,early bird,table tennis,8,sophomore
+499,50.730000000000000,west coast,noon,0.24,0.6,2,5,night owl,curling,3,sophomore
+500,49.4,west coast,noon,0.78,0.29,8,2,night owl,football,4,junior
+501,23.11,west coast,morning,0.32,0.66,3,11,early bird,football,3,sophomore
+502,42.730000000000000,west coast,morning,0.6900000000000000,0.39,4,4,night owl,martial arts,4,sophomore
+503,46.11,west coast,morning,0.9400000000000000,0.56,8,7,night owl,curling,3,senior
+504,44.480000000000000,west coast,morning,0.71,0.17,9,7,night owl,curling,3,sophomore
+505,37.22,west coast,morning,0.66,0.46,10,12,night owl,curling,2,junior
+506,25.12,west coast,morning,0.54,0.5,3,2,night owl,frisbee,4,sophomore
+507,40.03,west coast,morning,0.48,0.2,6,6,early bird,baseball,5,junior
+508,34.74,west coast,morning,0.55,0.39,9,10,night owl,frisbee,3,sophomore
+509,0,west coast,morning,0.18,0.39,3,5,night owl,curling,3,sophomore
+510,28.89,west coast,morning,0.07,0.01,4,1,night owl,baseball,3,sophomore
+511,55.43,west coast,morning,0.62,0.36,10,11,night owl,curling,3,sophomore
+512,45.480000000000000,west coast,morning,0.52,0.23,7,3,night owl,curling,3,junior
+513,67.61,west coast,morning,0.03,0.15,2,1,night owl,table tennis,3,sophomore
+514,56.57,west coast,morning,0.49,0.6900000000000000,3,6,night owl,football,4,senior
+515,59.300000000000000,west coast,morning,0.88,0.68,8,11,night owl,baseball,7,junior
+516,48.68,west coast,morning,0.31,0.9,1,6,early bird,football,3,senior
+517,47.94,west coast,morning,0.09,0.06,5,7,early bird,curling,3,frosh
+518,63.050000000000000,west coast,morning,0.56,0.06,6,2,night owl,baseball,5,sophomore
+519,52.81,west coast,morning,0.5700000000000000,0.9400000000000000,4,11,night owl,frisbee,4,junior
+520,25.69,west coast,morning,0.27,0.66,1,3,early bird,table tennis,3,senior
+521,62.43,west coast,morning,0.8200000000000000,0.74,7,8,night owl,frisbee,4,frosh
+522,51.75,west coast,morning,0.49,0.78,5,8,early bird,table tennis,3,junior
+523,36.89,west coast,morning,0.38,0.91,2,9,night owl,frisbee,3,sophomore
+524,77.78,west coast,morning,0.99,0.98,9,9,night owl,basketball,6,sophomore
+525,21.52,west coast,morning,0.44,0.25,4,1,night owl,curling,6,frosh
+526,64.81,west coast,morning,0.92,0.92,9,9,night owl,curling,2,senior
+527,41.37,west coast,morning,0.6,0.08,6,3,night owl,baseball,6,frosh
+528,32.72,west coast,morning,0.28,0.54,1,5,early bird,curling,5,sophomore
+529,27.64,west coast,morning,0.55,0.6,5,3,night owl,table tennis,4,junior
+530,49.03,west coast,morning,0.3,0.29,3,3,night owl,football,3,sophomore
+531,46.31,west coast,morning,0.73,0.6900000000000000,6,3,early bird,curling,3,senior
+532,72.21000000000000,west coast,morning,0.88,0.96,5,3,early bird,frisbee,5,senior
+533,37.63,west coast,morning,0.53,0.5700000000000000,6,11,night owl,curling,6,sophomore
+534,37.18,west coast,morning,0.63,0.04,6,2,night owl,baseball,5,frosh
+535,40.49,west coast,morning,0.03,0.72,3,12,night owl,frisbee,1,junior
+536,54.22,west coast,morning,0.62,0.31,6,9,early bird,baseball,3,junior
+537,42.59,west coast,morning,0.41000000000000000,0.44,1,1,night owl,football,4,frosh
+538,53.21,west coast,morning,0.51,0.79,6,6,night owl,frisbee,2,junior
+539,43.04,west coast,morning,0.15,0.36,3,4,night owl,frisbee,4,frosh
+540,60.78,west coast,morning,0.86,0.86,7,11,night owl,football,4,senior
+541,25.85,west coast,evening,0.05,0.58,1,5,night owl,basketball,2,sophomore
+542,35.32,west coast,evening,0.48,0.41000000000000000,6,2,night owl,martial arts,1,junior
+543,0,west coast,evening,0.44,0.03,5,0,night owl,baseball,4,sophomore
+544,51.76,west coast,evening,0.64,0.89,3,6,night owl,basketball,4,sophomore
+545,63.14,west coast,evening,0.86,0.87,7,6,night owl,table tennis,4,junior
+546,17.75,west coast,evening,0.22,0.45,3,8,night owl,baseball,3,junior
+547,31.21,west coast,evening,0.44,0.29,7,9,early bird,football,3,sophomore
+548,37.32,west coast,evening,0.32,0.81,7,10,night owl,martial arts,2,junior
+549,25.92,west coast,evening,0.45,0.6900000000000000,2,7,night owl,gymnastics,5,junior
+550,80.89,west coast,evening,0.97,0.98,4,6,night owl,frisbee,4,junior
+551,24.330000000000000,west coast,evening,0.5,0.07,6,4,night owl,curling,6,frosh
+552,31.84,west coast,evening,0.31,0.03,8,4,night owl,baseball,3,sophomore
+553,7.66,west coast,evening,0.13,0.3,1,4,night owl,curling,5,junior
+554,32.89,west coast,evening,0.4,0.71,3,9,night owl,football,4,senior
+555,60.24,west coast,evening,0.65,0.4,8,2,night owl,martial arts,3,junior
+556,65.6,west coast,evening,0.97,0.5700000000000000,10,8,night owl,curling,3,junior
+557,44.72,west coast,evening,0.64,0.78,2,10,night owl,martial arts,5,sophomore
+558,37.4,west coast,evening,0.5,0.29,7,4,night owl,table tennis,3,sophomore
+559,55.31,west coast,evening,0.56,0.85,5,5,night owl,martial arts,2,senior
+560,25.79,west coast,evening,0.25,0.28,2,0,night owl,martial arts,7,frosh
+561,22.76,west coast,noon,0.52,0.09,5,9,night owl,baseball,5,frosh
+562,34.800000000000000,west coast,noon,0.64,0.62,3,1,night owl,football,3,sophomore
+563,35.62,west coast,noon,0.31,0.46,5,12,night owl,baseball,3,senior
+564,57.06,west coast,noon,0.98,0.85,9,11,night owl,football,5,senior
+565,42.87,west coast,noon,0.53,0.87,2,0,night owl,basketball,4,junior
+566,27.060000000000000,west coast,noon,0.51,0.23,6,2,night owl,football,4,sophomore
+567,33.56,west coast,noon,0.31,0.29,5,2,night owl,curling,3,sophomore
+568,53.86,west coast,noon,0.71,0.24,9,10,night owl,martial arts,5,frosh
+569,60.620000000000000,west coast,noon,0.81,0.93,5,9,early bird,football,3,senior
+570,46.11,west coast,noon,0.77,0.91,3,6,night owl,table tennis,5,junior
+571,37.660000000000000,west coast,evening,0.5700000000000000,0.26,6,1,night owl,frisbee,6,frosh
+572,53.730000000000000,west coast,evening,0.89,0.35000000000000000,9,5,night owl,table tennis,3,junior
+573,22.6,west coast,evening,0.34,0.54,4,4,night owl,curling,4,sophomore
+574,65.74,west coast,evening,0.89,0.75,7,7,night owl,martial arts,5,junior
+575,39.54,west coast,evening,0.58,0.71,2,5,night owl,frisbee,6,frosh
+576,22.38,west coast,evening,0.3,0.11,4,2,night owl,frisbee,3,frosh
+577,44.08,west coast,evening,0.32,0.87,6,11,night owl,basketball,3,sophomore
+578,32.910000000000000,west coast,evening,0.36,0.19,5,6,night owl,football,3,sophomore
+579,30.22,west coast,evening,0.37,0.1,4,3,early bird,curling,3,frosh
+580,77.46000000000000,west coast,evening,0.89,0.97,5,9,night owl,frisbee,4,sophomore
+581,35.32,west coast,noon,0.68,0.17,9,2,night owl,baseball,3,frosh
+582,62.67,west coast,noon,0.68,0.99,3,6,night owl,basketball,3,junior
+583,46.02,west coast,noon,0.8,0.39,6,2,night owl,football,5,junior
+584,57.24,west coast,noon,0.88,0.74,10,12,early bird,baseball,4,senior
+585,10.98,west coast,noon,0.07,0.28,1,5,night owl,table tennis,5,frosh
+586,21.89,west coast,noon,0.33,0.84,4,9,night owl,curling,2,senior
+587,28.98,west coast,noon,0.46,0.11,6,5,night owl,gymnastics,4,sophomore
+588,29.46,west coast,noon,0.34,0.45,4,2,early bird,table tennis,3,junior
+589,34.92,west coast,noon,0.59,0.33,8,10,night owl,table tennis,3,junior
+590,39.6,west coast,noon,0.65,0.59,4,6,early bird,baseball,6,junior
+591,35.44,west coast,morning,0.6,0.22,7,6,night owl,martial arts,5,frosh
+592,23.28,west coast,morning,0.99,0.17,10,7,night owl,baseball,8,frosh
+593,25.59,west coast,morning,0,0.7000000000000000,2,8,night owl,basketball,2,junior
+594,44.62,west coast,morning,0.72,0.35000000000000000,6,5,early bird,curling,4,junior
+595,69.79,west coast,morning,0.87,0.98,5,8,night owl,frisbee,4,junior
+596,26.240000000000000,west coast,morning,0.37,0.47000000000000000,2,3,night owl,martial arts,3,junior
+597,20.88,west coast,morning,0.24,0.9,1,9,night owl,martial arts,3,senior
+598,33.54,west coast,morning,0.56,0.51,3,4,night owl,table tennis,7,sophomore
+599,14.81,west coast,morning,0.29,0.05,8,3,night owl,table tennis,2,junior
+600,52.06,west coast,morning,0.93,0.84,7,10,night owl,table tennis,7,junior
+601,53.68,west coast,evening,0.54,0.58,5,2,night owl,frisbee,3,sophomore
+602,39.82,west coast,evening,0.5700000000000000,0.37,5,5,night owl,curling,3,sophomore
+603,56.620000000000000,west coast,evening,0.6900000000000000,0.73,3,3,night owl,frisbee,3,junior
+604,44.76,west coast,evening,0.41000000000000000,0.77,6,3,night owl,basketball,2,sophomore
+605,66.07000000000000,west coast,evening,0.86,0.81,7,9,night owl,football,5,senior
+606,53.88,west coast,evening,0.71,0.42,6,4,night owl,curling,4,junior
+607,30.47,west coast,evening,0.11,0.26,2,3,night owl,martial arts,4,frosh
+608,81.68,west coast,evening,0.99,1,7,11,night owl,frisbee,5,senior
+609,33.78,west coast,evening,0.27,0.02,6,8,night owl,gymnastics,3,junior
+610,19.84,west coast,evening,0.42,0.23,6,4,early bird,gymnastics,4,junior
+611,2.41,west coast,morning,0.33,0.42,2,1,night owl,football,5,sophomore
+612,39.45,west coast,morning,0.06,0.7000000000000000,1,2,night owl,frisbee,2,junior
+613,30.46,west coast,morning,0.36,0.45,4,6,night owl,martial arts,3,senior
+614,16.16,west coast,morning,0.31,0.23,3,6,night owl,curling,4,frosh
+615,49.43,west coast,morning,0.67,0.38,7,6,night owl,curling,5,frosh
+616,55.74,west coast,morning,0.92,0.7000000000000000,5,5,early bird,gymnastics,9,senior
+617,76.78,west coast,morning,0.99,0.96,8,5,night owl,frisbee,4,senior
+618,17.93,west coast,morning,0.66,0.45,3,2,night owl,curling,6,sophomore
+619,41.57,west coast,morning,0.71,0.36,5,5,night owl,baseball,5,junior
+620,52.63,west coast,morning,0.8200000000000000,0.32,10,11,night owl,football,4,sophomore
+621,20.81,west coast,evening,0.06,0.7000000000000000,0,2,night owl,basketball,5,frosh
+622,58.63,west coast,evening,0.74,0.89,5,10,night owl,curling,6,junior
+623,65.95,west coast,evening,0.98,0.73,9,6,night owl,baseball,6,junior
+624,28.580000000000000,west coast,evening,0.35000000000000000,0.21,7,12,early bird,gymnastics,4,frosh
+625,56.39,west coast,evening,0.68,0.87,3,7,night owl,table tennis,5,sophomore
+626,36.78,west coast,evening,0.79,0.04,6,1,night owl,gymnastics,6,junior
+627,68.82000000000000,west coast,evening,0.84,0.7000000000000000,9,9,night owl,basketball,3,sophomore
+628,64.17,west coast,evening,0.99,0.56,10,9,night owl,curling,4,sophomore
+629,76.48,west coast,evening,0.78,0.87,9,10,night owl,basketball,3,sophomore
+630,65.84,west coast,evening,0.88,0.71,8,10,night owl,table tennis,4,senior
+631,70.84,west coast,noon,0.92,0.86,8,10,night owl,frisbee,8,sophomore
+632,31.14,west coast,noon,0.36,0.46,3,6,night owl,martial arts,3,junior
+633,54.01,west coast,noon,0.64,0.93,1,6,night owl,martial arts,4,junior
+634,29.27,west coast,noon,0.27,0.8,3,2,night owl,martial arts,3,senior
+635,46.06,west coast,noon,0.65,0.43,5,3,night owl,baseball,4,junior
+636,20,west coast,noon,0.63,0.54,1,0,night owl,table tennis,4,sophomore
+637,24.42,west coast,noon,0.11,0.52,3,9,night owl,baseball,3,senior
+638,12.98,west coast,noon,0.19,0.33,6,5,night owl,martial arts,2,sophomore
+639,23.8,west coast,noon,0.23,0.14,3,3,early bird,curling,4,sophomore
+640,45.37,west coast,noon,0.37,0.36,9,9,night owl,football,1,junior
+641,58.67,west coast,evening,0.52,0.96,3,5,night owl,frisbee,2,senior
+642,19.76,west coast,evening,0.22,0.37,4,3,night owl,baseball,1,junior
+643,21.830000000000000,west coast,evening,0.41000000000000000,0.75,3,6,night owl,curling,4,junior
+644,29.7,west coast,evening,0.9400000000000000,0.09,7,5,night owl,gymnastics,4,sophomore
+645,51.44,west coast,evening,0.74,0.8300000000000000,5,5,night owl,table tennis,4,junior
+646,11.51,west coast,evening,0.21,0.65,3,5,early bird,martial arts,2,junior
+647,47.95,west coast,evening,0.25,0.25,8,4,night owl,martial arts,1,sophomore
+648,62.09,west coast,evening,0.93,0.84,7,6,night owl,frisbee,5,sophomore
+649,61.34,west coast,evening,0.98,0.85,8,3,early bird,frisbee,5,junior
+650,21.98,west coast,evening,0.21,0.18,4,11,night owl,curling,6,frosh
+651,46.56,west coast,evening,0.1,0.75,1,11,early bird,martial arts,6,sophomore
+652,58.85,west coast,evening,0.51,0.49,7,6,early bird,frisbee,3,sophomore
+653,68.14,west coast,evening,0.8300000000000000,0.7000000000000000,5,9,night owl,frisbee,4,frosh
+654,46.82,west coast,evening,0.28,0.3,8,11,night owl,baseball,3,junior
+655,68.09,west coast,evening,0.36,0.97,5,12,night owl,frisbee,3,junior
+656,61.06,west coast,evening,0.91,0.61,9,9,early bird,baseball,3,senior
+657,52.95,west coast,evening,0.55,0.18,8,7,night owl,football,4,frosh
+658,50.2,west coast,evening,0.28,0.2,4,4,night owl,baseball,5,frosh
+659,51.050000000000000,west coast,evening,0.43,0.9,2,6,night owl,frisbee,5,sophomore
+660,92.99,west coast,evening,0.98,0.92,9,11,night owl,basketball,4,sophomore
+661,39.4,west coast,morning,0.55,0.75,4,4,night owl,martial arts,3,senior
+662,0,west coast,morning,0.13,0.75,1,11,night owl,table tennis,3,sophomore
+663,0.91,west coast,morning,0.77,0.08,6,1,night owl,curling,7,frosh
+664,0,west coast,morning,0.16,0.43,1,0,night owl,curling,3,sophomore
+665,37.910000000000000,west coast,morning,0.58,0.52,9,8,night owl,martial arts,3,sophomore
+666,33.33,west coast,morning,0.44,0.93,3,10,night owl,martial arts,3,junior
+667,0,west coast,morning,0.49,0.4,2,1,night owl,table tennis,6,junior
+668,11.65,west coast,morning,0.59,0.58,4,5,night owl,football,4,junior
+669,15.200000000000000,west coast,morning,0.72,0.08,8,2,night owl,curling,4,junior
+670,42.33,west coast,morning,0.98,0.71,9,8,night owl,table tennis,6,sophomore
+671,55.39,west coast,evening,0.47000000000000000,0.6,7,11,night owl,curling,3,junior
+672,44.43,west coast,evening,0.27,0.74,2,9,night owl,frisbee,4,sophomore
+673,67.7,west coast,evening,0.66,0.96,2,2,night owl,basketball,3,junior
+674,51.38,west coast,evening,0.52,0.17,4,0,early bird,martial arts,3,frosh
+675,39.45,west coast,evening,0.02,0.08,1,0,early bird,frisbee,3,frosh
+676,42.410000000000000,west coast,evening,0.38,0.45,5,3,night owl,football,3,sophomore
+677,56.76,west coast,evening,0.86,0.39,10,10,early bird,table tennis,3,sophomore
+678,52.28,west coast,evening,0.31,0.2,8,6,night owl,table tennis,3,junior
+679,62.63,west coast,evening,0.52,0.96,3,11,night owl,table tennis,3,senior
+680,69.93,west coast,evening,0.79,0.49,9,10,night owl,curling,3,sophomore
+681,62.43,west coast,evening,0.86,0.8200000000000000,8,10,night owl,table tennis,5,junior
+682,19.14,west coast,evening,0.11,0.73,0,6,night owl,martial arts,5,frosh
+683,51.86,west coast,evening,0.68,0.89,7,6,early bird,curling,2,senior
+684,22.91,west coast,evening,0.26,0.59,2,11,night owl,baseball,4,junior
+685,21.2,west coast,evening,0.24,0.7000000000000000,2,9,night owl,baseball,3,junior
+686,6.03,west coast,evening,0.16,0.47000000000000000,1,3,night owl,table tennis,3,sophomore
+687,62.14,west coast,evening,0.9400000000000000,0.79,9,9,night owl,table tennis,4,senior
+688,86.43,west coast,evening,0.98,0.99,9,9,night owl,frisbee,3,senior
+689,25.98,west coast,evening,0.62,0.01,9,4,early bird,gymnastics,4,frosh
+690,0,west coast,evening,0.28,0.34,1,2,night owl,baseball,4,junior
+691,53.9,west coast,noon,0.99,0.56,10,5,night owl,baseball,4,senior
+692,27.41,west coast,noon,0.52,0.62,5,3,early bird,table tennis,4,junior
+693,20.41,west coast,noon,0.16,0.43,4,9,night owl,martial arts,3,sophomore
+694,11.290000000000000,west coast,noon,0.41000000000000000,0.14,3,1,night owl,baseball,3,sophomore
+695,59.54,west coast,noon,0.9500000000000000,0.6,10,6,night owl,frisbee,3,sophomore
+696,3.85,west coast,noon,0.24,0.22,5,2,night owl,martial arts,3,sophomore
+697,41.69,west coast,noon,0.92,0.29,10,8,night owl,table tennis,5,sophomore
+698,24.11,west coast,noon,0.34,0.4,3,0,night owl,martial arts,4,sophomore
+699,32.43,west coast,noon,0.55,0.38,6,3,night owl,martial arts,4,sophomore
+700,41.54,west coast,noon,0.9,0.26,10,12,night owl,gymnastics,3,junior
+701,56.120000000000000,west coast,evening,0.63,0.6900000000000000,7,11,night owl,frisbee,3,junior
+702,51.32,west coast,evening,0.91,0.42,10,9,night owl,football,3,sophomore
+703,56.08,west coast,evening,0.45,0.9400000000000000,6,6,night owl,frisbee,1,senior
+704,42.6,west coast,evening,0.68,0.62,6,8,early bird,frisbee,4,frosh
+705,49.19,west coast,evening,0.36,0.89,4,6,early bird,frisbee,2,junior
+706,20.37,west coast,evening,0.33,0.17,2,3,night owl,football,5,sophomore
+707,56.02,west coast,evening,0.91,0.9,7,10,early bird,basketball,7,sophomore
+708,0,west coast,evening,0.17,0.09,1,0,night owl,table tennis,5,frosh
+709,43.67,west coast,evening,0.86,0.79,4,4,night owl,curling,5,junior
+710,27.61,west coast,evening,0.51,0.18,7,11,early bird,baseball,4,sophomore
+711,0,west coast,evening,0,0.08,0,1,night owl,baseball,3,sophomore
+712,12.790000000000000,west coast,evening,0.59,0.39,3,1,night owl,football,6,junior
+713,57.13,west coast,evening,0.9500000000000000,0.88,4,7,night owl,table tennis,5,junior
+714,0,west coast,evening,0.28,0.02,6,1,night owl,gymnastics,4,frosh
+715,51.64,west coast,evening,0.41000000000000000,0.65,8,11,night owl,basketball,2,sophomore
+716,17.490000000000000,west coast,evening,0.14,0.46,0,2,night owl,baseball,4,senior
+717,74.77,west coast,evening,0.8,0.92,8,9,night owl,frisbee,3,senior
+718,22.03,west coast,evening,0.14,0.31,3,2,night owl,basketball,3,frosh
+719,36.43,west coast,evening,0.37,0.88,2,7,night owl,frisbee,4,junior
+720,6.83,west coast,evening,0.03,0.05,1,2,night owl,table tennis,4,frosh
+721,35.93,west coast,noon,0.71,0.15,8,10,night owl,curling,7,frosh
+722,44.85,west coast,noon,0.53,0.63,9,5,early bird,curling,3,junior
+723,47.65,west coast,noon,0.88,0.36,8,11,early bird,baseball,6,sophomore
+724,13.200000000000000,west coast,noon,0.56,0.25,6,1,night owl,baseball,3,junior
+725,65.92,west coast,noon,0.98,0.84,10,11,night owl,table tennis,4,senior
+726,24.52,west coast,noon,0.16,0.49,5,9,early bird,curling,2,junior
+727,37.43,west coast,noon,0.61,0.5,3,2,night owl,curling,5,sophomore
+728,27.57,west coast,noon,0.54,0.47000000000000000,5,8,night owl,baseball,3,junior
+729,37.9,west coast,noon,0.07,0.5700000000000000,1,6,night owl,frisbee,3,sophomore
+730,59.17,west coast,noon,0.9500000000000000,0.59,9,6,night owl,frisbee,4,sophomore
+731,40.65,west coast,morning,0.18,0.6,2,1,night owl,basketball,2,frosh
+732,22.37,west coast,morning,0.27,0.16,4,1,night owl,table tennis,4,sophomore
+733,36.32,west coast,morning,0.55,0.44,3,3,night owl,football,7,sophomore
+734,68.56,west coast,morning,0.86,0.58,9,7,night owl,frisbee,3,junior
+735,65.72,west coast,morning,0.65,0.64,8,11,night owl,frisbee,2,junior
+736,40.12,west coast,morning,0.17,0.05,9,6,night owl,table tennis,3,frosh
+737,46.74,west coast,morning,0.62,0.3,6,0,early bird,gymnastics,2,senior
+738,51.11,west coast,morning,0.9500000000000000,0.84,4,2,early bird,curling,6,sophomore
+739,59.28,west coast,morning,0.97,0.6900000000000000,6,5,early bird,football,4,senior
+740,43.96,west coast,morning,0.93,0.75,6,6,night owl,gymnastics,6,junior
+741,16.64,west coast,evening,0.31,0.89,4,11,early bird,curling,3,junior
+742,21.59,west coast,evening,0.14,0.68,1,7,night owl,frisbee,3,sophomore
+743,13.99,west coast,evening,0.6,0,9,9,early bird,gymnastics,6,frosh
+744,63.92,west coast,evening,0.72,0.87,5,7,night owl,basketball,4,sophomore
+745,26.05,west coast,evening,0.17,0.22,5,5,night owl,frisbee,3,frosh
+746,20.64,west coast,evening,0.33,0.28,5,4,night owl,martial arts,3,junior
+747,39.160000000000000,west coast,evening,0.62,0.16,6,5,night owl,martial arts,6,frosh
+748,17.400000000000000,west coast,evening,0.22,0.76,1,2,night owl,table tennis,2,senior
+749,45.65,west coast,evening,0.81,0.72,7,10,night owl,table tennis,4,sophomore
+750,19.05,west coast,evening,0.19,0.6,4,8,night owl,football,3,junior
+751,47.62,west coast,evening,0.14,0.6,5,9,night owl,martial arts,1,junior
+752,51.59,west coast,evening,0.6,0.73,2,4,night owl,basketball,3,sophomore
+753,56.730000000000000,west coast,evening,0.74,0.37,9,11,night owl,curling,3,senior
+754,44.39,west coast,evening,0.4,0.37,3,6,night owl,table tennis,4,sophomore
+755,46.53,west coast,evening,0.73,0.12,8,6,night owl,gymnastics,6,junior
+756,36.81,west coast,evening,0.47000000000000000,0.01,7,3,night owl,gymnastics,4,sophomore
+757,53.01,west coast,evening,0.75,0.79,4,3,night owl,table tennis,4,junior
+758,63.870000000000000,west coast,evening,0.93,0.86,7,8,night owl,curling,5,sophomore
+759,25.02,west coast,evening,0.2,0.06,6,3,night owl,football,3,sophomore
+760,79.25,west coast,evening,0.9500000000000000,0.71,10,9,night owl,football,2,senior
+761,40.2,west coast,evening,0.06,0.1,7,7,early bird,martial arts,3,junior
+762,29.55,west coast,evening,0.34,0.06,9,7,night owl,gymnastics,1,junior
+763,42.27,west coast,evening,0.43,0.73,1,3,night owl,curling,3,junior
+764,56.44,west coast,evening,0.64,0.79,3,9,night owl,frisbee,4,frosh
+765,21.82,west coast,evening,0.31,0.5,0,1,early bird,curling,5,sophomore
+766,19.01,west coast,evening,0.12,0.55,1,9,night owl,football,2,senior
+767,52.78,west coast,evening,0.7000000000000000,0.55,8,2,night owl,curling,1,junior
+768,38.65,west coast,evening,0.41000000000000000,0.26,5,4,night owl,baseball,4,junior
+769,41.19,west coast,evening,0.3,0.33,1,5,early bird,football,6,junior
+770,31.23,west coast,evening,0.35000000000000000,0.77,8,11,early bird,martial arts,2,senior
+771,55.45,west coast,evening,0.8,0.21,9,4,night owl,martial arts,6,frosh
+772,40.65,west coast,evening,0.72,0.48,8,1,night owl,table tennis,3,junior
+773,44.2,west coast,evening,0.41000000000000000,0.5,7,6,night owl,martial arts,3,junior
+774,49.15,west coast,evening,0.44,0.9500000000000000,1,9,night owl,martial arts,4,junior
+775,3.56,west coast,evening,0.22,0.02,4,0,night owl,baseball,4,frosh
+776,40.39,west coast,evening,0.39,0.87,1,6,night owl,frisbee,5,junior
+777,14.43,west coast,evening,0.22,0.34,5,11,night owl,martial arts,3,sophomore
+778,52.07,west coast,evening,0.76,0.78,4,3,night owl,frisbee,4,sophomore
+779,12.72,west coast,evening,0.26,0.26,7,9,early bird,curling,2,sophomore
+780,0,west coast,evening,0.35000000000000000,0.25,3,0,night owl,curling,4,junior
+781,75.8,west coast,evening,0.91,0.9400000000000000,6,9,night owl,table tennis,4,junior
+782,60.68,west coast,evening,0.79,0.84,5,8,night owl,frisbee,6,junior
+783,50.44,west coast,evening,0.54,0.5,5,6,night owl,frisbee,3,sophomore
+784,21.1,west coast,evening,0.1,0.13,2,0,night owl,martial arts,3,frosh
+785,50.52,west coast,evening,0.4,0.91,3,5,night owl,martial arts,1,senior
+786,78.78,west coast,evening,0.15,0.05,3,0,early bird,curling,3,frosh
+787,50.57,west coast,evening,0.47000000000000000,0.9400000000000000,1,2,night owl,frisbee,5,junior
+788,55.08,west coast,evening,0.65,0.09,7,3,night owl,football,4,frosh
+789,40.54,west coast,evening,0.08,0.96,0,7,early bird,frisbee,3,senior
+790,69.78,west coast,evening,0.91,0.9500000000000000,4,1,night owl,frisbee,4,junior
+791,78.43,west coast,evening,0.96,0.8300000000000000,9,8,night owl,martial arts,3,junior
+792,5.68,west coast,evening,0.01,0.05,2,5,night owl,curling,3,sophomore
+793,13.23,west coast,evening,0.25,0.05,6,9,night owl,gymnastics,4,sophomore
+794,41.92,west coast,evening,0.66,0.89,5,1,early bird,martial arts,2,junior
+795,25.25,west coast,evening,0.36,0.74,3,4,night owl,curling,3,senior
+796,35.34,west coast,evening,0.12,0.92,2,9,night owl,basketball,2,sophomore
+797,50.660000000000000,west coast,evening,0.9500000000000000,0.38,9,5,night owl,curling,4,sophomore
+798,36.51,west coast,evening,0.75,0.15,7,9,night owl,gymnastics,5,sophomore
+799,24,west coast,evening,0.23,0.45,6,4,night owl,table tennis,2,junior
+800,37.78,west coast,evening,0.52,0.76,5,12,night owl,martial arts,4,sophomore
+801,31.88,west coast,noon,0.85,0.31,5,1,night owl,football,5,sophomore
+802,0,west coast,noon,0.11,0.14,1,0,night owl,table tennis,3,sophomore
+803,46.68,west coast,noon,0.8300000000000000,0.46,8,7,night owl,curling,6,sophomore
+804,42.09,west coast,noon,0.7000000000000000,0.8300000000000000,6,9,night owl,football,3,senior
+805,26.900000000000000,west coast,noon,0.45,0.87,1,0,night owl,basketball,4,junior
+806,18.330000000000000,west coast,noon,0.37,0.54,4,7,night owl,baseball,3,senior
+807,1.97,west coast,noon,0.07,0.01,6,9,night owl,gymnastics,4,frosh
+808,13.97,west coast,noon,0.09,0.81,0,3,night owl,frisbee,3,junior
+809,25.12,west coast,noon,0.51,0.23,3,2,night owl,curling,4,frosh
+810,0,west coast,noon,0.14,0.61,1,9,early bird,football,6,sophomore
+811,0,west coast,noon,0.27,0.03,5,6,night owl,baseball,5,frosh
+812,23.650000000000000,west coast,noon,0.6900000000000000,0.31,9,11,night owl,table tennis,4,sophomore
+813,50.06,west coast,noon,0.88,0.9500000000000000,4,7,night owl,curling,5,senior
+814,40.75,west coast,noon,0.9400000000000000,0.59,7,6,night owl,football,4,frosh
+815,0,west coast,noon,0.17,0.29,3,7,night owl,baseball,4,sophomore
+816,14.71,west coast,noon,0.53,0.34,8,7,night owl,curling,3,junior
+817,0,west coast,noon,0.28,0.33,1,0,night owl,table tennis,6,sophomore
+818,0,west coast,noon,0.2,0.17,0,9,night owl,baseball,5,frosh
+819,0,west coast,noon,0.19,0.6900000000000000,0,11,night owl,table tennis,5,sophomore
+820,20.56,west coast,noon,0.73,0.25,6,5,night owl,curling,7,frosh
+821,48.97,west coast,morning,0.79,0.74,9,11,night owl,table tennis,3,sophomore
+822,31.42,west coast,morning,0.42,0.02,9,6,night owl,table tennis,3,frosh
+823,45.36,west coast,morning,0.71,0.64,8,11,night owl,baseball,3,senior
+824,68.64,west coast,morning,0.88,0.96,6,10,night owl,martial arts,6,sophomore
+825,38.72,west coast,morning,0.98,0.19,10,4,night owl,gymnastics,3,sophomore
+826,25.36,west coast,morning,0.44,0.2,5,8,night owl,baseball,3,sophomore
+827,14.530000000000000,west coast,morning,0.13,0.01,4,1,night owl,baseball,5,frosh
+828,68.97,west coast,morning,0.9400000000000000,0.96,5,6,night owl,martial arts,5,junior
+829,15.31,west coast,morning,0.31,0.36,5,11,night owl,football,5,sophomore
+830,37.800000000000000,west coast,morning,0.77,0.39,7,11,night owl,curling,3,junior
+831,61.75,west coast,morning,0.85,0.67,10,11,night owl,table tennis,4,sophomore
+832,35.51,west coast,morning,0.44,0.21,4,5,night owl,baseball,5,frosh
+833,47.04,west coast,morning,0.61,0.66,6,4,early bird,curling,1,senior
+834,62.34,west coast,morning,0.8200000000000000,0.92,2,2,night owl,basketball,6,sophomore
+835,60.68,west coast,morning,0.68,0.93,1,1,night owl,martial arts,4,junior
+836,47.730000000000000,west coast,morning,0.93,0.08,9,5,night owl,curling,8,frosh
+837,41.160000000000000,west coast,morning,0.4,0.86,1,6,night owl,frisbee,4,junior
+838,55.26,west coast,morning,0.54,0.58,7,4,night owl,basketball,3,sophomore
+839,27.62,west coast,morning,0.58,0.04,7,0,night owl,table tennis,4,frosh
+840,30.03,west coast,morning,0.46,0.04,4,1,night owl,baseball,3,sophomore
+841,48.84,west coast,noon,0.81,0.86,5,8,night owl,table tennis,5,senior
+842,63.79,west coast,noon,0.98,0.91,7,7,night owl,curling,5,senior
+843,18.11,west coast,noon,0.11,0.67,3,1,night owl,frisbee,1,junior
+844,35.480000000000000,west coast,noon,0.6900000000000000,0.44,5,3,night owl,baseball,5,junior
+845,44.47,west coast,noon,0.26,0.38,6,4,night owl,frisbee,2,sophomore
+846,50.04,west coast,noon,0.89,0.9,3,0,night owl,basketball,4,sophomore
+847,55.07,west coast,noon,0.99,0.74,10,11,night owl,curling,7,sophomore
+848,37.07,west coast,noon,0.68,0.47000000000000000,3,3,night owl,curling,5,junior
+849,14.780000000000000,west coast,noon,0.19,0.76,1,8,night owl,basketball,3,junior
+850,8.15,west coast,noon,0.05,0.05,4,3,night owl,baseball,2,sophomore
+851,48.53,west coast,evening,0.63,0.64,3,6,night owl,curling,3,junior
+852,35.95,west coast,evening,0.5,0.87,1,1,early bird,basketball,3,junior
+853,76.02,west coast,evening,0.88,0.72,9,11,night owl,martial arts,5,sophomore
+854,43.02,west coast,evening,0.49,0.6,8,6,early bird,curling,1,senior
+855,59.35,west coast,evening,0.58,0.54,9,10,night owl,curling,1,senior
+856,90.49,west coast,evening,0.9500000000000000,0.99,8,12,night owl,frisbee,4,senior
+857,53.64,west coast,evening,0.19,0.96,4,12,early bird,basketball,2,junior
+858,30.46,west coast,evening,0.24,0.65,2,8,night owl,curling,4,junior
+859,68.92,west coast,evening,0.89,0.99,2,1,night owl,frisbee,5,junior
+860,80.67,west coast,evening,0.9,0.77,10,9,early bird,basketball,1,senior
+861,50.120000000000000,west coast,evening,0.68,0.53,8,5,night owl,curling,3,junior
+862,51.89,west coast,evening,0.02,0.34,0,0,early bird,martial arts,3,sophomore
+863,41.83,west coast,evening,0.73,0.38,7,3,early bird,martial arts,5,frosh
+864,71.9,west coast,evening,0.8200000000000000,0.87,7,7,night owl,frisbee,4,junior
+865,51.07,west coast,evening,0.91,0.47000000000000000,9,12,night owl,baseball,6,sophomore
+866,40.53,west coast,evening,0.55,0.36,6,9,night owl,baseball,3,junior
+867,12.27,west coast,evening,0.08,0.43,0,0,early bird,curling,1,senior
+868,49.67,west coast,evening,0.6900000000000000,0.39,8,10,night owl,table tennis,3,junior
+869,44.46,west coast,evening,0.64,0.86,6,12,early bird,table tennis,3,junior
+870,56.63,west coast,evening,0.84,0.84,6,1,night owl,basketball,3,senior
+871,59.480000000000000,west coast,noon,0.89,0.6900000000000000,10,10,early bird,curling,3,senior
+872,38.09,west coast,noon,0.23,0.62,0,6,night owl,gymnastics,6,junior
+873,24.89,west coast,noon,0.58,0.19,4,4,early bird,curling,7,frosh
+874,41.75,west coast,noon,0.67,0.52,8,8,night owl,football,3,sophomore
+875,36.800000000000000,west coast,noon,0.65,0.37,8,11,night owl,martial arts,5,frosh
+876,22.06,west coast,noon,0.47000000000000000,0.07,8,6,early bird,football,4,sophomore
+877,60.550000000000000,west coast,noon,0.92,0.59,8,3,night owl,martial arts,4,junior
+878,66.93,west coast,noon,0.79,0.98,3,8,night owl,basketball,4,junior
+879,53.32,west coast,noon,0.71,0.33,9,6,early bird,table tennis,3,sophomore
+880,9.450000000000000,west coast,noon,0.14,0.38,5,5,early bird,martial arts,2,frosh
+881,41.97,west coast,evening,0.58,0.3,5,2,night owl,baseball,4,junior
+882,58.02,west coast,evening,0.51,0.97,3,9,night owl,martial arts,3,junior
+883,32.9,west coast,evening,0.3,0.06,6,3,night owl,football,4,sophomore
+884,60.76,west coast,evening,0.61,0.93,3,11,night owl,baseball,4,senior
+885,50.38,west coast,evening,0.77,0.6,7,10,night owl,baseball,4,junior
+886,21.72,west coast,evening,0.33,0.22,6,8,night owl,football,3,sophomore
+887,59.52,west coast,evening,0.56,0.96,2,7,night owl,basketball,3,senior
+888,75.49,west coast,evening,0.9400000000000000,0.9,9,11,night owl,curling,4,senior
+889,75.86,west coast,evening,0.98,0.67,10,6,night owl,frisbee,4,junior
+890,36.09,west coast,evening,0.51,0.16,7,7,night owl,football,3,junior
+891,50.67,west coast,evening,0.36,0.54,8,11,night owl,frisbee,1,junior
+892,27.53,west coast,evening,0.48,0.1,6,3,early bird,baseball,3,junior
+893,13.64,west coast,evening,0.29,0.46,2,6,night owl,table tennis,4,sophomore
+894,20.63,west coast,evening,0.08,0.2,1,0,night owl,table tennis,3,sophomore
+895,0,west coast,evening,0.09,0.09,4,7,early bird,baseball,2,junior
+896,31.080000000000000,west coast,evening,0.02,0.34,1,4,night owl,martial arts,3,junior
+897,26.09,west coast,evening,0.55,0.8,1,4,early bird,curling,5,sophomore
+898,54.46,west coast,evening,0.8,0.64,5,7,night owl,football,5,junior
+899,56.04,west coast,evening,0.81,0.84,6,7,night owl,table tennis,4,junior
+900,51.870000000000000,west coast,evening,0.66,0.58,7,10,night owl,football,4,sophomore
+901,59.54,west coast,evening,0.88,0.48,10,4,night owl,curling,3,junior
+902,39.43,west coast,evening,0.64,0.14,9,3,night owl,table tennis,4,frosh
+903,41.95,west coast,evening,0.64,0.55,7,3,night owl,curling,3,senior
+904,51.160000000000000,west coast,evening,0.78,0.8,7,7,early bird,frisbee,3,junior
+905,62.82,west coast,evening,0.84,0.76,6,9,night owl,frisbee,4,frosh
+906,0,west coast,evening,0.1,0.66,1,12,early bird,gymnastics,3,senior
+907,29.3,west coast,evening,0.66,0.2,9,8,early bird,gymnastics,3,senior
+908,34.13,west coast,evening,0.75,0.47000000000000000,7,3,night owl,football,6,junior
+909,41.480000000000000,west coast,evening,0.89,0.24,8,9,night owl,gymnastics,6,sophomore
+910,57.230000000000000,west coast,evening,0.67,0.93,4,6,night owl,table tennis,3,senior
+911,73.95,west coast,evening,0.98,0.84,9,8,night owl,table tennis,3,senior
+912,10.53,west coast,evening,0.1,0.11,1,6,early bird,baseball,3,junior
+913,29.22,west coast,evening,0.5700000000000000,0.59,3,3,early bird,martial arts,5,junior
+914,46.410000000000000,west coast,evening,0.26,0.98,1,9,night owl,basketball,3,junior
+915,43.34,west coast,evening,0.6,0.77,5,3,early bird,table tennis,3,senior
+916,7.98,west coast,evening,0.07,0.34,0,4,night owl,table tennis,5,sophomore
+917,67.51,west coast,evening,0.9500000000000000,0.9,4,3,night owl,table tennis,4,junior
+918,62.76,west coast,evening,0.89,0.77,8,12,night owl,table tennis,4,junior
+919,60.38,west coast,evening,0.66,0.8,8,9,early bird,martial arts,2,senior
+920,25.51,west coast,evening,0.37,0.41000000000000000,2,1,night owl,table tennis,4,sophomore
+921,49.2,west coast,evening,0.59,0.37,7,9,early bird,football,5,sophomore
+922,59.52,west coast,evening,0.73,0.74,7,11,night owl,martial arts,4,sophomore
+923,29.060000000000000,west coast,evening,0.41000000000000000,0.46,2,2,night owl,curling,4,junior
+924,55.04,west coast,evening,0.85,0.72,9,12,night owl,curling,6,junior
+925,84.75,west coast,evening,0.98,1,7,5,night owl,table tennis,5,senior
+926,54.84,west coast,evening,0.63,0.49,8,8,night owl,frisbee,4,sophomore
+927,35.7,west coast,evening,0.8300000000000000,0.08,9,5,early bird,table tennis,6,frosh
+928,44.68,west coast,evening,0.81,0.75,3,5,night owl,curling,3,senior
+929,54.82,west coast,evening,0.71,0.43,8,7,night owl,football,3,sophomore
+930,26.35,west coast,evening,0.27,0.09,4,3,early bird,baseball,6,frosh
+931,9.950000000000000,west coast,evening,0.04,0.51,0,7,night owl,table tennis,4,frosh
+932,59.21,west coast,evening,0.96,0.86,7,11,night owl,curling,8,sophomore
+933,58.18,west coast,evening,0.88,0.77,7,2,night owl,curling,3,junior
+934,44.480000000000000,west coast,evening,0.74,0.78,6,3,night owl,curling,3,senior
+935,71.78,west coast,evening,0.86,0.99,7,8,early bird,basketball,3,junior
+936,25.35,west coast,evening,0.5700000000000000,0.64,4,5,night owl,table tennis,7,sophomore
+937,8.85,west coast,evening,0.03,0.47000000000000000,1,3,night owl,football,3,sophomore
+938,76.87,west coast,evening,0.9,0.9400000000000000,9,12,night owl,curling,3,senior
+939,25.400000000000000,west coast,evening,0.62,0.34,5,4,early bird,martial arts,5,frosh
+940,24.580000000000000,west coast,evening,0.23,0.59,3,3,night owl,football,2,senior
+941,47.22,west coast,evening,0.34,0.9,5,10,night owl,martial arts,2,senior
+942,51.94,west coast,evening,0.7000000000000000,0.84,8,11,early bird,table tennis,3,junior
+943,62.79,west coast,evening,0.61,0.93,4,7,night owl,basketball,3,junior
+944,41.7,west coast,evening,0.85,0.08,9,4,night owl,curling,7,frosh
+945,64.54,west coast,evening,0.9,0.87,4,10,night owl,baseball,5,senior
+946,67.34,west coast,evening,0.88,0.96,4,6,night owl,football,4,senior
+947,49,west coast,evening,0.47000000000000000,0.9500000000000000,2,2,night owl,frisbee,3,senior
+948,43.160000000000000,west coast,evening,0.9,0.39,8,2,night owl,football,6,frosh
+949,42.12,west coast,evening,0.24,0.36,8,7,night owl,frisbee,2,sophomore
+950,13.05,west coast,evening,0.42,0.15,5,10,early bird,baseball,5,junior
+951,22.51,west coast,noon,0.54,0.5700000000000000,2,3,night owl,curling,4,senior
+952,23.6,west coast,noon,0.56,0.59,5,2,night owl,martial arts,3,senior
+953,44.77,west coast,noon,0.8300000000000000,0.72,9,12,early bird,curling,6,junior
+954,0,west coast,noon,0.01,0.53,1,5,early bird,curling,1,senior
+955,18.490000000000000,west coast,noon,0.49,0.05,7,4,night owl,gymnastics,3,senior
+956,43.43,west coast,noon,0.1,0.53,0,1,night owl,curling,3,junior
+957,40.7,west coast,noon,0.76,0.66,5,5,early bird,basketball,5,frosh
+958,66.92,west coast,noon,0.88,1,4,11,night owl,frisbee,5,senior
+959,29.810000000000000,west coast,noon,0.62,0.8,5,8,night owl,table tennis,3,senior
+960,0,west coast,noon,0.32,0.4,3,10,night owl,curling,7,frosh
+961,44.88,west coast,evening,0.7000000000000000,0.58,7,9,night owl,football,4,junior
+962,58.050000000000000,west coast,evening,0.87,0.78,8,8,night owl,table tennis,4,junior
+963,58.14,west coast,evening,0.77,0.92,2,7,night owl,basketball,6,junior
+964,63.550000000000000,west coast,evening,0.99,0.6,10,10,night owl,curling,4,sophomore
+965,24.62,west coast,evening,0.04,0.21,1,4,night owl,martial arts,3,sophomore
+966,15.26,west coast,evening,0.04,0.21,2,2,early bird,table tennis,3,sophomore
+967,78.34,west coast,evening,0.73,0.99,5,8,night owl,basketball,3,sophomore
+968,19.54,west coast,evening,0.02,0.34,1,2,early bird,martial arts,1,junior
+969,53.160000000000000,west coast,evening,0.8200000000000000,0.58,8,10,night owl,table tennis,5,junior
+970,26.73,west coast,evening,0.27,0.84,2,3,night owl,frisbee,2,junior
+971,77.03,west coast,evening,0.71,0.87,8,5,night owl,frisbee,3,senior
+972,0.4,west coast,evening,0.23,0.76,1,8,night owl,table tennis,6,frosh
+973,45.2,west coast,evening,0.56,0.59,6,11,night owl,martial arts,3,sophomore
+974,53.870000000000000,west coast,evening,0.68,0.89,4,7,night owl,basketball,4,sophomore
+975,51.72,west coast,evening,0.68,0.86,3,8,night owl,martial arts,6,junior
+976,77.57000000000000,west coast,evening,0.98,0.96,9,12,night owl,football,5,senior
+977,44.4,west coast,evening,0.39,0.81,2,9,night owl,frisbee,4,sophomore
+978,15.33,west coast,evening,0.13,0.26,1,4,night owl,table tennis,5,sophomore
+979,39.14,west coast,evening,0.38,0.78,3,10,night owl,football,3,senior
+980,34.61,west coast,evening,0.43,0.13,9,8,early bird,baseball,3,sophomore
+981,52.6,west coast,evening,0.8200000000000000,0.6,4,8,night owl,gymnastics,5,sophomore
+982,44.08,west coast,evening,0.61,0.77,6,11,night owl,table tennis,4,senior
+983,40.34,west coast,evening,0.37,0.23,4,1,night owl,football,4,sophomore
+984,30.88,west coast,evening,0.03,0.5,1,5,night owl,martial arts,2,sophomore
+985,65.09,west coast,evening,0.91,0.62,9,8,night owl,table tennis,3,junior
+986,26.44,west coast,evening,0.26,0.86,0,0,night owl,basketball,5,junior
+987,29.14,west coast,evening,0.33,0.62,3,11,night owl,table tennis,4,sophomore
+988,44.02,west coast,evening,0.32,0.66,7,11,night owl,curling,3,junior
+989,54.94,west coast,evening,0.9,0.59,6,7,night owl,martial arts,4,sophomore
+990,38.06,west coast,evening,0.63,0.61,7,4,early bird,table tennis,3,senior
+991,0,west coast,noon,0,0.31,0,0,night owl,frisbee,2,sophomore
+992,44.31,west coast,noon,0.76,0.71,5,11,night owl,baseball,4,junior
+993,44.68,west coast,noon,0.51,0.54,7,1,night owl,table tennis,2,junior
+994,74.64,west coast,noon,0.93,0.9,8,3,night owl,basketball,3,sophomore
+995,34.1,west coast,noon,0.53,0.6900000000000000,5,1,early bird,basketball,3,sophomore
+996,44.65,west coast,noon,0.35000000000000000,0.81,2,10,night owl,martial arts,3,junior
+997,35.94,west coast,noon,0.31,0.49,6,5,night owl,martial arts,3,sophomore
+998,69.64,west coast,noon,0.74,1,6,10,night owl,basketball,3,senior
+999,35.59,west coast,noon,0.73,0.09,9,9,night owl,table tennis,6,frosh
+1000,56.18,west coast,noon,0.9400000000000000,0.29,9,12,night owl,gymnastics,5,senior
