@@ -1,0 +1,3 @@
+print(eveningmodel)
+View(data)
+View(adult)
