@@ -226,6 +226,9 @@ summary(model)
 # p = 1/pi arctan(beta * score_dif) + 1/2
 # but it just won't happen. Thus why I did the piecewise linear above
 
+# On further examination, maybe this is a logistic curve!
+# We'll see if we learn a technique for that though.
+
 # (This is an attempted transformation to accomplish it with linear
 # regression, but it failed because this should really be using
 # horizontal squared distance.)
