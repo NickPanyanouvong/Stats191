@@ -91,4 +91,4 @@ write.csv(all_games, "../PROCESSED_DATA/processed_normalized_all_games.csv", row
 previous_results <- previous_results %>%
   mutate(score_dif = `team 1 score` - `team 2 score`)
 
-write.csv(all_games, "../PROCESSED_DATA/processed_previous_results.csv", row.names = FALSE)
+write.csv(previous_results, "../PROCESSED_DATA/processed_previous_results.csv", row.names = FALSE)

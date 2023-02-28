@@ -1,6 +1,6 @@
-# Install packages
-install.packages('tidyverse')
-install.packages('haven')
+# Install packages (uncomment and run when needed)
+# install.packages('tidyverse')
+# install.packages('haven')
 
 # Libraries and helpers
 library(tidyverse)
@@ -145,7 +145,7 @@ ggplot(previous_results, aes(x=score_dif)) +
 
 # I couldn't find a better way to make a histogram of this type
 previous_results_means <- previous_results %>%
-  group_by(floor(score_dif/5)) %>%
+  group_by(floor(score_dif/5) + 0.5) %>%
   summarize(
     n = sum(!is.na(`winning team`)), 
     mean = mean(`winning team`)
@@ -173,7 +173,7 @@ abline(model)
 # This one shows the winrate in the buckets as a function of score difference:
 # (buckets of 5)
 # TODO: (fast) Rename the axis on these
-ggplot(previous_results_means, aes(x=`floor(score_dif/5)`*5, y=mean, fill=`floor(score_dif/5)`)) + 
+ggplot(previous_results_means, aes(x=`floor(score_dif/5) + 0.5`*5, y=mean, fill=`floor(score_dif/5)`)) + 
   geom_bar(stat="identity") +
   geom_text(aes(label=round(mean, digits=3)), color="green", vjust=-2.5) + 
   theme_minimal()
@@ -202,7 +202,7 @@ ggplot(previous_results_means, aes(x=`floor(score_dif/5)`*5, y=mean, fill=`floor
 # This one limits it to those bounds, and makes a pretty reasonable trendline
 # It makes an error message but the issue it says is happening isn't actually
 # happening
-ggplot(filter(previous_results_means, abs(`floor(score_dif/5)`*5) <= 35), aes(x=`floor(score_dif/5)`*5, y=mean, fill=`floor(score_dif/5)`)) + 
+ggplot(filter(previous_results_means, abs(`floor(score_dif/5) + 0.5`*5) <= 35), aes(x=`floor(score_dif/5) + 0.5`*5, y=mean, fill=`floor(score_dif/5) + 0.5`)) + 
   geom_bar(stat="identity") +
   geom_text(aes(label=round(mean, digits=3)), color="green", vjust=-2.5) + 
   stat_smooth(method="lm") +
@@ -210,8 +210,8 @@ ggplot(filter(previous_results_means, abs(`floor(score_dif/5)`*5) <= 35), aes(x=
 
 # The equation for the trendline from that is below. Keep in mind the
 # slope should be divided by five to convert to score_dif units
-model <- lm(mean ~ `floor(score_dif/5)`,
-            data=filter(previous_results_means, abs(`floor(score_dif/5)`*5) <= 35))
+model <- lm(mean ~ `floor(score_dif/5) + 0.5`,
+            data=filter(previous_results_means, abs(`floor(score_dif/5) + 0.5`*5) <= 35))
 summary(model)
 
 # Here's a more accurate, very similar trendline that doesn't use buckets
