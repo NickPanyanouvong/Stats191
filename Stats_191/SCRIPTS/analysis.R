@@ -232,11 +232,14 @@ ggplot(residual_by_cutoff, aes(x=cutoffs, y=residuals)) +
 
 cutoff <- mean(residual_by_cutoff$cutoffs[which(residual_by_cutoff$residuals == min(residual_by_cutoff$residuals))])
 
-model <- lm(`winning team` ~ score_dif,
-            data=filter(previous_results, abs(score_dif) < cutoff))
-summary(model)
-plot(`winning team` ~ score_dif, data = previous_results)
-abline(model)
+# Now we know the region to search in
+targeted_range <- targeted_piecewise_residual(previous_results, previous_results$`winning team`,
+                                              previous_results$score_dif, 50000, cutoff - 5, cutoff + 5)
+# Accurate to three decimal places - because we searched 
+# a range of length 10 in 50,000 intervals
+cutoff <- round(mean(targeted_range$cutoffs[which(targeted_range$residuals == min(targeted_range$residuals))]),3)
+
+
 
 # A side note:
 

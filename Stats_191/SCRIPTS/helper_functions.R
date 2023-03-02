@@ -32,18 +32,21 @@ piecewise_predict <- function(input, model, cutoff) {
   return(0.5 + input/(2*cutoff))
 }
 
-
 multiple_piecewise_residual <- function(df, dependent, independent, steps) {
-  maxcutoff <- max(max(independent),max(-1*independent)) * 1.05
-  step <- maxcutoff/steps
+  return(targeted_piecewise_residual(df, dependent, independent, steps, 0, max(max(independent),max(-1*independent)) * 1.05))
+}
+
+targeted_piecewise_residual <- function(df, dependent, independent, steps, lower, upper) {
+  step <- (upper-lower)/steps
   cutoffs <- c()
   residuals <- c()
   for(i in 0:steps) {
-    cutoffs <- append(cutoffs,step * i)
-    residuals <- append(residuals,piecewise_residual_square(df,dependent, independent, -1 * step * i, step * i))
+    cutoffs <- append(cutoffs,lower + step * i)
+    residuals <- append(residuals,piecewise_residual_square(df,dependent, independent, -1 * (lower + step * i), lower + step * i))
   }
   return(data.frame(cutoffs,residuals))
 }
+
 # Just returns a list of z-scores from a list
 normalize <- function(statistic){
   return ((statistic - mean(statistic))/var(statistic))
