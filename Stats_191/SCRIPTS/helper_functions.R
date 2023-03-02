@@ -7,9 +7,29 @@
 
 piecewise_residual_square <- function(df, dependent, independent, low, high) {
   piece_one <- sum(dependent[independent <= low]^2)
-  piece_two <- deviance(lm(dependent[independent > low][independent < high] ~ independent[independent > low][independent < high], data = filter(filter(df,score_dif < high),score_dif > low)))
+  if(low != high) {
+    yvals <- dependent[independent < high]
+    middle <- independent[independent < high]
+    yvals <- yvals[middle > low]
+    middle <- middle[middle > low]
+    yvals <- yvals[!is.na(yvals)]
+    middle <- middle[!is.na(middle)]
+    piece_two <- sum(((middle - low)/(high-low) - yvals)^2)
+  } else {
+    piece_two <- 0
+  }
   piece_three <- sum((1-dependent[independent >= high])^2)
   return(piece_one + piece_two + piece_three)
+}
+
+piecewise_predict <- function(input, model, cutoff) {
+  if(input <= -1*cutoff) {
+    return(0)
+  }
+  if(input >= cutoff) {
+    return(1)
+  }
+  return(0.5 + input/(2*cutoff))
 }
 
 

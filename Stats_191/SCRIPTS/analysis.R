@@ -230,6 +230,14 @@ ggplot(residual_by_cutoff, aes(x=cutoffs, y=residuals)) +
   geom_point() +
   theme_minimal()
 
+cutoff <- mean(residual_by_cutoff$cutoffs[which(residual_by_cutoff$residuals == min(residual_by_cutoff$residuals))])
+
+model <- lm(`winning team` ~ score_dif,
+            data=filter(previous_results, abs(score_dif) < cutoff))
+summary(model)
+plot(`winning team` ~ score_dif, data = previous_results)
+abline(model)
+
 # A side note:
 
 # I really want to do a a regression of the form:
@@ -245,6 +253,10 @@ ggplot(residual_by_cutoff, aes(x=cutoffs, y=residuals)) +
 
 # TODO: (??? difficulty) try the below regression with horizontal
 # squared distance
+
+# Looks like horizontal squared distance doesn't exist in r/is just
+# accomplished by switching the axes, which ruins the point here.
+# I think this is a dead end
 model <- lm(score_dif ~ tan(pi*(`winning team`-1/2)),
             data=previous_results)
 summary(model)
