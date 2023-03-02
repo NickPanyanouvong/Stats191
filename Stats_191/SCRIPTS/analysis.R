@@ -220,6 +220,15 @@ model <- lm(`winning team` ~ score_dif,
             data=filter(previous_results, abs(score_dif) < 35))
 summary(model)
 
+piecewise_residual_square(previous_results, previous_results$`winning team`,
+                          previous_results$score_dif, -35, 35)
+
+residual_by_cutoff <- multiple_piecewise_residual(previous_results, previous_results$`winning team`,
+                            previous_results$score_dif, 2000)
+
+ggplot(residual_by_cutoff, aes(x=cutoffs, y=residuals)) + 
+  geom_point() +
+  theme_minimal()
 
 # A side note:
 
