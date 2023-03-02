@@ -10,19 +10,19 @@
 ## Dependencies
 library(tidyverse)
 library(haven)
-source('helper_functions.R') # Import helpers
+source("./SCRIPTS/helper_functions.R") # Import helpers
 
 ## Open data and make their storage variables
-games <- list(read_csv("../RAW_DATA/game_1_data.csv"),
-              read_csv("../RAW_DATA/game_2_data.csv"),
-              read_csv("../RAW_DATA/game_3_data.csv"),
-              read_csv("../RAW_DATA/game_4_data.csv"),
-              read_csv("../RAW_DATA/game_5_data.csv"),
-              read_csv("../RAW_DATA/game_6_data.csv"),
-              read_csv("../RAW_DATA/game_7_data.csv"),
-              read_csv("../RAW_DATA/game_8_data.csv"),
-              read_csv("../RAW_DATA/game_9_data.csv"),
-              read_csv("../RAW_DATA/game_10_data.csv"))
+games <- list(read_csv("./RAW_DATA/game_1_data.csv"),
+              read_csv("./RAW_DATA/game_2_data.csv"),
+              read_csv("./RAW_DATA/game_3_data.csv"),
+              read_csv("./RAW_DATA/game_4_data.csv"),
+              read_csv("./RAW_DATA/game_5_data.csv"),
+              read_csv("./RAW_DATA/game_6_data.csv"),
+              read_csv("./RAW_DATA/game_7_data.csv"),
+              read_csv("./RAW_DATA/game_8_data.csv"),
+              read_csv("./RAW_DATA/game_9_data.csv"),
+              read_csv("./RAW_DATA/game_10_data.csv"))
 
 # Reads the games list into one big dataframe
 # with an extra category indicating the game number
@@ -31,6 +31,15 @@ all_games <- games[[1]] %>%
 for (index in 2:10) {
   all_games = rbind(all_games, games[[index]] %>% mutate(game = index))
 }
+
+# Many categoricals shouldn't change between games for a given player,
+# but do due to recording errors. We need to accommodate for this.
+all_games <- all_games %>% group_by(`student label`) %>%
+  mutate(
+    `previous competitive sports` = Mode(`previous competitive sports`),
+    `university year` = Mode(`university year`),
+    `early bird/night owl` = Mode(`early bird/night owl`)
+  )
 
 # Converts some of the categoricals in the just-made dataframe into  
 # indicator functions. The way I'm doing grades is clunky but I
@@ -49,7 +58,7 @@ all_games <- all_games %>%
 #mutate(`winning team` = as_factor(`winning team`)) %>% # Previously used but breaks averages
 
 # NICK CODE: Write to CSV
-write.csv(all_games, "../PROCESSED_DATA/processed_all_games.csv", row.names = FALSE)
+write.csv(all_games, "./PROCESSED_DATA/processed_all_games.csv", row.names = FALSE)
 
 # Creates a dataframe that has information in one row for each player
 # TODO: Fix evening score and morning score (they are currently broken)
@@ -64,12 +73,12 @@ player_means <- distinct(all_games %>%
                                      `overall fitness score` = mean(`overall fitness score`),
                                      `# extra strategy sessions attended` = mean(`# extra strategy sessions attended`),
                                      `hours of sleep the night before game` = mean(`hours of sleep the night before game`),
-                                     `previous competitive sports` = Mode(`previous competitive sports`),
                                      `# meals on day prior to game` = mean(`# meals on day prior to game`),
-                                     `university year` = Mode(`university year`),
                                      evening = mean(evening),
                                      morning = mean(morning),
-                                     night_owl = Mode(night_owl)))
+                                     `previous competitive sports` = Mode(`previous competitive sports`),
+                                     `university year` = mean(`university year`),
+                                     night_owl = mean(night_owl)))
 
 # Normalized version of all_games, except for indicator function variables
 # Useful for the 'how best to coach a player' portion, we can compare
@@ -82,13 +91,13 @@ normalized_games <- all_games %>%
          `# meals on day prior to game` = normalize(`# meals on day prior to game`),
          `university year` = normalize(`university year`))
 
-match_ups <- read_csv("../RAW_DATA/season_match_up.csv")
-previous_results <- read_csv("../RAW_DATA/previous_season_results.csv")
+match_ups <- read_csv("./RAW_DATA/season_match_up.csv")
+previous_results <- read_csv("./RAW_DATA/previous_season_results.csv")
 
-write.csv(all_games, "../PROCESSED_DATA/processed_normalized_all_games.csv", row.names = FALSE)
+write.csv(all_games, "./PROCESSED_DATA/processed_normalized_all_games.csv", row.names = FALSE)
 
 # Add a score difference variable
 previous_results <- previous_results %>%
   mutate(score_dif = `team 1 score` - `team 2 score`)
 
-write.csv(previous_results, "../PROCESSED_DATA/processed_previous_results.csv", row.names = FALSE)
+write.csv(previous_results, "./PROCESSED_DATA/processed_previous_results.csv", row.names = FALSE)
