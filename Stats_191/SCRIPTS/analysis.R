@@ -136,12 +136,23 @@ summary(morningmodel)
 
 
 ## Understanding the distribution of previous results
+length(previous_results$score_dif) # n = 200
 
 summary(previous_results$score_dif)
 
 ggplot(previous_results, aes(x=score_dif)) + 
   geom_histogram(binwidth=5, color="grey50", fill="lightblue", alpha=0.8) +
   theme_minimal()
+
+# Looks approximately normally distributed, with a mean of:
+mean(previous_results$score_dif) 
+#-0.116, and standard deviation of:
+score_sd = sd(previous_results$score_dif) 
+# 23.328, for a standard error on the mean of:
+sd(previous_results$score_dif)/length(previous_results$score_dif)
+# 0.116. So the mean is not significantly different from 0,
+# and it's approximately normally distributed with SD = 23.328
+# This will be useful later.
 
 # I couldn't find a better way to make a histogram of this type
 previous_results_means <- previous_results %>% 
@@ -193,13 +204,6 @@ ggplot(previous_results_means, aes(x=bucket*5, y=mean, fill=bucket)) +
 # this means that we expect the function's confidence interval to contain
 # (-35,0) and (35,1), or whatever our cutoffs are.
 
-# TODO: (difficult) find the cutoffs that minimize the vertical distance
-# squared for our whole piecewise function - from the 0 at score_dif < -cutoff,
-# linear from (-cutoff,0) to (cutoff,0), and 1 for score_dif > cutoff
-# Two ways to do this: fix the line to directly connect the cutoff point, or just
-# do a normal regression over that cutoff
-# This connects to the function at the top of the document (SPECIAL)
-
 # This one limits it to those bounds, and makes a pretty reasonable trendline
 # It makes an error message but the issue it says is happening isn't actually
 # happening
@@ -220,11 +224,14 @@ model <- lm(`winning team` ~ score_dif,
             data=filter(previous_results, abs(score_dif) < 35))
 summary(model)
 
-piecewise_residual_square(previous_results, previous_results$`winning team`,
-                          previous_results$score_dif, -35, 35)
+### Regression stuff with helper functions
 
-residual_by_cutoff <- multiple_piecewise_residual(previous_results, previous_results$`winning team`,
-                            previous_results$score_dif, 2000)
+## With vertical distance squared
+piecewise_residual_square(previous_results$`winning team`,
+                          previous_results$score_dif, 35)
+
+residual_by_cutoff <- multiple_piecewise_residual(previous_results$`winning team`,
+                            previous_results$score_dif, 2000, piecewise_residual_square)
 
 ggplot(residual_by_cutoff, aes(x=cutoffs, y=residuals)) + 
   geom_point() +
@@ -233,14 +240,83 @@ ggplot(residual_by_cutoff, aes(x=cutoffs, y=residuals)) +
 cutoff <- mean(residual_by_cutoff$cutoffs[which(residual_by_cutoff$residuals == min(residual_by_cutoff$residuals))])
 
 # Now we know the region to search in
-targeted_range <- targeted_piecewise_residual(previous_results, previous_results$`winning team`,
-                                              previous_results$score_dif, 50000, cutoff - 5, cutoff + 5)
+targeted_range <- targeted_piecewise_residual(previous_results$`winning team`,
+                                              previous_results$score_dif, 50000, cutoff - 5, cutoff + 5,
+                                              piecewise_residual_square)
 # Accurate to three decimal places - because we searched 
 # a range of length 10 in 50,000 intervals
 cutoff <- round(mean(targeted_range$cutoffs[which(targeted_range$residuals == min(targeted_range$residuals))]),3)
 
 
+a <- read.csv("../PROCESSED_DATA/cutoff_distribution_demo.csv")$a
+# Proof-of-concept simulation:
+# WARNING: TAKES 1 MINUTE TO RUN
+# a <- append(a,cutoff_distribution(cutoff, 1000, 200, score_sd, piecewise_residual_square))
 
+ggplot(data.frame(a), aes(x=a)) +
+  geom_histogram(binwidth=0.5, color="grey50", fill="lightblue", alpha=0.8) +
+  theme_minimal() + 
+  stat_function(fun = function(x){dnorm(x,mean = mean(a),sd = sd(a))}*length(a)*0.5)
+
+write.csv(data.frame(a),"../PROCESSED_DATA/cutoff_distribution_demo.csv")
+
+## With -1 times probability of occurring
+# The -1 is so that we can minimize this, instead of maximizing
+piecewise_probability(previous_results$`winning team`,
+                          previous_results$score_dif, 35)
+
+probs_by_cutoff <- multiple_piecewise_residual(previous_results$`winning team`,
+                                                  previous_results$score_dif, 2000, piecewise_probability)
+
+probs_by_cutoff$residuals <- probs_by_cutoff$residuals/sum(probs_by_cutoff$cutoffs[2] * probs_by_cutoff$residuals)
+
+probs_by_cutoff <- probs_by_cutoff %>% mutate(
+  rownum = row_number()
+)
+
+probs_by_cutoff <- probs_by_cutoff %>% mutate(
+  cumsum = cumsum(residuals)*probs_by_cutoff$cutoffs[2]
+)
+
+percentile_2.5 <- probs_by_cutoff$cutoff[probs_by_cutoff$cumsum>0.025][1]
+
+percentile_97.5 <- probs_by_cutoff$cutoff[probs_by_cutoff$cumsum>0.975][1]
+
+# Plot with lines denoting the 95% confidence interval for the cutoff
+
+ggplot(probs_by_cutoff, aes(x=cutoffs, y=residuals)) + 
+  geom_point() +
+  theme_minimal() +
+  labs(y="Probability density (given observed results)", x="Cutoff") +
+  geom_vline(xintercept = percentile_2.5, color = "red") +
+  geom_vline(xintercept = percentile_97.5, color = "red")
+
+
+
+cutoff <- mean(residual_by_cutoff$cutoffs[which(residual_by_cutoff$residuals == min(residual_by_cutoff$residuals))])
+
+# Now we know the region to search in
+targeted_range <- targeted_piecewise_residual(previous_results$`winning team`,
+                                              previous_results$score_dif, 50000, cutoff - 5, cutoff + 5,
+                                              piecewise_probability)
+# Accurate to three decimal places - because we searched 
+# a range of length 10 in 50,000 intervals
+cutoff <- round(mean(targeted_range$cutoffs[which(targeted_range$residuals == min(targeted_range$residuals))]),3)
+
+
+p_distribution <- read.csv("../PROCESSED_DATA/p_cutoff_distribution_demo.csv")$a
+# Proof-of-concept simulation:
+# WARNING: TAKES 30 SECONDS TO RUN
+# p_distribution <- append(p_distribution,cutoff_distribution(cutoff, 10000, 200, score_sd, piecewise_probability))
+
+ggplot(data.frame(p_distribution), aes(x=p_distribution)) +
+  geom_histogram(binwidth=0.5, color="grey50", fill="lightblue", alpha=0.8) +
+  theme_minimal() + 
+  stat_function(fun = function(x){dnorm(x,mean = mean(p_distribution),
+          sd = sd(p_distribution))}*length(p_distribution)*0.5) +
+  geom_vline(xintercept = cutoff)
+
+# write.csv(data.frame(p_distribution),"../PROCESSED_DATA/p_cutoff_distribution_demo.csv")
 # A side note:
 
 # I really want to do a a regression of the form:
