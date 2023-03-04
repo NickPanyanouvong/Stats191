@@ -67,6 +67,25 @@ piecewise_probability <- function(dependent, independent, cutoff) {
   return(-1 * abs(prod(1 - dependent - piecewise_multipredict(independent,cutoff))))
 }
 
+# Finding residauls for each cutoff
+
+multiple_piecewise_residual <- function(dependent, independent, steps, objective_func) {
+  return(targeted_piecewise_residual(dependent, independent, steps, 0, max(max(independent),max(-1*independent)) * 1.05, objective_func))
+}
+
+targeted_piecewise_residual <- function(dependent, independent, steps, lower, upper, objective_func) {
+  step <- (upper-lower)/steps
+  cutoffs <- c()
+  residuals <- c()
+  for(i in 0:steps) {
+    cutoffs <- append(cutoffs,lower + step * i)
+    residuals <- append(residuals,objective_func(dependent, independent, lower + step * i))
+  }
+  return(data.frame(cutoffs,residuals))
+}
+
+# Using these to find the best cutoff
+
 optimize_cutoff <- function(dependent, independent, objective_func) {
   cutoff <- find_cutoff(dependent, independent, 1000, 
                         lower_limit(dependent,independent) * 0.95,
@@ -83,20 +102,7 @@ find_cutoff <- function(dependent, independent, steps, lower, upper, objective_f
   return(mean(residual_by_cutoff$cutoffs[which(residual_by_cutoff$residuals == min(residual_by_cutoff$residuals))]))
 }
 
-multiple_piecewise_residual <- function(dependent, independent, steps, objective_func) {
-  return(targeted_piecewise_residual(dependent, independent, steps, 0, max(max(independent),max(-1*independent)) * 1.05, objective_func))
-}
-
-targeted_piecewise_residual <- function(dependent, independent, steps, lower, upper, objective_func) {
-  step <- (upper-lower)/steps
-  cutoffs <- c()
-  residuals <- c()
-  for(i in 0:steps) {
-    cutoffs <- append(cutoffs,lower + step * i)
-    residuals <- append(residuals,objective_func(dependent, independent, lower + step * i))
-  }
-  return(data.frame(cutoffs,residuals))
-}
+# Simulating samples to test for bias
 
 simulate_piecewise_sample <- function(input, cutoff) {
   return(sample(c(0,1), size = 1,prob = c(1-piecewise_predict(input, cutoff),piecewise_predict(input, cutoff))))
@@ -126,4 +132,75 @@ cutoff_distribution <- function(true_cutoff, numsims, numsamples, score_sd, obje
     }
   }
   return(measured_cutoffs)
+}
+
+### Finding the best team for normal game
+
+# Takes in lists of win chances and score differences, an input, and
+# the number of digits the entries in the dataframe are rounded to,
+# and outputs the associated win chance
+
+confidence_predict <- function(odds, score_difs, input, rounding_places) {
+  if(round(input,rounding_places) %in% score_difs) {
+    return(odds[score_difs
+              == round(input, digits = rounding_places)])
+  }
+  if(round(input,rounding_places) < min(score_difs)) {
+    return(odds[1])
+  }
+  if(round(input,rounding_places) > max(score_difs)) {
+    return(odds[length(odds)])
+  }
+  print("confidence_predict error! Score_difs have gaps")
+}
+
+# Takes in a normalized probability density function for score_dif
+# and outputs the chances of winning. Also needs auxilary inputs
+# like rounding places and the chances of winning at score_difs,
+# along with the bounds to search over
+
+# score_dif_density_func should output probability density as a function
+# of score_dif
+
+distribution_win_chance <- function(odds, score_difs, score_dif_density_func,
+                                    rounding_places, low, high) {
+  cur_score_dif <- low
+  step_size <- 10^{-1*rounding_places}
+  result <- 0
+  for(i in 0:ceiling((high - low)/step_size)) {
+    result <- result + step_size * score_dif_density_func(cur_score_dif) *
+      confidence_predict(odds,score_difs,cur_score_dif,rounding_places)
+    cur_score_dif <- round(cur_score_dif + step_size,rounding_places)
+  }
+  return(result)
+}
+
+# Uses above with a list of scores of teams we're playing against
+# combined with a score_func for our team to calculate the odds
+# of never losing a game
+
+undefeated_odds <- function(odds, score_difs, score_func, team_scores,
+                            rounding_places, low, high) {
+  result <- 1
+  for(score in team_scores) {
+    result <- result * distribution_win_chance(
+      odds, score_difs, function(x){score_func(x + score)},
+      rounding_places, low - score, high - score
+    )
+  }
+  return(result)
+}
+
+# Same as above, but calculates average won games
+
+expected_wins <- function(odds, score_difs, score_func, team_scores,
+                            rounding_places, low, high) {
+  result <- 0
+  for(score in team_scores) {
+    result <- result + distribution_win_chance(
+      odds, score_difs, function(x){score_func(x + score)},
+      rounding_places, low - score, high - score
+    )
+  }
+  return(result)
 }
