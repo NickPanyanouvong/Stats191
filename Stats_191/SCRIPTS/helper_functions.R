@@ -204,3 +204,15 @@ expected_wins <- function(odds, score_difs, score_func, team_scores,
   }
   return(result)
 }
+
+# Assuming a normal distribution, and that the overall game performance
+# is the average of the players' game performance, we can make a 
+# helper function to calculate the score distribution for the team
+
+# The normal assumption is reasonable - see the analysis sheet,
+# there's a helpful plot on it
+
+score_func_from_players <- function(player_means, player_sds) {
+  return(function(x){dnorm(x,mean = mean(player_means),
+                    sd = sqrt(sum(player_sds^2)))})
+}
