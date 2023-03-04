@@ -40,7 +40,6 @@ sd(previous_results$score_dif)/length(previous_results$score_dif)
 # and it's approximately normally distributed with SD = 23.328
 # This will be useful later.
 
-# I couldn't find a better way to make a histogram of this type
 previous_results_means <- previous_results %>% 
   mutate(bucket = floor(score_dif/5) + 0.5) %>%
   group_by(bucket) %>%
@@ -52,27 +51,12 @@ previous_results_means <- previous_results %>%
 # From these, we can see that the bulk of the data is between
 # -35 and +35 on the score_dif axis. This will be useful later.
 
-# TODO: (easy) add code here that finds exactly what percentage is between
-# -35 and +35 - optimally, we want more than 90 or 95%
-
-
-
-## Understanding how score_dif affects win chance
-
-model <- lm(`winning team` ~ score_dif,
-            data=previous_results)
-summary(model)
-
-# TODO: Do the below graph using ggplot so it matches with the other graphs
-
-plot(`winning team` ~ score_dif, data = previous_results)
-abline(model)
-
 # This one shows the winrate in the buckets as a function of score difference:
 # (buckets of 5)
 # TODO: (fast) Rename the axis on these
 ggplot(previous_results_means, aes(x=bucket*5, y=mean, fill=bucket)) + 
   geom_bar(stat="identity") +
+  labs(y="Chance of winning", x="Score difference") +
   geom_text(aes(label=round(mean, digits=3)), color="green", vjust=-2.5) + 
   theme_minimal()
 # We can see from this that for score_dif < -35, we lose (almost) every game -
@@ -99,18 +83,14 @@ ggplot(filter(previous_results_means, abs(bucket*5) <= 35), aes(x=bucket*5, y=me
   stat_smooth(method="lm") +
   theme_minimal()
 
-# The equation for the trendline from that is below. Keep in mind the
-# slope should be divided by five to convert to score_dif units
-model <- lm(mean ~ bucket,
-            data=filter(previous_results_means, abs(bucket*5) <= 35))
-summary(model)
-
-# Here's a more accurate, very similar trendline that doesn't use buckets
-model <- lm(`winning team` ~ score_dif,
-            data=filter(previous_results, abs(score_dif) < 35))
-summary(model)
+# But we can do better than that! Lets do some regressions
 
 ### Regression stuff with helper functions
+
+# Initially, I did this with vertical distance squared. The code
+# below is left as a record of that, but is not actually helpful for
+# regression - it turns out vertical distance squared has a strong
+# bias towards underestimating the cutoff
 
 ## With vertical distance squared
 piecewise_residual_square(previous_results$`winning team`,
@@ -119,6 +99,7 @@ piecewise_residual_square(previous_results$`winning team`,
 residual_by_cutoff <- multiple_piecewise_residual(previous_results$`winning team`,
                                                   previous_results$score_dif, 2000, piecewise_residual_square)
 
+# We can minimize this
 ggplot(residual_by_cutoff, aes(x=cutoffs, y=residuals)) + 
   geom_point() +
   theme_minimal()
@@ -139,15 +120,29 @@ a <- read.csv("../PROCESSED_DATA/cutoff_distribution_demo.csv")$a
 # WARNING: TAKES 1 MINUTE TO RUN
 # a <- append(a,cutoff_distribution(cutoff, 1000, 200, score_sd, piecewise_residual_square))
 
+
+# This is the plot that makes the bias clear. The true cutoff is shown in
+# red, and as you can see, the data are significantly and systematically
+# skewed from it. This means we can't trust the results of this regression
+# without significant adjustments, so we might as well regress a different
+# way
 ggplot(data.frame(a), aes(x=a)) +
   geom_histogram(binwidth=0.5, color="grey50", fill="lightblue", alpha=0.8) +
   theme_minimal() + 
-  stat_function(fun = function(x){dnorm(x,mean = mean(a),sd = sd(a))}*length(a)*0.5)
+  stat_function(fun = function(x){dnorm(x,mean = mean(a),sd = sd(a))}*length(a)*0.5) +
+  geom_vline(xintercept = cutoff, color = "red")
 
-write.csv(data.frame(a),"../PROCESSED_DATA/cutoff_distribution_demo.csv")
+
+
+# write.csv(data.frame(a),"../PROCESSED_DATA/cutoff_distribution_demo.csv")
+
+# The new objective function is the probability of the observed data
+# occurring in the theorized model. All of these chances will be small,
+# but some will be much smaller than others.
 
 ## With -1 times probability of occurring
-# The -1 is so that we can minimize this, instead of maximizing
+# The -1 is so that we can minimize this, instead of maximizing -
+# it lets us use the same functions as vertical distance squared
 piecewise_probability(previous_results$`winning team`,
                       previous_results$score_dif, 35)
 
@@ -165,7 +160,9 @@ percentile_2.5 <- probs_by_cutoff$cutoff[probs_by_cutoff$cumsum>0.025][1]
 percentile_97.5 <- probs_by_cutoff$cutoff[probs_by_cutoff$cumsum>0.975][1]
 
 # Plot with lines denoting the 95% confidence interval for the cutoff
-
+# From this plot, you can already see the expected cutoff and how
+# we expect the possible true cutoffs to be distributed given these
+# data.
 ggplot(probs_by_cutoff, aes(x=cutoffs, y=residuals)) + 
   geom_point() +
   theme_minimal() +
@@ -188,7 +185,7 @@ cutoff <- round(mean(targeted_range$cutoffs[which(targeted_range$residuals == mi
 
 p_distribution <- read.csv("../PROCESSED_DATA/p_cutoff_distribution_demo.csv")$a
 # Proof-of-concept simulation:
-# WARNING: TAKES 5 MINUTES TO RUN
+# WARNING: TAKES 5 MINUTES TO RUN (if you uncomment it)
 # p_distribution <- append(p_distribution,cutoff_distribution(cutoff, 10000, 200, score_sd, piecewise_probability))
 
 ggplot(data.frame(p_distribution), aes(x=p_distribution)) +
@@ -212,7 +209,14 @@ ggplot(data.frame(p_distribution), aes(x=p_distribution)) +
 # score data we have
 rounding_places <- 2
 
-## Takes ~3 minutes to run
+## Takes ~3 minutes to run (if you uncomment it)
+
+# This code just runs all the computations. We stored it so
+# we don't have to recalculate it every time.
+# It just goes through and for a given score difference, adds up
+# the products of winning under a given model times our confidence
+# of that model being true under these observations.
+
 # chance_winning <- c()
 # score_difs <- c()
 # score_step_size <- 10^{-1*rounding_places}
@@ -234,6 +238,8 @@ rounding_places <- 2
 
 win_chances <- read_csv("../PROCESSED_DATA/confidence_win_rates.csv")
 
+# This is what our probability curve looks like after accounting
+# for our confidence distribution in true cutoffs
 ggplot(win_chances, aes(x=score_difs, y=chance_winning)) + 
   geom_point() +
   theme_minimal() +

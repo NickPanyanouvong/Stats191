@@ -16,6 +16,9 @@ Mode <- function(statistic) {
 ### Piecewise regression stuff
 
 ## General utility
+
+# Just takes in a cutoff to determine the model and an input
+# to evaluate it at and returns appropriates
 piecewise_predict <- function(input, cutoff) {
   if(input <= -1*cutoff) {
     return(0)
@@ -26,6 +29,8 @@ piecewise_predict <- function(input, cutoff) {
   return(0.5 + input/(2*cutoff))
 }
 
+# Same as above but optimized for vectors - significant
+# time reduction
 piecewise_multipredict <- function(input_vec, cutoff) {
   output = vector(mode(input_vec),length(input_vec))
   output[input_vec <= -1*cutoff] <- 0
@@ -37,6 +42,8 @@ piecewise_multipredict <- function(input_vec, cutoff) {
   return(output)
 }
 
+# These three just define the lower bound of where we should
+# bother searching for cutoffs
 lower_limit <- function(dependent, independent) {
   return(min(abs(last_loss(dependent,independent)),abs(first_win(dependent,independent))))
 }
@@ -52,22 +59,21 @@ first_win <- function(dependent, independent) {
 ## Objective functions
 
 # Notice how these have the same arguments, and both want to be
-# minimized, so we can treat them the same
+# minimized, so we can treat them the same in our functions
 
-# Takes in a dataframe, two variables, and an upper-lower bound,
-# and fits it with 0 before the lower bound, 1 after the upper,
-# and a linear regression in between. This may be discontinuous,
-# but the hope is that at the optimized point it will be continuous.
-
+# This one caused bad skew but is included for defending why we
+# didn't use it - it's vertical distance squared
 piecewise_residual_square <- function(dependent, independent, cutoff) {
   return(sum((dependent - piecewise_multipredict(independent,cutoff))^2))
 }
 
+# This one is significantly better, it's the chance of the observed
+# game results happening in a particular model
 piecewise_probability <- function(dependent, independent, cutoff) {
   return(-1 * abs(prod(1 - dependent - piecewise_multipredict(independent,cutoff))))
 }
 
-# Finding residauls for each cutoff
+# Finding residuals for each cutoff
 
 multiple_piecewise_residual <- function(dependent, independent, steps, objective_func) {
   return(targeted_piecewise_residual(dependent, independent, steps, 0, max(max(independent),max(-1*independent)) * 1.05, objective_func))
@@ -102,12 +108,16 @@ find_cutoff <- function(dependent, independent, steps, lower, upper, objective_f
   return(mean(residual_by_cutoff$cutoffs[which(residual_by_cutoff$residuals == min(residual_by_cutoff$residuals))]))
 }
 
-# Simulating samples to test for bias
+## Simulating samples to test for bias
 
+# Represents a single game, randomly determines the result
+# based on the model
 simulate_piecewise_sample <- function(input, cutoff) {
   return(sample(c(0,1), size = 1,prob = c(1-piecewise_predict(input, cutoff),piecewise_predict(input, cutoff))))
 }
 
+# Based on a normal distribution of score differences, this
+# uses the above to generate many games in a given model
 simulate_piecewise_distribution <- function(cutoff, n, score_sd) {
   score_difs = rnorm(n, sd=score_sd)
   winners = c()
@@ -134,7 +144,8 @@ cutoff_distribution <- function(true_cutoff, numsims, numsamples, score_sd, obje
   return(measured_cutoffs)
 }
 
-### Finding the best team for normal game
+
+### Finding the best team for normal season
 
 # Takes in lists of win chances and score differences, an input, and
 # the number of digits the entries in the dataframe are rounded to,
