@@ -10,7 +10,12 @@
 ## Dependencies
 library(tidyverse)
 library(haven)
-source('helper_functions.R') # Import helpers
+
+# Adjust wd, verify
+file_path <- rstudioapi::getSourceEditorContext()$path
+setwd(dirname(file_path))
+
+source('../SCRIPTS/helper_functions.R') # Import helpers
 
 ## Open data and make their storage variables
 games <- list(read_csv("../RAW_DATA/game_1_data.csv"),
@@ -36,7 +41,29 @@ for (index in 2:10) {
 # indicator functions. The way I'm doing grades is clunky but I
 # couldn't find a better way
 
-# Notably missing: create an indicator function for previous sports (TODO)
+
+# Identify all unique sports
+previous_sports_col <- distinct(select(all_games, 'previous competitive sports'))
+unique_sports_list <- as.list(previous_sports_col)[[1]]
+
+# Generate indicator columns
+columns <- c()
+
+for(i in seq(length(unique_sports_list))){
+  sport <- unique_sports_list[[i]]
+  print(sport)
+  col <- match_sport(all_games$'previous competitive sports', sport)
+  columns[[i]] <- col
+  
+}
+
+# Add all sports indicator columns
+all_games <- all_games %>%
+  mutate(curling = columns[[1]], gymnastics = columns[[2]], baseball = columns[[3]],
+         martial_arts = columns[[4]], frisbee = columns[[5]], table_tennis = columns[[6]],
+         basketball = columns[[7]], football = columns[[8]])
+
+
 all_games <- all_games %>%
   mutate(evening = as.integer(`game scheduled` == "evening"),
          morning = as.integer(`game scheduled` == "morning"),
@@ -46,6 +73,7 @@ all_games <- all_games %>%
                                            ifelse(`university year`=="junior",3,
                                                   ifelse(`university year`=="senior",4,NA)))),
          night_owl = as.integer(`early bird/night owl` == "night owl"))
+
 #mutate(`winning team` = as_factor(`winning team`)) %>% # Previously used but breaks averages
 
 # NICK CODE: Write to CSV

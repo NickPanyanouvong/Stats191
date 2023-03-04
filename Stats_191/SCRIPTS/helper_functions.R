@@ -21,3 +21,17 @@ Mode <- function(statistic) {
   uniques <- unique(statistic)
   uniques[which.max(tabulate(match(statistic, uniques)))]
 }
+
+# Determine if an element matches the specified sport
+match_sport <- function(strings, sport){
+  results <- c()
+  for(string in strings){
+    if (string == sport){
+      results <- c(results, 1)
+    } else {
+      results <- c(results, 0)
+    }
+  }
+  
+  return(results)
+}
