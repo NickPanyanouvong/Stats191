@@ -1,6 +1,6 @@
 #### Functions
 
-## Utility stuff
+### Utility stuff
 
 # Just returns a list of z-scores from a list
 normalize <- function(statistic){
@@ -15,7 +15,7 @@ Mode <- function(statistic) {
 
 ### Piecewise regression stuff
 
-## General utility
+## Piecewise utility functions
 
 # Just takes in a cutoff to determine the model and an input
 # to evaluate it at and returns appropriates
@@ -227,3 +227,4 @@ score_func_from_players <- function(player_means, player_sds) {
   return(function(x){dnorm(x,mean = mean(player_means),
                     sd = sqrt(sum(player_sds^2)))})
 }
+

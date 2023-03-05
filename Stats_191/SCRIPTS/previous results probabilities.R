@@ -243,6 +243,6 @@ win_chances <- read_csv("../PROCESSED_DATA/confidence_win_rates.csv")
 ggplot(win_chances, aes(x=score_difs, y=chance_winning)) + 
   geom_point() +
   theme_minimal() +
-  labs(y="Chance of winning (given ovserved dist.)", x="Score difference")
+  labs(y="Chance of winning (given observed dist.)", x="Score difference")
 
 
