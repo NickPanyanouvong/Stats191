@@ -139,6 +139,16 @@ morningmodel <- lm(`game score` ~ `percent training sessions attended`
                    data=filter(all_games, morning == 1))
 summary(morningmodel)
 
+# extract betas from evening and morning models
+evening_betas <- eveningmodel$coefficients
+morning_betas <- morningmodel$coefficients
+
+# run t-test between evening and morning betas, using adjusted
+# significance threshold
+new_alpha = 0.05 / length(morning_betas)
+new_conf_level = 1 - new_alpha
+t.test(evening_betas, morning_betas, conf.level=new_conf_level)
+
 
 ##### PREVIOUS RESULTS ANALYSIS #####
 ## Understanding the distribution of previous results
