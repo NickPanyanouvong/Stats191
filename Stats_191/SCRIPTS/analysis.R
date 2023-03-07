@@ -31,12 +31,14 @@ overallmodel <- lm(`game score` ~ `percent training sessions attended`
                    + `hours of sleep the night before game`
                    + `# meals on day prior to game`
                    + `university year`
+                   + `curling` + `gymnastics` + `baseball` + `martial_arts`
+                   + `frisbee` + `table_tennis` + `basketball`
                    + evening + morning + night_owl,
                    data=all_games)
 summary(overallmodel) # Run lines like this again to see the model
 
 all_games <- subset(cbind(all_games,predict(overallmodel, se.fit = TRUE)) %>%
-                      mutate(residual = `game score` - fit), select = -c(df,residual.scale))
+                      mutate(residual = `game score` - `fit`), select = -c(`df`,`residual.scale`))
 
 normalizedmodel <- lm(`game score` ~ `percent training sessions attended`
                       + `overall fitness score` 
@@ -52,6 +54,15 @@ summary(normalizedmodel)
 normalized_games <- subset(cbind(normalized_games,predict(normalizedmodel, se.fit = TRUE)) %>%
                              mutate(residual = `game score` - fit), select = -c(df,residual.scale))
 
+## RESIDUAL PLOTS
+
+# We want to plot the residuals of our model's game score predictions against the
+# predictions themselves. Let's extract this from all_games and create a scatterplot.
+
+all_games_residuals <- select(all_games, `fit`, `residual`, `se.fit`)
+ggplot(all_games_residuals, aes(x = fit, y = residual)) +
+  geom_point(color = 'red')
+  
 
 ##### ALL GAMES ANALYSIS #####
 
@@ -102,16 +113,16 @@ ggplot(all_games, aes(x=`# meals on day prior to game`,y=`percent training sessi
 # morning games to night owls in night games, or code that compares the
 # difference like I did verbally
 
-# TODO: (difficult) Automatedly do a significance test on to see 
+# TODO: (difficult) Automatically run pairwise t-tests probing differences in beta.
+# Use scaled-down significance threshold to adjust for multiple testing fallacy.
 
-# TODO: add indicator functions (once added to all_games) to the below
-# regressions
 eveningmodel <- lm(`game score` ~ `percent training sessions attended`
                    + `overall fitness score` 
                    + `# extra strategy sessions attended`
                    + `hours of sleep the night before game`
                    + `# meals on day prior to game`
-                   + `university year`
+                   + `university year` + `curling` + `gymnastics` + `baseball` + `martial_arts`
+                   + `frisbee` + `table_tennis` + `basketball`
                    + night_owl,
                    data=filter(all_games, evening == 1))
 summary(eveningmodel)
@@ -122,19 +133,14 @@ morningmodel <- lm(`game score` ~ `percent training sessions attended`
                    + `# extra strategy sessions attended`
                    + `hours of sleep the night before game`
                    + `# meals on day prior to game`
-                   + `university year`
+                   + `university year` + `curling` + `gymnastics` + `baseball` + `martial_arts`
+                   + `frisbee` + `table_tennis` + `basketball`
                    + night_owl,
                    data=filter(all_games, morning == 1))
 summary(morningmodel)
 
 
-
-
-
-
 ##### PREVIOUS RESULTS ANALYSIS #####
-
-
 ## Understanding the distribution of previous results
 
 summary(previous_results$score_dif)
