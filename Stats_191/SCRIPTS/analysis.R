@@ -62,6 +62,10 @@ normalized_games <- subset(cbind(normalized_games,predict(normalizedmodel, se.fi
 all_games_residuals <- select(all_games, `fit`, `residual`, `se.fit`)
 ggplot(all_games_residuals, aes(x = fit, y = residual)) +
   geom_point(color = 'red')
+
+normalized_residuals <- select(normalized_games, `fit`, `residual`, `se.fit`)
+ggplot(normalized_residuals, aes(x = fit, y = residual)) +
+  geom_point(color = 'blue')
   
 
 ##### ALL GAMES ANALYSIS #####
@@ -138,6 +142,62 @@ morningmodel <- lm(`game score` ~ `percent training sessions attended`
                    + night_owl,
                    data=filter(all_games, morning == 1))
 summary(morningmodel)
+
+# -----------------------------------------------------------------------------
+## RESIDUAL PLOTS
+#------------------------------------------------------------------------------
+# Let's explore the residual plots of each of these models. Start w/ morning:
+morning_residuals <- filter(all_games, morning == 1) %>%
+  select(`game score`, `early bird/night owl`)
+
+morning_residuals <- cbind(morning_residuals, predict(morningmodel, se.fit = TRUE)) %>%
+  mutate(residuals = `game score` - fit)
+
+# General residual plot
+
+png("../OUTPUTS/Morning_General_Residuals.png")
+
+ggplot(morning_residuals, aes(x = fit, y = residuals)) +
+  geom_point(color = 'green') +
+  ggtitle("Morning Model Residuals")
+
+dev.off()
+
+png("../OUTPUTS/Morning_Grouped_Residuals.png")
+
+# Grouping by night owl/early bird
+ggplot(morning_residuals, aes(x = fit, y = residuals)) +
+  geom_point(aes(color = `early bird/night owl`)) +
+  ggtitle("Morning Model Residuals")
+
+dev.off()
+
+# Let's explore the evening model now!
+evening_residuals <- filter(all_games, evening == 1) %>%
+  select(`game score`, `early bird/night owl`)
+
+evening_residuals <- cbind(evening_residuals, predict(eveningmodel, se.fit = TRUE)) %>%
+  mutate(residuals = `game score` - fit)
+
+# General residual plot   
+png("../OUTPUTS/Evening_General_Residuals.png")
+
+ggplot(evening_residuals, aes(x = fit, y = residuals)) +
+  geom_point(color = 'green') +
+  ggtitle("Evening Model Residuals")
+
+dev.off()
+
+png("../OUTPUTS/Evening_Grouped_Residuals.png")
+# Grouping by night owl/early bird
+ggplot(evening_residuals, aes(x = fit, y = residuals)) +
+  geom_point(aes(color = `early bird/night owl`)) +
+  ggtitle("Evening Model Residuals")
+
+dev.off()
+#--------------------------------------------------------------------------
+## HYPOTHESIS TESTING
+#--------------------------------------------------------------------------
 
 # extract betas and standard errors from evening and morning models
 evening_betas <- eveningmodel$coefficients
