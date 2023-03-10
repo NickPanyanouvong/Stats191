@@ -136,7 +136,7 @@ ggplot(data.frame(a), aes(x=a)) +
 
 # write.csv(data.frame(a),"../PROCESSED_DATA/cutoff_distribution_demo.csv")
 
-# The new objective function is the probability of the observed data
+# The new objective function is the likelihood of the observed data
 # occurring in the theorized model. All of these chances will be small,
 # but some will be much smaller than others.
 
@@ -183,7 +183,7 @@ targeted_range <- targeted_piecewise_residual(previous_results$`winning team`,
 cutoff <- round(mean(targeted_range$cutoffs[which(targeted_range$residuals == min(targeted_range$residuals))]),3)
 
 
-p_distribution <- read.csv("../PROCESSED_DATA/p_cutoff_distribution_demo.csv")$a
+p_distribution <- read.csv("../PROCESSED_DATA/p_cutoff_distribution_demo.csv")
 # Proof-of-concept simulation:
 # WARNING: TAKES 5 MINUTES TO RUN (if you uncomment it)
 # p_distribution <- append(p_distribution,cutoff_distribution(cutoff, 10000, 200, score_sd, piecewise_probability))
@@ -191,9 +191,9 @@ p_distribution <- read.csv("../PROCESSED_DATA/p_cutoff_distribution_demo.csv")$a
 ggplot(data.frame(p_distribution), aes(x=p_distribution)) +
   geom_histogram(binwidth=0.5, color="grey50", fill="lightblue", alpha=0.8) +
   theme_minimal() + 
-  stat_function(fun = function(x){dnorm(x,mean = mean(p_distribution),
-                                        sd = sd(p_distribution))}*length(p_distribution)*0.5) +
-  geom_vline(xintercept = cutoff)
+  stat_function(fun = function(x){dnorm(x,mean = mean(p_distribution$p_distribution),
+                                        sd = sd(p_distribution$p_distribution))}*length(p_distribution$p_distribution)*0.5) +
+  geom_vline(xintercept = cutoff, color="red")
 
 # Plot shows a little bias on the mean, but none on the mode - 
 # seems acceptable
