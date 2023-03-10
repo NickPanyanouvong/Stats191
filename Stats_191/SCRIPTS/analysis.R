@@ -276,12 +276,32 @@ morning_players <- morningized_games %>% group_by(`student label`) %>% summarize
   mean = mean(`game score`),
   sd = sd(`game score`)
 )
-top_n(morning_players,10,mean)
+top_morning <- top_n(morning_players,20,mean)
 
 evening_players <- eveningized_games %>% group_by(`student label`) %>% summarize(
   mean = mean(`game score`),
   sd = sd(`game score`)
 )
-top_n(evening_players,10,mean)
+top_evening <- top_n(evening_players,20,mean)
 
-# These currently have some overlap, but we'll deal with that later
+best_morning <- c()
+best_evening <- c()
+for(i in 1:20) {
+  if(!(top_morning$`student label`[i] %in% best_evening)) {
+    if(top_morning$`student label`[i] ==
+       top_evening$`student label`[i]) {
+      if(top_morning$mean[i] - mean(top_morning$mean) >
+         top_evening$mean[i] - mean(top_evening$mean)) {
+        best_morning <- append(best_morning, top_morning$`student label`[i])
+      } else {
+        best_evening <- append(best_evening, top_evening$`student label`[i])
+      }
+    } else {
+      best_morning <- append(best_morning, top_morning$`student label`[i])
+      best_evening <- append(best_evening, top_evening$`student label`[i])
+    }
+  }
+}
+
+best_morning <- best_morning[1:10]
+best_evening <- best_evening[1:10]
