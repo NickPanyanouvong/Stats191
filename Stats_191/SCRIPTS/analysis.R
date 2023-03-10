@@ -31,12 +31,14 @@ overallmodel <- lm(`game score` ~ `percent training sessions attended`
                    + `hours of sleep the night before game`
                    + `# meals on day prior to game`
                    + `university year`
+                   + `curling` + `gymnastics` + `baseball` + `martial_arts`
+                   + `frisbee` + `table_tennis` + `basketball`
                    + evening + morning + night_owl,
                    data=all_games)
 summary(overallmodel) # Run lines like this again to see the model
 
 all_games <- subset(cbind(all_games,predict(overallmodel, se.fit = TRUE)) %>%
-                      mutate(residual = `game score` - fit), select = -c(df,residual.scale))
+                      mutate(residual = `game score` - `fit`), select = -c(`df`,`residual.scale`))
 
 normalizedmodel <- lm(`game score` ~ `percent training sessions attended`
                       + `overall fitness score` 
@@ -52,6 +54,19 @@ summary(normalizedmodel)
 normalized_games <- subset(cbind(normalized_games,predict(normalizedmodel, se.fit = TRUE)) %>%
                              mutate(residual = `game score` - fit), select = -c(df,residual.scale))
 
+## RESIDUAL PLOTS
+
+# We want to plot the residuals of our model's game score predictions against the
+# predictions themselves. Let's extract this from all_games and create a scatterplot.
+
+all_games_residuals <- select(all_games, `fit`, `residual`, `se.fit`)
+ggplot(all_games_residuals, aes(x = fit, y = residual)) +
+  geom_point(color = 'red')
+
+normalized_residuals <- select(normalized_games, `fit`, `residual`, `se.fit`)
+ggplot(normalized_residuals, aes(x = fit, y = residual)) +
+  geom_point(color = 'blue')
+  
 
 ##### ALL GAMES ANALYSIS #####
 
@@ -109,16 +124,16 @@ ggplot(all_games, aes(x=`# meals on day prior to game`,y=`percent training sessi
 # morning games to night owls in night games, or code that compares the
 # difference like I did verbally
 
-# TODO: (difficult) Automatedly do a significance test on to see 
+# TODO: (difficult) Automatically run pairwise t-tests probing differences in beta.
+# Use scaled-down significance threshold to adjust for multiple testing fallacy.
 
-# TODO: add indicator functions (once added to all_games) to the below
-# regressions
 eveningmodel <- lm(`game score` ~ `percent training sessions attended`
                    + `overall fitness score` 
                    + `# extra strategy sessions attended`
                    + `hours of sleep the night before game`
                    + `# meals on day prior to game`
-                   + `university year`
+                   + `university year` + `curling` + `gymnastics` + `baseball` + `martial_arts`
+                   + `frisbee` + `table_tennis` + `basketball`
                    + night_owl,
                    data=filter(all_games, evening == 1))
 summary(eveningmodel)
@@ -129,15 +144,80 @@ morningmodel <- lm(`game score` ~ `percent training sessions attended`
                    + `# extra strategy sessions attended`
                    + `hours of sleep the night before game`
                    + `# meals on day prior to game`
-                   + `university year`
+                   + `university year` + `curling` + `gymnastics` + `baseball` + `martial_arts`
+                   + `frisbee` + `table_tennis` + `basketball`
                    + night_owl,
                    data=filter(all_games, morning == 1))
 summary(morningmodel)
 
+# -----------------------------------------------------------------------------
+## RESIDUAL PLOTS
+#------------------------------------------------------------------------------
+# Let's explore the residual plots of each of these models. Start w/ morning:
+morning_residuals <- filter(all_games, morning == 1) %>%
+  select(`game score`, `early bird/night owl`)
 
+morning_residuals <- cbind(morning_residuals, predict(morningmodel, se.fit = TRUE)) %>%
+  mutate(residuals = `game score` - fit)
 
+# General residual plot
 
+png("../OUTPUTS/Morning_General_Residuals.png")
 
+ggplot(morning_residuals, aes(x = fit, y = residuals)) +
+  geom_point(color = 'green') +
+  ggtitle("Morning Model Residuals")
 
+dev.off()
 
+png("../OUTPUTS/Morning_Grouped_Residuals.png")
 
+# Grouping by night owl/early bird
+ggplot(morning_residuals, aes(x = fit, y = residuals)) +
+  geom_point(aes(color = `early bird/night owl`)) +
+  ggtitle("Morning Model Residuals")
+
+dev.off()
+
+# Let's explore the evening model now!
+evening_residuals <- filter(all_games, evening == 1) %>%
+  select(`game score`, `early bird/night owl`)
+
+evening_residuals <- cbind(evening_residuals, predict(eveningmodel, se.fit = TRUE)) %>%
+  mutate(residuals = `game score` - fit)
+
+# General residual plot   
+png("../OUTPUTS/Evening_General_Residuals.png")
+
+ggplot(evening_residuals, aes(x = fit, y = residuals)) +
+  geom_point(color = 'green') +
+  ggtitle("Evening Model Residuals")
+
+png("../OUTPUTS/Evening_Grouped_Residuals.png")
+# Grouping by night owl/early bird
+ggplot(evening_residuals, aes(x = fit, y = residuals)) +
+  geom_point(aes(color = `early bird/night owl`)) +
+  ggtitle("Evening Model Residuals")
+
+#--------------------------------------------------------------------------
+## HYPOTHESIS TESTING
+#--------------------------------------------------------------------------
+
+# extract betas and standard errors from evening and morning models
+evening_betas <- eveningmodel$coefficients
+morning_betas <- morningmodel$coefficients
+evening_errors <- sqrt(diag(vcov(eveningmodel)))
+morning_errors <- sqrt(diag(vcov(morningmodel)))
+
+# run t-test between evening and morning betas, using adjusted
+# significance threshold
+new_alpha = 0.05 / length(morning_betas)
+new_conf_level = 1 - new_alpha
+names_betas <- names(morning_betas)
+
+for (i in 1:length(evening_betas)) {
+  betas <- c(evening_betas[i], morning_betas[i])
+  std_dev <- sqrt((evening_errors[i])^2 + (morning_errors[i])^2)
+  print(names_betas[i])
+  print(t.test(betas, mu=0, sd=std_dev, conf.level=new_conf_level))
+}
