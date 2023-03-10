@@ -193,11 +193,15 @@ ggplot(evening_residuals, aes(x = fit, y = residuals)) +
   geom_point(color = 'green') +
   ggtitle("Evening Model Residuals")
 
+dev.off()
+
 png("../OUTPUTS/Evening_Grouped_Residuals.png")
 # Grouping by night owl/early bird
 ggplot(evening_residuals, aes(x = fit, y = residuals)) +
   geom_point(aes(color = `early bird/night owl`)) +
   ggtitle("Evening Model Residuals")
+
+dev.off()
 
 #--------------------------------------------------------------------------
 ## HYPOTHESIS TESTING
