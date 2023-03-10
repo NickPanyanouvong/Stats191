@@ -22,9 +22,13 @@ match_ups <- read_csv("../RAW_DATA/season_match_up.csv")
 
 ## Preliminary transformations and regressions
 
-# Do regressions on (almost) all relevant covariates and add
+# Do regressions on all relevant covariates and add
 # the predicted values and residuals into the dataframes
-# TODO: add previous sport experience to both after making indicator functions
+
+# Because night_owl interacts with the evening and morning variables,
+# we need to add extra terms to account for the cross-variable
+# interaction - this makes sense, because being a night owl affects
+# your performance differently based on the time of day
 overallmodel <- lm(`game score` ~ `percent training sessions attended`
                    + `overall fitness score` 
                    + `# extra strategy sessions attended`
@@ -33,7 +37,8 @@ overallmodel <- lm(`game score` ~ `percent training sessions attended`
                    + `university year`
                    + `curling` + `gymnastics` + `baseball` + `martial_arts`
                    + `frisbee` + `table_tennis` + `basketball`
-                   + evening + morning + night_owl,
+                   + evening + morning + night_owl
+                   + night_owl * morning + night_owl * evening,
                    data=all_games)
 summary(overallmodel) # Run lines like this again to see the model
 
@@ -225,3 +230,58 @@ for (i in 1:length(evening_betas)) {
   print(names_betas[i])
   print(t.test(betas, mu=0, sd=std_dev, conf.level=new_conf_level))
 }
+
+#--------------------------------------------------------------------------
+## Finding the best morning & evening players
+#--------------------------------------------------------------------------
+
+# Make a hypothetical version of the data where every game was played
+# in the or in the evening
+morningized_games <- all_games
+morningized_games$morning <- 1
+morningized_games$evening <- 0
+
+eveningized_games <- all_games
+eveningized_games$morning <- 0
+eveningized_games$evening <- 1
+
+# Set the variables we see as mutable to 0 to remove their effects.
+# We decided the training and strategy sessions could be controlled
+# the coach on real teams, so we shouldn't consider their impact
+# on an individual's score.
+morningized_games$`percent training sessions attended` <- 0
+morningized_games$`# extra strategy sessions attended` <- 0
+eveningized_games$`percent training sessions attended` <- 0
+eveningized_games$`# extra strategy sessions attended` <- 0
+
+# Then predict how the players would have scored. We can use
+# overallmodel for this, because we know that the only night_owl
+# has a significant difference between morning and evening games
+# and its interaction with that has been accounted for.
+
+# It's better to use overallmodel to avoid bias due to 
+# non-statistically significant, but still potentially impactful,
+# differences between overallmodel and morning/evening model
+morningized_games$`game score` <- predict.lm(overallmodel, morningized_games)
+eveningized_games$`game score` <- predict.lm(overallmodel, eveningized_games)
+
+# Adjust by the residual, in case there is some confounding variable
+# biasing them. (The residual in these dataframes is still the 
+# residual from all_games, which is useful here.)
+morningized_games$`game score` <- morningized_games$`game score` + morningized_games$residual
+eveningized_games$`game score` <- eveningized_games$`game score` + eveningized_games$residual
+
+# Then, average these by player
+morning_players <- morningized_games %>% group_by(`student label`) %>% summarize(
+  mean = mean(`game score`),
+  sd = sd(`game score`)
+)
+top_n(morning_players,10,mean)
+
+evening_players <- eveningized_games %>% group_by(`student label`) %>% summarize(
+  mean = mean(`game score`),
+  sd = sd(`game score`)
+)
+top_n(evening_players,10,mean)
+
+# These currently have some overlap, but we'll deal with that later
