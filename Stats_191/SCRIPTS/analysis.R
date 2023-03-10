@@ -245,14 +245,14 @@ eveningized_games <- all_games
 eveningized_games$morning <- 0
 eveningized_games$evening <- 1
 
-# Set the variables we see as mutable to 0 to remove their effects.
+# Set the variables we see as mutable to the average to remove their effects.
 # We decided the training and strategy sessions could be controlled
 # the coach on real teams, so we shouldn't consider their impact
 # on an individual's score.
-morningized_games$`percent training sessions attended` <- 0
-morningized_games$`# extra strategy sessions attended` <- 0
-eveningized_games$`percent training sessions attended` <- 0
-eveningized_games$`# extra strategy sessions attended` <- 0
+morningized_games$`percent training sessions attended` <- mean(all_games$`percent training sessions attended`)
+morningized_games$`# extra strategy sessions attended` <- mean(all_games$`# extra strategy sessions attended`)
+eveningized_games$`percent training sessions attended` <- mean(all_games$`percent training sessions attended`)
+eveningized_games$`# extra strategy sessions attended` <- mean(all_games$`# extra strategy sessions attended`)
 
 # Then predict how the players would have scored. We can use
 # overallmodel for this, because we know that the only night_owl
@@ -277,12 +277,15 @@ morning_players <- morningized_games %>% group_by(`student label`) %>% summarize
   sd = sd(`game score`)
 )
 top_morning <- top_n(morning_players,20,mean)
+top_morning <- top_morning[order(top_morning$mean,decreasing = TRUE),]
 
 evening_players <- eveningized_games %>% group_by(`student label`) %>% summarize(
   mean = mean(`game score`),
   sd = sd(`game score`)
 )
 top_evening <- top_n(evening_players,20,mean)
+top_evening <- top_evening[order(top_evening$mean,decreasing = TRUE),]
+
 
 best_morning <- c()
 best_evening <- c()
@@ -303,5 +306,35 @@ for(i in 1:20) {
   }
 }
 
+# Keep only the top 10 from each. Those are our teams!
 best_morning <- best_morning[1:10]
 best_evening <- best_evening[1:10]
+
+#--------------------------------------------------------------------------
+## Find our regular season team
+#--------------------------------------------------------------------------
+
+# Remove the players used for east coast/west coast cups
+adjusted_games <- filter(all_games,!(`student label` %in% best_morning))
+adjusted_games <- filter(adjusted_games,!(`student label` %in% best_evening))
+
+# Again, we want to remove the effect of the training and strategy sessions
+adjusted_games$`percent training sessions attended` <- mean(all_games$`percent training sessions attended`)
+adjusted_games$`# extra strategy sessions attended` <- mean(all_games$`# extra strategy sessions attended`)
+
+adjusted_games$`game score` <- predict.lm(overallmodel, adjusted_games)
+adjusted_games$`game score` <- adjusted_games$`game score` + adjusted_games$residual
+
+# Summarize by player
+all_players <- adjusted_games %>% group_by(`student label`) %>% summarize(
+  mean = mean(`game score`),
+  sd = sd(`game score`)
+)
+
+# Naively select the best 10, and compare everyone to the 10th best
+best_10 <- top_n(all_players,10,mean)
+best_10 <- best_10[order(best_10$mean,decreasing = TRUE),]
+
+all_players <- all_players %>% mutate(
+  chance_better_than_10 = pnorm((mean - best_10$mean[10])/sqrt(sd^2 + best_10$sd[10]^2))
+)
