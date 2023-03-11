@@ -187,45 +187,56 @@ confidence_predict <- function(odds, score_difs, input, rounding_places) {
 # score_dif_density_func should output probability density as a function
 # of score_dif
 
-distribution_win_chance <- function(odds, score_difs, score_dif_density_func,
-                                    rounding_places, low, high) {
-  cur_score_dif <- low
+distribution_win_chance <- function(odds, score_difs, score_dif_density_func, 
+                                    score_dif_cdf, rounding_places, low, high) {
+  if(low > 0) {
+    stop("Distribution win chance low end must be below 0!")
+  }
+  
+  cur_score_dif <- 0
   step_size <- 10^{-1*rounding_places}
   result <- 0
-  for(i in 0:ceiling((high - low)/step_size)) {
+  for(i in 0:ceiling((high)/step_size)) {
+    if(confidence_predict(odds,score_difs,cur_score_dif,rounding_places)
+       > 0.999) {
+      result <- result + (high - cur_score_dif) * score_dif_cdf(cur_score_dif)
+      break
+    }
     result <- result + step_size * score_dif_density_func(cur_score_dif) *
       confidence_predict(odds,score_difs,cur_score_dif,rounding_places)
     cur_score_dif <- round(cur_score_dif + step_size,rounding_places)
+  }
+  for(i in 0:ceiling((low)/step_size)) {
+    if(confidence_predict(odds,score_difs,cur_score_dif,rounding_places)
+       < 0.001) {
+      break
+    }
+    result <- result + step_size * score_dif_density_func(cur_score_dif) *
+      confidence_predict(odds,score_difs,cur_score_dif,rounding_places)
+    cur_score_dif <- round(cur_score_dif - step_size,rounding_places)
   }
   return(result)
 }
 
 # Uses above with a list of scores of teams we're playing against
 # combined with a score_func for our team to calculate the odds
-# of never losing a game
+# of never losing a game and average won games - first entry
+# is average, second is undefeated odds
 
-undefeated_odds <- function(odds, score_difs, score_func, team_scores,
-                            rounding_places, low, high) {
-  result <- 1
+success_measures <- function(odds, score_difs, score_func, score_cdf,
+                            team_scores, rounding_places, low, high) {
+  result <- c(0,1)
+  win_chances <- c()
   for(score in team_scores) {
-    result <- result * distribution_win_chance(
+    win_chances <- append(win_chances,distribution_win_chance(
       odds, score_difs, function(x){score_func(x + score)},
-      rounding_places, low - score, high - score
-    )
+      function(x){score_cdf(x + score)}, rounding_places,
+      low - score, high - score
+    ))
   }
-  return(result)
-}
-
-# Same as above, but calculates average won games
-
-expected_wins <- function(odds, score_difs, score_func, team_scores,
-                            rounding_places, low, high) {
-  result <- 0
-  for(score in team_scores) {
-    result <- result + distribution_win_chance(
-      odds, score_difs, function(x){score_func(x + score)},
-      rounding_places, low - score, high - score
-    )
+  for(chance in win_chances) {
+    result[1] <- result[1] + chance
+    result[2] <- result[2] * chance
   }
   return(result)
 }
@@ -237,9 +248,13 @@ expected_wins <- function(odds, score_difs, score_func, team_scores,
 # The normal assumption is reasonable - see the analysis sheet,
 # there's a helpful plot on it
 
-score_func_from_players <- function(player_means, player_sds) {
+score_pdf_from_players <- function(player_means, player_sds) {
   return(function(x){dnorm(x,mean = mean(player_means),
                     sd = sqrt(sum(player_sds^2)))})
 }
 
-
+score_cdf_from_players <- function(player_means, player_sds) {
+  return(function(x){pnorm(x,mean = mean(player_means),
+                           sd = sqrt(sum(player_sds^2)),
+                           lower.tail = FALSE)})
+}
