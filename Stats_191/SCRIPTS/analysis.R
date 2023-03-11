@@ -325,6 +325,8 @@ adjusted_games$`# extra strategy sessions attended` <- mean(all_games$`# extra s
 adjusted_games$`game score` <- predict.lm(overallmodel, adjusted_games)
 adjusted_games$`game score` <- adjusted_games$`game score` + adjusted_games$residual
 
+# TODO: Average the predicted scores for morning, noon, and evening,
+# instead of just using their current average
 # Summarize by player
 all_players <- adjusted_games %>% group_by(`student label`) %>% summarize(
   mean = mean(`game score`),
@@ -338,3 +340,23 @@ best_10 <- best_10[order(best_10$mean,decreasing = TRUE),]
 all_players <- all_players %>% mutate(
   chance_better_than_10 = pnorm((mean - best_10$mean[10])/sqrt(sd^2 + best_10$sd[10]^2))
 )
+
+# In order to have a 5% chance of being better than the tenth best
+# player in 10 of the 20 games, a player needs to have: 
+# 20 C 10 * x^10 = 0.05
+# x = 0.22
+# a 22% chance of being better than the tenth best player on a
+# single game.
+
+# All the remaining players:
+ggplot(all_players, aes(x = mean, y = sd)) +
+  geom_point() +
+  ggtitle("Players for general season")  +
+  scale_x_continuous(limits = c(0,60))
+
+# Same, but only the players with a >5% chance of being better 
+# than the 10th best player on average in over half the games
+ggplot(filter(all_players, chance_better_than_10 > 0.22), aes(x = mean, y = sd)) +
+  geom_point() +
+  ggtitle("Top cut of players for general season") +
+  scale_x_continuous(limits = c(0,60))
