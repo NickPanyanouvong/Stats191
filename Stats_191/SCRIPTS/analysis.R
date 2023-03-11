@@ -19,6 +19,7 @@ normalized_games <- read_csv("../PROCESSED_DATA/processed_normalized_all_games.c
 all_games <- read_csv("../PROCESSED_DATA/processed_all_games.csv")
 previous_results <- read_csv("../PROCESSED_DATA/processed_previous_results.csv")
 match_ups <- read_csv("../RAW_DATA/season_match_up.csv")
+match_ups <- match_ups[1,2:20]
 
 ## Preliminary transformations and regressions
 
@@ -314,20 +315,31 @@ best_evening <- best_evening[1:10]
 ## Find our regular season team
 #--------------------------------------------------------------------------
 
+# Create another set for all noon games
+noonized_games <- adjusted_games
+noonized_games$morning <- 0
+noonized_games$evening <- 0
+
 # Remove the players used for east coast/west coast cups
-adjusted_games <- filter(all_games,!(`student label` %in% best_morning))
-adjusted_games <- filter(adjusted_games,!(`student label` %in% best_evening))
+noonized_games <- filter(noonized_games,!(`student label` %in% best_morning))
+noonized_games <- filter(noonized_games,!(`student label` %in% best_evening))
+morningized_games <- filter(noonized_games,!(`student label` %in% best_morning))
+morningized_games <- filter(noonized_games,!(`student label` %in% best_evening))
+eveningized_games <- filter(noonized_games,!(`student label` %in% best_morning))
+eveningized_games <- filter(noonized_games,!(`student label` %in% best_evening))
 
 # Again, we want to remove the effect of the training and strategy sessions
-adjusted_games$`percent training sessions attended` <- mean(all_games$`percent training sessions attended`)
-adjusted_games$`# extra strategy sessions attended` <- mean(all_games$`# extra strategy sessions attended`)
-
-adjusted_games$`game score` <- predict.lm(overallmodel, adjusted_games)
-adjusted_games$`game score` <- adjusted_games$`game score` + adjusted_games$residual
+noonized_games$`percent training sessions attended` <- mean(all_games$`percent training sessions attended`)
+noonized_games$`# extra strategy sessions attended` <- mean(all_games$`# extra strategy sessions attended`)
+noonized_games$`game score` <- predict.lm(overallmodel, noonized_games)
+noonized_games$`game score` <- noonized_games$`game score` + noonized_games$residual
 
 # TODO: Average the predicted scores for morning, noon, and evening,
 # instead of just using their current average
-# Summarize by player
+
+adjusted_games <- rbind(noonized_games,morningized_games,eveningized_games)
+
+# Summarize the average of the three by player
 all_players <- adjusted_games %>% group_by(`student label`) %>% summarize(
   mean = mean(`game score`),
   sd = sd(`game score`)
@@ -360,3 +372,27 @@ ggplot(filter(all_players, chance_better_than_10 > 0.22), aes(x = mean, y = sd))
   geom_point() +
   ggtitle("Top cut of players for general season") +
   scale_x_continuous(limits = c(0,60))
+
+# Splits the players by standard deviation, the organizes them
+# in each SD group by mean, keeping only the 10 best means
+
+# Change the first 10 to a 2.5 for a more granular, and 16 hours
+# long, calculation
+bucketed_players <- partition(all_players,"sd","mean",10,10)
+
+# Test how many runs it'll take
+a <- numeric(length(bucketed_players))
+a[1] <- 10
+i <- 0
+while(sum(a)==10){
+  a <- increment_amounts(bucketed_players,a)
+  i <- i + 1
+}
+print(paste(i, "runs incoming"))
+
+win_chances <- read_csv("../PROCESSED_DATA/confidence_win_rates.csv")
+
+all_possible_teams <- bucket_combo_teams(bucketed_players, 4, win_chances$chance_winning,
+                                         win_chances$score_difs, match_ups, 0, i)
+
+# Please do a write.csv() if you successfully do the 16 hour run
