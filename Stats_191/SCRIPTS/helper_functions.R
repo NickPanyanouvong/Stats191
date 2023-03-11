@@ -27,6 +27,23 @@ match_sport <- function(strings, sport){
   return(results)
 }
 
+# Partitions a dataframe into buckets by one variable, while
+# each bucket is organized in descending order by another.
+
+# Takes column names in strings.
+
+partition <- function(df, bucketvar, sortvar, bucketsize) {
+  buckets <- list()
+  lower <- min(df[[bucketvar]])
+  while(lower <= max(df[[bucketvar]])) {
+    temp <- filter(filter(df,!!as.symbol(bucketvar) >= lower),
+                 !!as.symbol(bucketvar) < lower + bucketsize)
+    buckets[[length(buckets) + 1]] <- temp[order(temp[[sortvar]], decreasing = TRUE),]
+    lower <- lower + bucketsize
+  }
+  return(buckets)
+}
+
 ### Piecewise regression stuff
 
 ## Piecewise utility functions
