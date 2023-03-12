@@ -6,6 +6,7 @@
 library(tidyverse)
 library(haven)
 library(rstudioapi)
+library(MASS)
 
 # Adjust wd
 file_path <- rstudioapi::getSourceEditorContext()$path
@@ -59,23 +60,111 @@ summary(normalizedmodel)
 normalized_games <- subset(cbind(normalized_games,predict(normalizedmodel, se.fit = TRUE)) %>%
                              mutate(residual = `game score` - fit), select = -c(df,residual.scale))
 
-## RESIDUAL PLOTS
+####################################################################################
+# TRANSFORMATIONS AND RESIDUALS
 
 # We want to plot the residuals of our model's game score predictions against the
 # predictions themselves. Let's extract this from all_games and create a scatterplot.
 
-all_games_residuals <- select(all_games, `fit`, `residual`, `se.fit`)
-ggplot(all_games_residuals, aes(x = fit, y = residual)) +
+png("../OUTPUTS/initial_residuals.png")
+all_games_residuals <- dplyr::select(all_games, `fit`, `se.fit`, `residual`)
+all_games_residuals <- all_games_residuals %>% mutate(standard_residuals = rstandard(overallmodel))
+ggplot(all_games_residuals, aes(x = fit, y = standard_residuals)) +
   geom_point(color = 'red')
+dev.off()
 
-normalized_residuals <- select(normalized_games, `fit`, `residual`, `se.fit`)
-ggplot(normalized_residuals, aes(x = fit, y = residual)) +
-  geom_point(color = 'blue')
-  
 
-##### ALL GAMES ANALYSIS #####
+############################# ARCSIN TRANSFORM #########################################
+arcsin_games <- all_games
+arcsin_games <- arcsin_games %>% mutate(arcsin_scores = asinh(`game score`)) 
 
-## Errors are approzimately normal
+arcsinmodel <- lm(`arcsin_scores` ~ `percent training sessions attended`
+                      + `overall fitness score` 
+                      + `# extra strategy sessions attended`
+                      + `hours of sleep the night before game`
+                      + `# meals on day prior to game`
+                      + `university year`
+                      + evening + morning + night_owl
+                      + night_owl * morning + night_owl * evening,
+                      data=arcsin_games)
+
+summary(arcsinmodel)
+
+arcsin_games <- subset(arcsin_games, select = -c(`fit`, `residual`, `se.fit`))
+arcsin_games <- subset(cbind(arcsin_games,predict(arcsinmodel, se.fit = TRUE)) %>%
+                      mutate(standard_residual = `arcsin_scores` - `fit`), select = -c(`df`,`residual.scale`))
+
+arcsin_games$`residual` <- rstandard(arcsinmodel)
+
+png("../OUTPUTS/arcsin_residuals.png")
+
+ggplot(arcsin_games, aes(x = fit, y = standard_residual)) +
+  geom_point(aes(color = night_owl)) +
+  ggtitle("Residuals of arcsin(score)") +
+  theme(plot.title = element_text(hjust = 0.5, vjust = 0.5))
+
+dev.off()
+
+#################################### BOXCOX #######################################
+boxcox_all_games <- all_games
+
+# Ensure that all responses (scores) are above zero
+boxcox_all_games$`game score` <- boxcox_all_games$`game score` + 0.001
+
+# boxcox() requires a linear model arg lm(), for some reason.
+boxcox_overall_model <- lm(`game score` ~ `percent training sessions attended`
+                           + `overall fitness score` 
+                           + `# extra strategy sessions attended`
+                           + `hours of sleep the night before game`
+                           + `# meals on day prior to game`
+                           + `university year`
+                           + `curling` + `gymnastics` + `baseball` + `martial_arts`
+                           + `frisbee` + `table_tennis` + `basketball`
+                           + evening + morning + night_owl
+                           + night_owl * morning + night_owl * evening,
+                           data=boxcox_all_games)
+
+# Find the optimal lambda
+bc <- boxcox(boxcox_overall_model)
+lambda <- bc[[1]][which.max(bc[[2]])] # This is the lambda we'll use for Box-Cox
+
+# Transform the scores column
+boxcox_all_games$`game score` <- ((boxcox_all_games$`game score`)^(lambda) - 1)/lambda
+
+# Run regression with transformed scores
+fin_boxcox_overall_model <- lm(`game score` ~ `percent training sessions attended`
+                               + `overall fitness score` 
+                               + `# extra strategy sessions attended`
+                               + `hours of sleep the night before game`
+                               + `# meals on day prior to game`
+                               + `university year`
+                               + `curling` + `gymnastics` + `baseball` + `martial_arts`
+                               + `frisbee` + `table_tennis` + `basketball`
+                               + evening + morning + night_owl
+                               + night_owl * morning + night_owl * evening,
+                               data=boxcox_all_games)
+
+# Fit the model and plot residuals
+boxcox_all_games <- subset(boxcox_all_games, select =-c(`fit`, `se.fit`, `residual`))
+boxcox_all_games <- subset(cbind(boxcox_all_games,predict(fin_boxcox_overall_model, se.fit = TRUE)) %>%
+                      mutate(residual = `game score` - `fit`), select = -c(`df`,`residual.scale`))
+
+standard_residuals <- rstandard(fin_boxcox_overall_model)
+png("../OUTPUTS/boxcox_residuals.png")
+
+# Plot
+ggplot(boxcox_all_games, aes(x = fit, y = standard_residuals)) +
+  geom_point(aes(color = night_owl)) +
+  ggtitle("Box-Cox Residuals") +
+  theme(plot.title = element_text(hjust = 0.5, vjust = 0.5))
+
+dev.off()
+
+#############################################################################
+
+# ALL GAMES ANALYSIS 
+
+## Errors are approximately normal
 ggplot(data.frame(overallmodel$residuals), aes(x=overallmodel$residuals)) +
   geom_histogram(binwidth=1, color="grey50", fill="lightblue", alpha=0.8) +
   theme_minimal() + 
@@ -105,10 +194,6 @@ ggplot(all_games, aes(x=`# meals on day prior to game`,y=`percent training sessi
 # beta value represents (think of the midterm). OR we can ignore that and say
 # we should have them eat less meals for better coaching - I think the former
 # is better.
-
-
-
-
 
 ## Models for morning and evening games
 
@@ -156,7 +241,7 @@ morningmodel <- lm(`game score` ~ `percent training sessions attended`
 summary(morningmodel)
 
 # -----------------------------------------------------------------------------
-## RESIDUAL PLOTS
+## MORNING AND EVENING RESIDUAL PLOTS
 #------------------------------------------------------------------------------
 # Let's explore the residual plots of each of these models. Start w/ morning:
 morning_residuals <- filter(all_games, morning == 1) %>%

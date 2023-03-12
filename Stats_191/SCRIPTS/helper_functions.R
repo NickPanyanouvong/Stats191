@@ -1,5 +1,26 @@
 #### Functions
 
+### Graphing
+
+# Generates and saves multiple histograms for the specified COLS of the dataframe
+multi_histogram <- function(data, cols){
+  
+  for(column in cols){
+    
+    png(paste("../OUTPUTS/", column, ".png"))
+
+    bin_width <- (max(data[[column]]) - min(data[[column]])) / 50 # Adjust bin width
+    histo <- ggplot(data = data, aes(x = !!sym(column))) +
+      geom_histogram(binwidth = bin_width, color = 'black', fill = 'lightblue') +
+      ggtitle(paste(column, " distribution")) +
+      theme(plot.title = element_text(hjust = 0.5, vjust = 0.5))
+    
+    print(histo)
+    
+    dev.off()
+  }
+}
+
 ### Utility stuff
 
 # Just returns a list of z-scores from a list
