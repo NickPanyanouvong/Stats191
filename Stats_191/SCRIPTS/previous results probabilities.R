@@ -17,6 +17,7 @@ source("helper_functions.R")
 # Import processed data
 previous_results <- read_csv("../PROCESSED_DATA/processed_previous_results.csv")
 match_ups <- read_csv("../RAW_DATA/season_match_up.csv")
+match_ups <- match_ups[1,2:20]
 
 ##### PREVIOUS RESULTS ANALYSIS #####
 
@@ -245,4 +246,8 @@ ggplot(win_chances, aes(x=score_difs, y=chance_winning)) +
   theme_minimal() +
   labs(y="Chance of winning (given observed dist.)", x="Score difference")
 
-
+# Example use of success_measures
+success_measures(win_chances$chance_winning,win_chances$score_difs, 
+                 function(x){dnorm(x,mean=50,sd=15)},
+                 function(x){pnorm(x,mean=50,sd=15,lower.tail = FALSE)},
+                 match_ups,2,5,95)

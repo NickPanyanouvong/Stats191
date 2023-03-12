@@ -48,6 +48,168 @@ match_sport <- function(strings, sport){
   return(results)
 }
 
+
+### Bucketing to build teams efficiently
+
+# Partitions a dataframe into buckets by one variable, while
+# each bucket is organized in descending order by another.
+
+# Takes column names in strings.
+
+partition <- function(df, bucketvar, sortvar, bucketsize, maxsize) {
+  buckets <- list()
+  lower <- min(df[[bucketvar]])
+  while(lower <= max(df[[bucketvar]])) {
+    temp <- filter(filter(df,!!as.symbol(bucketvar) >= lower),
+                 !!as.symbol(bucketvar) < lower + bucketsize)
+    temp <- temp[order(temp[[sortvar]], decreasing = TRUE),]
+    temp <- filter(temp[1:maxsize,],!is.na(!!as.symbol(bucketvar)))
+    buckets[[length(buckets) + 1]] <- temp[order(temp[[sortvar]], decreasing = TRUE),]
+    lower <- lower + bucketsize
+  }
+  return(buckets)
+}
+
+# Finds the last index of a vector that is nonzero, excluding the
+# index at the end of the vector
+last_nonfinal_nonzero <- function(vec) {
+  i <- length(vec) - 1
+  while(i > 0){
+    if(vec[i] != 0) {
+      return(i)
+    }
+    i <- i - 1
+  }
+  return(0)
+}
+
+# Grabs given numbers of players from the appropriate buckets
+make_team <- function(amounts, buckets) {
+  if(length(amounts) != length(buckets)) {
+    print(amounts)
+    print(length(buckets))
+    stop("Amounts not as long as buckets!")
+  }
+  output <- NULL
+  for(i in 1:length(buckets)) {
+    if(amounts[i] > 0) {
+      temp <- buckets[[i]]
+      output <- rbind(output,temp[1:amounts[i],])
+    }
+  }
+  return(output)
+}
+
+# Takes in a list of amounts and the buckets they belong to, and
+# increments it by one, moving the rightmost entry right by one,
+# or if it's at the last spot, moving the next rightmost right by
+# one and resetting everything at the last spot to that spot.
+
+# Example: 2 0 0 0 -> 1 1 0 0  -> 1 0 1 0 -> 1 0 0 1 -> 0 2 0 0
+
+increment_amounts <- function(buckets,bucket_amounts) {
+  last <- last_nonfinal_nonzero(bucket_amounts)
+  # Reset all the ones at the end to the new beginning, after
+  # incrementing the appropriate 'turtle' counter
+  add <- bucket_amounts[length(bucket_amounts)]
+  bucket_amounts[length(bucket_amounts)] <- 0
+  # If everything is in the last cell, return null to signal
+  # that we're done
+  if(last == 0) {
+    print("All at the end!")
+    return(NULL)
+  }
+  bucket_amounts[last] <- bucket_amounts[last] - 1
+  bucket_amounts[last + 1] <- 1 + add
+  # Not all the buckets are the same length, need to make them fit
+  cur <- last + 1
+  while(bucket_amounts[cur] > nrow(buckets[[cur]])) {
+    # If we're at the last one, we need to roll over by incrementing
+    # again
+    if(cur == length(bucket_amounts)){
+      # Normal increment stuff
+      add <- bucket_amounts[length(bucket_amounts)]
+      bucket_amounts[length(bucket_amounts)] <- 0
+      cur <- last_nonfinal_nonzero(bucket_amounts)
+      # If everything is in the last cell, return as usual
+      if(cur == 0) {
+        return(NULL)
+      }
+      bucket_amounts[cur] <- bucket_amounts[cur] - 1
+      bucket_amounts[cur + 1] <- 1 + add
+    } else {
+      # Just slide the excess over to the next bucket
+      bucket_amounts[cur + 1] <- bucket_amounts[cur + 1] + bucket_amounts[cur] - nrow(buckets[[cur]])
+      bucket_amounts[cur] <- nrow(buckets[[cur]])
+    }
+    cur <- cur + 1
+    # Repeat to make sure there's enough space in the 
+    # bucket we slid the excess into
+  }
+  return(bucket_amounts)
+}
+
+# Tries all combinations of these players, but you never use
+# a player unless all higher-mean players from their sd bucket
+# have already been used. Takes a list of dataframes, like above,
+# along with auxilary inputs.
+
+# num_sd is the number of standard deviation away from the mean to
+# calculate over
+
+bucket_combo_teams <- function(bucketlist, num_sd, odds, score_difs,
+                               team_scores, rounding_places, totalruns) {
+  # This keeps track of how many people we are pulling from each bucket
+  bucket_amounts <- numeric(length(bucketlist))
+  bucket_amounts[1] <- 10
+  player1 <- c()
+  player2 <- c()
+  player3 <- c()
+  player4 <- c()
+  player5 <- c()
+  player6 <- c()
+  player7 <- c()
+  player8 <- c()
+  player9 <- c()
+  player10 <- c()
+  avg_wins <- c()
+  undefeated_chance <- c()
+  i <- 0
+  while(!is.null(bucket_amounts)) {
+    players <- make_team(bucket_amounts, bucketlist)
+    player1[length(player1)+1] <- players$`student label`[1]
+    player2[length(player2)+1] <- players$`student label`[2]
+    player3[length(player3)+1] <- players$`student label`[3]
+    player3[length(player3)+1] <- players$`student label`[3]
+    player4[length(player4)+1] <- players$`student label`[4]
+    player5[length(player5)+1] <- players$`student label`[5]
+    player6[length(player6)+1] <- players$`student label`[6]
+    player7[length(player7)+1] <- players$`student label`[7]
+    player8[length(player8)+1] <- players$`student label`[8]
+    player9[length(player9)+1] <- players$`student label`[9]
+    player10[length(player10)+1] <- players$`student label`[10]
+    
+    # We can model the distribution of their average easily,
+    # because each of their score distributions are normal (see graph)
+    team_pdf <- score_pdf_from_players(players$mean,players$sd)
+    team_cdf <- score_cdf_from_players(players$mean,players$sd)
+    results <- success_measures(odds, score_difs, team_pdf, team_cdf,
+                                team_scores, rounding_places, 
+                                mean(players$mean) - num_sd * sqrt(sum(players$sd^2)),
+                                mean(players$mean) + num_sd * sqrt(sum(players$sd^2)))
+    avg_wins[length(avg_wins)+1] <- results[1]
+    undefeated_chance[length(undefeated_chance)+1] <- results[2]
+    bucket_amounts <- increment_amounts(bucketlist,bucket_amounts)
+    i <- i + 1
+    if(i %% round(totalruns/100,0) == 0) {
+      print(paste(round(i/totalruns * 100,1),"%","done"))
+    }
+  }
+  return(data.frame(player1,player2,player3,player4,player5,player6,
+                    player7,player8,player9,player10,avg_wins,
+                    undefeated_chance))
+}
+
 ### Piecewise regression stuff
 
 ## Piecewise utility functions
@@ -208,45 +370,58 @@ confidence_predict <- function(odds, score_difs, input, rounding_places) {
 # score_dif_density_func should output probability density as a function
 # of score_dif
 
-distribution_win_chance <- function(odds, score_difs, score_dif_density_func,
-                                    rounding_places, low, high) {
-  cur_score_dif <- low
+distribution_win_chance <- function(odds, score_difs, score_dif_density_func, 
+                                    score_dif_cdf, rounding_places, low, high) {
+  if(low > 0) {
+    print("Distribution win chance low end must be below 0!")
+    low <- -1
+  }
+  
+  cur_score_dif <- 0
   step_size <- 10^{-1*rounding_places}
   result <- 0
-  for(i in 0:ceiling((high - low)/step_size)) {
+  for(i in 0:ceiling((high)/step_size)) {
+    if(confidence_predict(odds,score_difs,cur_score_dif,rounding_places)
+       > 0.999) {
+      result <- result + score_dif_cdf(cur_score_dif)
+      break
+    }
     result <- result + step_size * score_dif_density_func(cur_score_dif) *
       confidence_predict(odds,score_difs,cur_score_dif,rounding_places)
     cur_score_dif <- round(cur_score_dif + step_size,rounding_places)
+  }
+  cur_score_dif <- 0
+  for(i in 0:ceiling((low)/step_size)) {
+    if(confidence_predict(odds,score_difs,cur_score_dif,rounding_places)
+       < 0.001) {
+      break
+    }
+    result <- result + step_size * score_dif_density_func(cur_score_dif) *
+      confidence_predict(odds,score_difs,cur_score_dif,rounding_places)
+    cur_score_dif <- round(cur_score_dif - step_size,rounding_places)
   }
   return(result)
 }
 
 # Uses above with a list of scores of teams we're playing against
 # combined with a score_func for our team to calculate the odds
-# of never losing a game
+# of never losing a game and average won games - first entry
+# is average, second is undefeated odds
 
-undefeated_odds <- function(odds, score_difs, score_func, team_scores,
-                            rounding_places, low, high) {
-  result <- 1
+success_measures <- function(odds, score_difs, score_func, score_cdf,
+                            team_scores, rounding_places, low, high) {
+  result <- c(0,1)
+  win_chances <- c()
   for(score in team_scores) {
-    result <- result * distribution_win_chance(
+    win_chances <- append(win_chances,distribution_win_chance(
       odds, score_difs, function(x){score_func(x + score)},
-      rounding_places, low - score, high - score
-    )
+      function(x){score_cdf(x + score)}, rounding_places,
+      low - score, high - score
+    ))
   }
-  return(result)
-}
-
-# Same as above, but calculates average won games
-
-expected_wins <- function(odds, score_difs, score_func, team_scores,
-                            rounding_places, low, high) {
-  result <- 0
-  for(score in team_scores) {
-    result <- result + distribution_win_chance(
-      odds, score_difs, function(x){score_func(x + score)},
-      rounding_places, low - score, high - score
-    )
+  for(chance in win_chances) {
+    result[1] <- result[1] + chance
+    result[2] <- result[2] * chance
   }
   return(result)
 }
@@ -258,9 +433,15 @@ expected_wins <- function(odds, score_difs, score_func, team_scores,
 # The normal assumption is reasonable - see the analysis sheet,
 # there's a helpful plot on it
 
-score_func_from_players <- function(player_means, player_sds) {
-  return(function(x){dnorm(x,mean = mean(player_means),
-                    sd = sqrt(sum(player_sds^2)))})
+score_pdf_from_players <- function(player_means, player_sds) {
+  output_func <- function(x){dnorm(x,mean = mean(player_means),
+                                   sd = sqrt(sum(player_sds^2)))}
+  return(output_func)
 }
 
-
+score_cdf_from_players <- function(player_means, player_sds) {
+  output_func <- function(x){pnorm(x,mean = mean(player_means),
+                                   sd = sqrt(sum(player_sds^2)),
+                                   lower.tail = FALSE)}
+  return(output_func)
+}
