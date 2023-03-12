@@ -412,7 +412,7 @@ best_evening <- best_evening[1:10]
 #--------------------------------------------------------------------------
 
 # Create another set for all noon games
-noonized_games <- adjusted_games
+noonized_games <- all_games
 noonized_games$morning <- 0
 noonized_games$evening <- 0
 
@@ -424,14 +424,25 @@ morningized_games <- filter(noonized_games,!(`student label` %in% best_evening))
 eveningized_games <- filter(noonized_games,!(`student label` %in% best_morning))
 eveningized_games <- filter(noonized_games,!(`student label` %in% best_evening))
 
-# Again, we want to remove the effect of the training and strategy sessions
-noonized_games$`percent training sessions attended` <- mean(all_games$`percent training sessions attended`)
-noonized_games$`# extra strategy sessions attended` <- mean(all_games$`# extra strategy sessions attended`)
+# Again, we want to remove the effect of the training and strategy sessions.
+# However, because we care about absolute scores, and not relative scores,
+# we can't just assign them all to the mean. Instead, it makes more sense
+# to assign them to the max: we want our players to be the best, so
+# we will send them to as many training and strategy sessions as possible.
+noonized_games$`percent training sessions attended` <- max(all_games$`percent training sessions attended`)
+noonized_games$`# extra strategy sessions attended` <- max(all_games$`# extra strategy sessions attended`)
 noonized_games$`game score` <- predict.lm(overallmodel, noonized_games)
 noonized_games$`game score` <- noonized_games$`game score` + noonized_games$residual
 
-# TODO: Average the predicted scores for morning, noon, and evening,
-# instead of just using their current average
+morningized_games$`percent training sessions attended` <- max(all_games$`percent training sessions attended`)
+morningized_games$`# extra strategy sessions attended` <- max(all_games$`# extra strategy sessions attended`)
+morningized_games$`game score` <- predict.lm(overallmodel, morningized_games)
+morningized_games$`game score` <- morningized_games$`game score` + morningized_games$residual
+
+eveningized_games$`percent training sessions attended` <- max(all_games$`percent training sessions attended`)
+eveningized_games$`# extra strategy sessions attended` <- max(all_games$`# extra strategy sessions attended`)
+eveningized_games$`game score` <- predict.lm(overallmodel, eveningized_games)
+eveningized_games$`game score` <- eveningized_games$`game score` + eveningized_games$residual
 
 adjusted_games <- rbind(noonized_games,morningized_games,eveningized_games)
 
@@ -460,35 +471,46 @@ all_players <- all_players %>% mutate(
 ggplot(all_players, aes(x = mean, y = sd)) +
   geom_point() +
   ggtitle("Players for general season")  +
-  scale_x_continuous(limits = c(0,60))
+  scale_x_continuous(limits = c(0,100))
 
 # Same, but only the players with a >5% chance of being better 
 # than the 10th best player on average in over half the games
 ggplot(filter(all_players, chance_better_than_10 > 0.22), aes(x = mean, y = sd)) +
   geom_point() +
   ggtitle("Top cut of players for general season") +
-  scale_x_continuous(limits = c(0,60))
+  scale_x_continuous(limits = c(0,100))
 
 # Splits the players by standard deviation, the organizes them
 # in each SD group by mean, keeping only the 10 best means
 
-# Change the first 10 to a 2.5 for a more granular, and 16 hours
-# long, calculation
-bucketed_players <- partition(all_players,"sd","mean",10,10)
+## DO NOT RUN, TAKES ~13.5 HOURS
 
-# Test how many runs it'll take
-a <- numeric(length(bucketed_players))
-a[1] <- 10
-i <- 0
-while(sum(a)==10){
-  a <- increment_amounts(bucketed_players,a)
-  i <- i + 1
-}
-print(paste(i, "runs incoming"))
+# bucketed_players <- partition(all_players,"sd","mean",2.5,10)
+# 
+# # Test how many runs it'll take
+# a <- numeric(length(bucketed_players))
+# a[1] <- 10
+# i <- 0
+# while(sum(a)==10){
+#   a <- increment_amounts(bucketed_players,a)
+#   i <- i + 1
+# }
+# print(paste(i, "runs incoming"))
+# 
+# win_chances <- read_csv("../PROCESSED_DATA/confidence_win_rates.csv")
+# 
+# all_possible_teams <- bucket_combo_teams(bucketed_players, 4, win_chances$chance_winning,
+#                                          win_chances$score_difs, match_ups, 0, i)
 
-win_chances <- read_csv("../PROCESSED_DATA/confidence_win_rates.csv")
+# 13.5 hour run successfully done and saved here, please don't overwrite
+# write.csv(all_possible_teams, "../PROCESSED_DATA/all_possible_teams.csv")
+all_possible_teams <- read_csv("../PROCESSED_DATA/all_possible_teams.csv")
 
-all_possible_teams <- bucket_combo_teams(bucketed_players, 4, win_chances$chance_winning,
-                                         win_chances$score_difs, match_ups, 0, i)
+all_possible_teams <- distinct(all_possible_teams)
 
-# Please do a write.csv() if you successfully do the 16 hour run
+best_on_average_teams <- top_n(all_possible_teams,10,avg_wins)
+best_on_average_teams <- best_on_average_teams[order(best_on_average_teams$avg_wins,
+                                                    decreasing = TRUE),]
+best_undefeated_teams <- top_n(all_possible_teams,10,undefeated_chance)
+best_undefeated_teams <- best_undefeated_teams[order(best_undefeated_teams$undefeated_chance,
+                                                    decreasing = TRUE),]

@@ -180,7 +180,6 @@ bucket_combo_teams <- function(bucketlist, num_sd, odds, score_difs,
     player1[length(player1)+1] <- players$`student label`[1]
     player2[length(player2)+1] <- players$`student label`[2]
     player3[length(player3)+1] <- players$`student label`[3]
-    player3[length(player3)+1] <- players$`student label`[3]
     player4[length(player4)+1] <- players$`student label`[4]
     player5[length(player5)+1] <- players$`student label`[5]
     player6[length(player6)+1] <- players$`student label`[6]
@@ -205,6 +204,7 @@ bucket_combo_teams <- function(bucketlist, num_sd, odds, score_difs,
       print(paste(round(i/totalruns * 100,1),"%","done"))
     }
   }
+  print(paste("Ran",i,"times"))
   return(data.frame(player1,player2,player3,player4,player5,player6,
                     player7,player8,player9,player10,avg_wins,
                     undefeated_chance))
