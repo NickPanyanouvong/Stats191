@@ -506,25 +506,24 @@ ggplot(filter(all_players, chance_better_than_10 > 0.22), aes(x = mean, y = sd))
 # write.csv(all_possible_teams, "../PROCESSED_DATA/all_possible_teams.csv")
 all_possible_teams <- read_csv("../PROCESSED_DATA/all_possible_teams.csv")
 
-all_possible_teams <- distinct(all_possible_teams)
-
-best_on_average_teams <- top_n(all_possible_teams,10,avg_wins)
-best_on_average_teams <- best_on_average_teams[order(best_on_average_teams$avg_wins,
-                                                     decreasing = TRUE),]
-best_undefeated_teams <- top_n(all_possible_teams,10,undefeated_chance)
-best_undefeated_teams <- best_undefeated_teams[order(best_undefeated_teams$undefeated_chance,
-                                                    decreasing = TRUE),]
 # Double check these teams with higher precision to guarantee they're
 # the best
 
-# Takes ~4 minutes to check because it's extremely high precision
+# Takes ~13 minutes to check because it's extremely high precision
 
+# best_on_average_teams <- top_n(all_possible_teams,30,avg_wins)
+# best_on_average_teams <- best_on_average_teams[order(best_on_average_teams$avg_wins,
+#                                                      decreasing = TRUE),]
+# best_undefeated_teams <- top_n(all_possible_teams,30,undefeated_chance)
+# best_undefeated_teams <- best_undefeated_teams[order(best_undefeated_teams$undefeated_chance,
+#                                                     decreasing = TRUE),]
+# 
 # for(i in 1:nrow(best_on_average_teams)) {
 #   players <- filter(all_players,`student label` %in% best_on_average_teams[i,1:10])
 #   team_pdf <- score_pdf_from_players(players$mean,players$sd)
 #   team_cdf <- score_cdf_from_players(players$mean,players$sd)
 #   results <- success_measures(win_chances$chance_winning, win_chances$score_difs,
-#                               team_pdf, team_cdf, match_ups, 2, 
+#                               team_pdf, team_cdf, match_ups, 2,
 #                               mean(players$mean) - 8 * sqrt(sum(players$sd^2)),
 #                               mean(players$mean) + 8 * sqrt(sum(players$sd^2)))
 #   best_on_average_teams[i,11] <- results[1]
@@ -533,13 +532,14 @@ best_undefeated_teams <- best_undefeated_teams[order(best_undefeated_teams$undef
 # # Notably, the #1 spot doesn't change on this one
 # best_on_average_teams <- best_on_average_teams[order(best_on_average_teams$avg_wins,
 #                                                      decreasing = TRUE),]
+# best_on_average_teams <- best_on_average_teams[1:10,]
 # 
 # for(i in 1:nrow(best_undefeated_teams)) {
 #   players <- filter(all_players,`student label` %in% best_undefeated_teams[i,1:10])
 #   team_pdf <- score_pdf_from_players(players$mean,players$sd)
 #   team_cdf <- score_cdf_from_players(players$mean,players$sd)
 #   results <- success_measures(win_chances$chance_winning, win_chances$score_difs,
-#                               team_pdf, team_cdf, match_ups, 2, 
+#                               team_pdf, team_cdf, match_ups, 2,
 #                               mean(players$mean) - 8 * sqrt(sum(players$sd^2)),
 #                               mean(players$mean) + 8 * sqrt(sum(players$sd^2)))
 #   best_undefeated_teams[i,11] <- results[1]
@@ -547,6 +547,8 @@ best_undefeated_teams <- best_undefeated_teams[order(best_undefeated_teams$undef
 # }
 # best_undefeated_teams <- best_undefeated_teams[order(best_undefeated_teams$undefeated_chance,
 #                                                      decreasing = TRUE),]
+# best_undefeated_teams <- best_undefeated_teams[1:10,]
+# 
 # write.csv(best_on_average_teams, "../PROCESSED_DATA/best_on_average_teams.csv")
 # write.csv(best_undefeated_teams, "../PROCESSED_DATA/best_undefeated_teams.csv")
 
