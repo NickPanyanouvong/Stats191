@@ -62,6 +62,16 @@ normalized_games <- subset(cbind(normalized_games,predict(normalizedmodel, se.fi
                              mutate(residual = `game score` - fit), select = -c(df,residual.scale))
 
 ####################################################################################
+# OUTLIER DETECTION
+
+# Begin by generating frequency distributions for all covariates in order to identify
+# high-leverage points.
+
+multi_histogram(all_games, cols = c("hours of sleep the night before game", 
+                                    "# meals on day prior to game", 
+                                    "overall fitness score"))
+
+####################################################################################
 # TRANSFORMATIONS AND RESIDUALS
 
 # We want to plot the residuals of our model's game score predictions against the
@@ -180,6 +190,7 @@ ggplot(all_games, aes(x=`# meals on day prior to game`,y=`game score`)) +
   stat_smooth(method = "lm") +
   geom_point() +
   theme_minimal()
+
 # But after accounting for training sessions attended, it's negatively correlated (and significantly so)
 model <- lm(`game score` ~ `# meals on day prior to game` + `percent training sessions attended`,
             data=all_games)
