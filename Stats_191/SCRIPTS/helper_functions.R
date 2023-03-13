@@ -48,7 +48,6 @@ match_sport <- function(strings, sport){
   return(results)
 }
 
-
 ### Bucketing to build teams efficiently
 
 # Partitions a dataframe into buckets by one variable, while
@@ -71,7 +70,7 @@ partition <- function(df, bucketvar, sortvar, bucketsize, maxsize) {
 }
 
 # Finds the last index of a vector that is nonzero, excluding the
-# index at the end of the vector
+# index at the end of the vector. (Very specific but useful here.)
 last_nonfinal_nonzero <- function(vec) {
   i <- length(vec) - 1
   while(i > 0){

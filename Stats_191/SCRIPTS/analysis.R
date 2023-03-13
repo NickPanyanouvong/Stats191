@@ -346,10 +346,10 @@ eveningized_games$evening <- 1
 # We decided the training and strategy sessions could be controlled
 # the coach on real teams, so we shouldn't consider their impact
 # on an individual's score.
-morningized_games$`percent training sessions attended` <- mean(all_games$`percent training sessions attended`)
-morningized_games$`# extra strategy sessions attended` <- mean(all_games$`# extra strategy sessions attended`)
-eveningized_games$`percent training sessions attended` <- mean(all_games$`percent training sessions attended`)
-eveningized_games$`# extra strategy sessions attended` <- mean(all_games$`# extra strategy sessions attended`)
+morningized_games$`percent training sessions attended` <- max(all_games$`percent training sessions attended`)
+morningized_games$`# extra strategy sessions attended` <- max(all_games$`# extra strategy sessions attended`)
+eveningized_games$`percent training sessions attended` <- max(all_games$`percent training sessions attended`)
+eveningized_games$`# extra strategy sessions attended` <- max(all_games$`# extra strategy sessions attended`)
 
 # Then predict how the players would have scored. We can use
 # overallmodel for this, because we know that the only night_owl
