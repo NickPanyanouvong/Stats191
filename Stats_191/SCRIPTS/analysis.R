@@ -220,7 +220,8 @@ used_covariates <- c("percent training sessions attended",
 
 correlations <- c()
 for(var in used_covariates) {
-  correlations <- append(correlations, summary(lm(as.formula(paste("`", var, "`~.", sep = "")),data = test))$r.squared)
+  correlations <- append(correlations, summary(lm(as.formula(paste("`", var, "`~.", sep = "")),data = 
+                                                    all_games[,names(all_games) %in% used_covariates]))$r.squared)
 }
 
 correlations_by_covar <- data.frame(used_covariates,correlations)
@@ -228,6 +229,27 @@ correlations_by_covar <- data.frame(used_covariates,correlations)
 if(length(correlations_by_covar$correlations[correlations_by_covar$correlations >= 0.8]) > 0) {
   print("Some variables are very correlated (inflation factor > 5)!")
 }
+
+## Check for non-linearity
+ggplot(all_games, aes(x = `percent training sessions attended`, y = residual)) +
+  geom_point(color = 'black') +
+  ggtitle("Percent training sessions attended residuals")
+
+ggplot(all_games, aes(x = `overall fitness score`, y = residual)) +
+  geom_point(color = 'black') +
+  ggtitle("Overall fitness score residuals")
+
+ggplot(all_games, aes(x = `# extra strategy sessions attended`, y = residual)) +
+  geom_point(color = 'black') +
+  ggtitle("# extra strategy sessions attended residuals")
+
+ggplot(all_games, aes(x = `hours of sleep the night before game`, y = residual)) +
+  geom_point(color = 'black') +
+  ggtitle("Hours of sleep the night before game residuals")
+
+ggplot(all_games, aes(x = `# meals on day prior to game`, y = residual)) +
+  geom_point(color = 'black') +
+  ggtitle("# meals on day prior to game the night before game residuals")
 
 ## Models for morning and evening games
 
