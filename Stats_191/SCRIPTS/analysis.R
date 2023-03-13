@@ -207,6 +207,28 @@ ggplot(all_games, aes(x=`# meals on day prior to game`,y=`percent training sessi
 # we should have them eat less meals for better coaching - I think the former
 # is better.
 
+## Check for correlation between covariates
+used_covariates <- c("percent training sessions attended",
+                     "overall fitness score",
+                     "# extra strategy sessions attended",
+                     "hours of sleep the night before game",
+                     "# meals on day prior to game",
+                     "university year",
+                     "curling", "gymnastics", "baseball", "martial_arts",
+                     "frisbee", "table_tennis", "basketball",
+                     "evening", "morning", "night_owl")
+
+correlations <- c()
+for(var in used_covariates) {
+  correlations <- append(correlations, summary(lm(as.formula(paste("`", var, "`~.", sep = "")),data = test))$r.squared)
+}
+
+correlations_by_covar <- data.frame(used_covariates,correlations)
+
+if(length(correlations_by_covar$correlations[correlations_by_covar$correlations >= 0.8]) > 0) {
+  print("Some variables are very correlated (inflation factor > 5)!")
+}
+
 ## Models for morning and evening games
 
 # This is useful for checking whether our model is a good fit - 
@@ -221,13 +243,6 @@ ggplot(all_games, aes(x=`# meals on day prior to game`,y=`percent training sessi
 # represents early birds. So early birds have an 11 point difference (after
 # accounting for changes in the other variables) between morning and evening
 # games, while night owls only have about a 3 point difference
-
-# TODO: (easy) add code here that compares the average of early birds in
-# morning games to night owls in night games, or code that compares the
-# difference like I did verbally
-
-# TODO: (difficult) Automatically run pairwise t-tests probing differences in beta.
-# Use scaled-down significance threshold to adjust for multiple testing fallacy.
 
 eveningmodel <- lm(`game score` ~ `percent training sessions attended`
                    + `overall fitness score` 
