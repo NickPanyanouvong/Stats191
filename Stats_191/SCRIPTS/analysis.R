@@ -405,7 +405,9 @@ for(i in 1:20) {
 
 # Keep only the top 10 from each. Those are our teams!
 best_morning <- best_morning[1:10]
+write.csv(data.frame(best_morning),"../PROCESSED_DATA/west_coast_team.csv")
 best_evening <- best_evening[1:10]
+write.csv(data.frame(best_evening),"../PROCESSED_DATA/east_coast_team.csv")
 
 #--------------------------------------------------------------------------
 ## Find our regular season team
