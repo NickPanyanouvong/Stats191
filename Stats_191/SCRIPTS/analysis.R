@@ -294,7 +294,7 @@ summary(morningmodel)
 #------------------------------------------------------------------------------
 # Let's explore the residual plots of each of these models. Start w/ morning:
 morning_residuals <- filter(all_games, morning == 1) %>%
-  select(`game score`, `early bird/night owl`)
+  dplyr::select(`game score`, `early bird/night owl`)
 
 morning_residuals <- cbind(morning_residuals, predict(morningmodel, se.fit = TRUE)) %>%
   mutate(residuals = `game score` - fit)
@@ -548,43 +548,48 @@ all_possible_teams <- read_csv("../PROCESSED_DATA/all_possible_teams.csv")
 # Double check these teams with higher precision to guarantee they're
 # the best
 
-# Takes ~13 minutes to check because it's extremely high precision
+# Takes ~13 minutes to check if you limit it to priority <= 30
+# because it's extremely high precision
 
-# best_on_average_teams <- top_n(all_possible_teams,30,avg_wins)
-# best_on_average_teams <- best_on_average_teams[order(best_on_average_teams$avg_wins,
-#                                                      decreasing = TRUE),]
-# best_undefeated_teams <- top_n(all_possible_teams,30,undefeated_chance)
-# best_undefeated_teams <- best_undefeated_teams[order(best_undefeated_teams$undefeated_chance,
-#                                                     decreasing = TRUE),]
+# best_teams <- all_possible_teams %>% mutate(
+#   avg_place = ntile(avg_wins,nrow(all_possible_teams)),
+#   und_place = ntile(undefeated_chance,nrow(all_possible_teams)),
+#   priority = nrow(all_possible_teams)
+# )
 # 
-# for(i in 1:nrow(best_on_average_teams)) {
-#   players <- filter(all_players,`student label` %in% best_on_average_teams[i,1:10])
+# for(i in 1:nrow(best_teams)) {
+#   best_teams[i,"priority"] = min(best_teams[i,"und_place"],
+#                                  best_teams[i,"avg_place"])
+# }
+# 
+# best_teams <- best_teams[order(best_teams$priority,
+#                                decreasing = FALSE),]
+# 
+# # You can just let this run for however long you have, it goes back
+# # through the existing data and retabulates the the success measures
+# # with maximum precision, in descending order- from the ones that 
+# # performed best on the imprecise run to the ones that performed
+# # worst
+# for(i in 1:nrow(best_teams)) {
+#   players <- filter(all_players,`student label` %in% best_teams[i,1:10])
 #   team_pdf <- score_pdf_from_players(players$mean,players$sd)
 #   team_cdf <- score_cdf_from_players(players$mean,players$sd)
 #   results <- success_measures(win_chances$chance_winning, win_chances$score_difs,
 #                               team_pdf, team_cdf, match_ups, 2,
 #                               mean(players$mean) - 8 * sqrt(sum(players$sd^2)),
 #                               mean(players$mean) + 8 * sqrt(sum(players$sd^2)))
-#   best_on_average_teams[i,11] <- results[1]
-#   best_on_average_teams[i,12] <- results[2]
+#   best_teams[i,"avg_wins"] <- results[1]
+#   best_teams[i,"undefeated_chance"] <- results[2]
+#   if(best_teams[i,"priority"] %% 10 == 0) {
+#     print(paste(best_teams[i,"priority"],"out of",nrow(best_on_average_teams),"rows"))
+#   }
 # }
 # # Notably, the #1 spot doesn't change on this one
-# best_on_average_teams <- best_on_average_teams[order(best_on_average_teams$avg_wins,
+# best_on_average_teams <- best_teams[order(best_teams$avg_wins,
 #                                                      decreasing = TRUE),]
 # best_on_average_teams <- best_on_average_teams[1:10,]
 # 
-# for(i in 1:nrow(best_undefeated_teams)) {
-#   players <- filter(all_players,`student label` %in% best_undefeated_teams[i,1:10])
-#   team_pdf <- score_pdf_from_players(players$mean,players$sd)
-#   team_cdf <- score_cdf_from_players(players$mean,players$sd)
-#   results <- success_measures(win_chances$chance_winning, win_chances$score_difs,
-#                               team_pdf, team_cdf, match_ups, 2,
-#                               mean(players$mean) - 8 * sqrt(sum(players$sd^2)),
-#                               mean(players$mean) + 8 * sqrt(sum(players$sd^2)))
-#   best_undefeated_teams[i,11] <- results[1]
-#   best_undefeated_teams[i,12] <- results[2]
-# }
-# best_undefeated_teams <- best_undefeated_teams[order(best_undefeated_teams$undefeated_chance,
+# best_undefeated_teams <- best_teams[order(best_teams$undefeated_chance,
 #                                                      decreasing = TRUE),]
 # best_undefeated_teams <- best_undefeated_teams[1:10,]
 # 

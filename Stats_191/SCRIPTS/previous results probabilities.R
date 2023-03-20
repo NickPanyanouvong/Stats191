@@ -29,7 +29,9 @@ summary(previous_results$score_dif)
 
 ggplot(previous_results, aes(x=score_dif)) + 
   geom_histogram(binwidth=5, color="grey50", fill="lightblue", alpha=0.8) +
-  theme_minimal()
+  theme_minimal() +
+  stat_function(fun = function(x){dnorm(x,mean = mean(previous_results$score_dif)
+                                        ,sd = sd(previous_results$score_dif))}*length(previous_results$score_dif)*5)
 
 # Looks approximately normally distributed, with a mean of:
 mean(previous_results$score_dif) 
@@ -149,6 +151,11 @@ piecewise_probability(previous_results$`winning team`,
 
 probs_by_cutoff <- multiple_piecewise_residual(previous_results$`winning team`,
                                                previous_results$score_dif, 2000, piecewise_probability)
+
+ggplot(probs_by_cutoff, aes(x=cutoffs, y=-1*residuals)) + 
+  geom_point() +
+  theme_minimal() +
+  labs(y="MLE", x="Cutoff")
 
 probs_by_cutoff$residuals <- probs_by_cutoff$residuals/sum(probs_by_cutoff$cutoffs[2] * probs_by_cutoff$residuals)
 
