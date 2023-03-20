@@ -1,0 +1,568 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+.inline {
+  background-color: #f7f7f7;
+  border:solid 1px #B0B0B0;
+}
+.error {
+	font-weight: bold;
+	color: #FF0000;
+}
+.warning {
+	font-weight: bold;
+}
+.message {
+	font-style: italic;
+}
+.source, .output, .warning, .error, .message {
+	padding: 0 1em;
+  border:solid 1px #F7F7F7;
+}
+.source {
+  background-color: #f5f5f5;
+}
+.left {
+  text-align: left;
+}
+.right {
+  text-align: right;
+}
+.center {
+  text-align: center;
+}
+.hl.num {
+  color: #AF0F91;
+}
+.hl.str {
+  color: #317ECC;
+}
+.hl.com {
+  color: #AD95AF;
+  font-style: italic;
+}
+.hl.opt {
+  color: #000000;
+}
+.hl.std {
+  color: #585858;
+}
+.hl.kwa {
+  color: #295F94;
+  font-weight: bold;
+}
+.hl.kwb {
+  color: #B05A65;
+}
+.hl.kwc {
+  color: #55aa55;
+}
+.hl.kwd {
+  color: #BC5A65;
+  font-weight: bold;
+}
+</style>
+  <script src="https://yihui.name/media/js/center-images.js"></script>
+  <title>\title{}</title>
+</head>
+<body>
+
+  <p>This report is automatically generated with the R
+    package <a href="https://yihui.name/knitr/"><strong>knitr</strong></a>
+    (version <code class="knitr inline">1.41</code>)
+    .</p>
+
+<div class="chunk" id="auto-report"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com">#### Functions</span>
+
+<span class="hl com">### Graphing</span>
+
+<span class="hl com"># Generates and saves multiple histograms for the specified COLS of the dataframe</span>
+<span class="hl std">multi_histogram</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">data</span><span class="hl std">,</span> <span class="hl kwc">cols</span><span class="hl std">){</span>
+
+  <span class="hl kwa">for</span><span class="hl std">(column</span> <span class="hl kwa">in</span> <span class="hl std">cols){</span>
+
+    <span class="hl kwd">png</span><span class="hl std">(</span><span class="hl kwd">paste</span><span class="hl std">(</span><span class="hl str">&quot;../OUTPUTS/&quot;</span><span class="hl std">, column,</span> <span class="hl str">&quot;.png&quot;</span><span class="hl std">))</span>
+
+    <span class="hl std">bin_width</span> <span class="hl kwb">&lt;-</span> <span class="hl std">(</span><span class="hl kwd">max</span><span class="hl std">(data[[column]])</span> <span class="hl opt">-</span> <span class="hl kwd">min</span><span class="hl std">(data[[column]]))</span> <span class="hl opt">/</span> <span class="hl num">50</span> <span class="hl com"># Adjust bin width</span>
+    <span class="hl std">histo</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">ggplot</span><span class="hl std">(</span><span class="hl kwc">data</span> <span class="hl std">= data,</span> <span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span> <span class="hl std">=</span> <span class="hl opt">!!</span><span class="hl kwd">sym</span><span class="hl std">(column)))</span> <span class="hl opt">+</span>
+      <span class="hl kwd">geom_histogram</span><span class="hl std">(</span><span class="hl kwc">binwidth</span> <span class="hl std">= bin_width,</span> <span class="hl kwc">color</span> <span class="hl std">=</span> <span class="hl str">'black'</span><span class="hl std">,</span> <span class="hl kwc">fill</span> <span class="hl std">=</span> <span class="hl str">'lightblue'</span><span class="hl std">)</span> <span class="hl opt">+</span>
+      <span class="hl kwd">ggtitle</span><span class="hl std">(</span><span class="hl kwd">paste</span><span class="hl std">(column,</span> <span class="hl str">&quot; distribution&quot;</span><span class="hl std">))</span> <span class="hl opt">+</span>
+      <span class="hl kwd">theme</span><span class="hl std">(</span><span class="hl kwc">plot.title</span> <span class="hl std">=</span> <span class="hl kwd">element_text</span><span class="hl std">(</span><span class="hl kwc">hjust</span> <span class="hl std">=</span> <span class="hl num">0.5</span><span class="hl std">,</span> <span class="hl kwc">vjust</span> <span class="hl std">=</span> <span class="hl num">0.5</span><span class="hl std">))</span>
+
+    <span class="hl kwd">print</span><span class="hl std">(histo)</span>
+
+    <span class="hl kwd">dev.off</span><span class="hl std">()</span>
+  <span class="hl std">}</span>
+<span class="hl std">}</span>
+
+<span class="hl com">### Utility stuff</span>
+
+<span class="hl com"># Just returns a list of z-scores from a list</span>
+<span class="hl std">normalize</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">statistic</span><span class="hl std">){</span>
+  <span class="hl kwd">return</span> <span class="hl std">((statistic</span> <span class="hl opt">-</span> <span class="hl kwd">mean</span><span class="hl std">(statistic))</span><span class="hl opt">/</span><span class="hl kwd">var</span><span class="hl std">(statistic))</span>
+<span class="hl std">}</span>
+
+<span class="hl com"># Returns the mode because that doesn't exist by default for some reason</span>
+<span class="hl std">Mode</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">statistic</span><span class="hl std">) {</span>
+  <span class="hl std">uniques</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">unique</span><span class="hl std">(statistic)</span>
+  <span class="hl std">uniques[</span><span class="hl kwd">which.max</span><span class="hl std">(</span><span class="hl kwd">tabulate</span><span class="hl std">(</span><span class="hl kwd">match</span><span class="hl std">(statistic, uniques)))]</span>
+<span class="hl std">}</span>
+
+<span class="hl com"># Determine if an element matches the specified sport</span>
+<span class="hl std">match_sport</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">strings</span><span class="hl std">,</span> <span class="hl kwc">sport</span><span class="hl std">){</span>
+  <span class="hl std">results</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">c</span><span class="hl std">()</span>
+  <span class="hl kwa">for</span><span class="hl std">(string</span> <span class="hl kwa">in</span> <span class="hl std">strings){</span>
+    <span class="hl kwa">if</span> <span class="hl std">(string</span> <span class="hl opt">==</span> <span class="hl std">sport){</span>
+      <span class="hl std">results</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">c</span><span class="hl std">(results,</span> <span class="hl num">1</span><span class="hl std">)</span>
+    <span class="hl std">}</span> <span class="hl kwa">else</span> <span class="hl std">{</span>
+      <span class="hl std">results</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">c</span><span class="hl std">(results,</span> <span class="hl num">0</span><span class="hl std">)</span>
+    <span class="hl std">}</span>
+  <span class="hl std">}</span>
+
+  <span class="hl kwd">return</span><span class="hl std">(results)</span>
+<span class="hl std">}</span>
+
+<span class="hl com">### Bucketing to build teams efficiently</span>
+
+<span class="hl com"># Partitions a dataframe into buckets by one variable, while</span>
+<span class="hl com"># each bucket is organized in descending order by another.</span>
+
+<span class="hl com"># Takes column names in strings.</span>
+
+<span class="hl std">partition</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">df</span><span class="hl std">,</span> <span class="hl kwc">bucketvar</span><span class="hl std">,</span> <span class="hl kwc">sortvar</span><span class="hl std">,</span> <span class="hl kwc">bucketsize</span><span class="hl std">,</span> <span class="hl kwc">maxsize</span><span class="hl std">) {</span>
+  <span class="hl std">buckets</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">list</span><span class="hl std">()</span>
+  <span class="hl std">lower</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">min</span><span class="hl std">(df[[bucketvar]])</span>
+  <span class="hl kwa">while</span><span class="hl std">(lower</span> <span class="hl opt">&lt;=</span> <span class="hl kwd">max</span><span class="hl std">(df[[bucketvar]])) {</span>
+    <span class="hl std">temp</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">filter</span><span class="hl std">(</span><span class="hl kwd">filter</span><span class="hl std">(df,</span><span class="hl opt">!!</span><span class="hl kwd">as.symbol</span><span class="hl std">(bucketvar)</span> <span class="hl opt">&gt;=</span> <span class="hl std">lower),</span>
+                 <span class="hl opt">!!</span><span class="hl kwd">as.symbol</span><span class="hl std">(bucketvar)</span> <span class="hl opt">&lt;</span> <span class="hl std">lower</span> <span class="hl opt">+</span> <span class="hl std">bucketsize)</span>
+    <span class="hl std">temp</span> <span class="hl kwb">&lt;-</span> <span class="hl std">temp[</span><span class="hl kwd">order</span><span class="hl std">(temp[[sortvar]],</span> <span class="hl kwc">decreasing</span> <span class="hl std">=</span> <span class="hl num">TRUE</span><span class="hl std">),]</span>
+    <span class="hl std">temp</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">filter</span><span class="hl std">(temp[</span><span class="hl num">1</span><span class="hl opt">:</span><span class="hl std">maxsize,],</span><span class="hl opt">!</span><span class="hl kwd">is.na</span><span class="hl std">(</span><span class="hl opt">!!</span><span class="hl kwd">as.symbol</span><span class="hl std">(bucketvar)))</span>
+    <span class="hl std">buckets[[</span><span class="hl kwd">length</span><span class="hl std">(buckets)</span> <span class="hl opt">+</span> <span class="hl num">1</span><span class="hl std">]]</span> <span class="hl kwb">&lt;-</span> <span class="hl std">temp[</span><span class="hl kwd">order</span><span class="hl std">(temp[[sortvar]],</span> <span class="hl kwc">decreasing</span> <span class="hl std">=</span> <span class="hl num">TRUE</span><span class="hl std">),]</span>
+    <span class="hl std">lower</span> <span class="hl kwb">&lt;-</span> <span class="hl std">lower</span> <span class="hl opt">+</span> <span class="hl std">bucketsize</span>
+  <span class="hl std">}</span>
+  <span class="hl kwd">return</span><span class="hl std">(buckets)</span>
+<span class="hl std">}</span>
+
+<span class="hl com"># Finds the last index of a vector that is nonzero, excluding the</span>
+<span class="hl com"># index at the end of the vector. (Very specific but useful here.)</span>
+<span class="hl std">last_nonfinal_nonzero</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">vec</span><span class="hl std">) {</span>
+  <span class="hl std">i</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">length</span><span class="hl std">(vec)</span> <span class="hl opt">-</span> <span class="hl num">1</span>
+  <span class="hl kwa">while</span><span class="hl std">(i</span> <span class="hl opt">&gt;</span> <span class="hl num">0</span><span class="hl std">){</span>
+    <span class="hl kwa">if</span><span class="hl std">(vec[i]</span> <span class="hl opt">!=</span> <span class="hl num">0</span><span class="hl std">) {</span>
+      <span class="hl kwd">return</span><span class="hl std">(i)</span>
+    <span class="hl std">}</span>
+    <span class="hl std">i</span> <span class="hl kwb">&lt;-</span> <span class="hl std">i</span> <span class="hl opt">-</span> <span class="hl num">1</span>
+  <span class="hl std">}</span>
+  <span class="hl kwd">return</span><span class="hl std">(</span><span class="hl num">0</span><span class="hl std">)</span>
+<span class="hl std">}</span>
+
+<span class="hl com"># Grabs given numbers of players from the appropriate buckets</span>
+<span class="hl std">make_team</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">amounts</span><span class="hl std">,</span> <span class="hl kwc">buckets</span><span class="hl std">) {</span>
+  <span class="hl kwa">if</span><span class="hl std">(</span><span class="hl kwd">length</span><span class="hl std">(amounts)</span> <span class="hl opt">!=</span> <span class="hl kwd">length</span><span class="hl std">(buckets)) {</span>
+    <span class="hl kwd">print</span><span class="hl std">(amounts)</span>
+    <span class="hl kwd">print</span><span class="hl std">(</span><span class="hl kwd">length</span><span class="hl std">(buckets))</span>
+    <span class="hl kwd">stop</span><span class="hl std">(</span><span class="hl str">&quot;Amounts not as long as buckets!&quot;</span><span class="hl std">)</span>
+  <span class="hl std">}</span>
+  <span class="hl std">output</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">NULL</span>
+  <span class="hl kwa">for</span><span class="hl std">(i</span> <span class="hl kwa">in</span> <span class="hl num">1</span><span class="hl opt">:</span><span class="hl kwd">length</span><span class="hl std">(buckets)) {</span>
+    <span class="hl kwa">if</span><span class="hl std">(amounts[i]</span> <span class="hl opt">&gt;</span> <span class="hl num">0</span><span class="hl std">) {</span>
+      <span class="hl std">temp</span> <span class="hl kwb">&lt;-</span> <span class="hl std">buckets[[i]]</span>
+      <span class="hl std">output</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">rbind</span><span class="hl std">(output,temp[</span><span class="hl num">1</span><span class="hl opt">:</span><span class="hl std">amounts[i],])</span>
+    <span class="hl std">}</span>
+  <span class="hl std">}</span>
+  <span class="hl kwd">return</span><span class="hl std">(output)</span>
+<span class="hl std">}</span>
+
+<span class="hl com"># Takes in a list of amounts and the buckets they belong to, and</span>
+<span class="hl com"># increments it by one, moving the rightmost entry right by one,</span>
+<span class="hl com"># or if it's at the last spot, moving the next rightmost right by</span>
+<span class="hl com"># one and resetting everything at the last spot to that spot.</span>
+
+<span class="hl com"># Example: 2 0 0 0 -&gt; 1 1 0 0  -&gt; 1 0 1 0 -&gt; 1 0 0 1 -&gt; 0 2 0 0</span>
+
+<span class="hl std">increment_amounts</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">buckets</span><span class="hl std">,</span><span class="hl kwc">bucket_amounts</span><span class="hl std">) {</span>
+  <span class="hl std">last</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">last_nonfinal_nonzero</span><span class="hl std">(bucket_amounts)</span>
+  <span class="hl com"># Reset all the ones at the end to the new beginning, after</span>
+  <span class="hl com"># incrementing the appropriate 'turtle' counter</span>
+  <span class="hl std">add</span> <span class="hl kwb">&lt;-</span> <span class="hl std">bucket_amounts[</span><span class="hl kwd">length</span><span class="hl std">(bucket_amounts)]</span>
+  <span class="hl std">bucket_amounts[</span><span class="hl kwd">length</span><span class="hl std">(bucket_amounts)]</span> <span class="hl kwb">&lt;-</span> <span class="hl num">0</span>
+  <span class="hl com"># If everything is in the last cell, return null to signal</span>
+  <span class="hl com"># that we're done</span>
+  <span class="hl kwa">if</span><span class="hl std">(last</span> <span class="hl opt">==</span> <span class="hl num">0</span><span class="hl std">) {</span>
+    <span class="hl kwd">print</span><span class="hl std">(</span><span class="hl str">&quot;All at the end!&quot;</span><span class="hl std">)</span>
+    <span class="hl kwd">return</span><span class="hl std">(</span><span class="hl kwa">NULL</span><span class="hl std">)</span>
+  <span class="hl std">}</span>
+  <span class="hl std">bucket_amounts[last]</span> <span class="hl kwb">&lt;-</span> <span class="hl std">bucket_amounts[last]</span> <span class="hl opt">-</span> <span class="hl num">1</span>
+  <span class="hl std">bucket_amounts[last</span> <span class="hl opt">+</span> <span class="hl num">1</span><span class="hl std">]</span> <span class="hl kwb">&lt;-</span> <span class="hl num">1</span> <span class="hl opt">+</span> <span class="hl std">add</span>
+  <span class="hl com"># Not all the buckets are the same length, need to make them fit</span>
+  <span class="hl std">cur</span> <span class="hl kwb">&lt;-</span> <span class="hl std">last</span> <span class="hl opt">+</span> <span class="hl num">1</span>
+  <span class="hl kwa">while</span><span class="hl std">(bucket_amounts[cur]</span> <span class="hl opt">&gt;</span> <span class="hl kwd">nrow</span><span class="hl std">(buckets[[cur]])) {</span>
+    <span class="hl com"># If we're at the last one, we need to roll over by incrementing</span>
+    <span class="hl com"># again</span>
+    <span class="hl kwa">if</span><span class="hl std">(cur</span> <span class="hl opt">==</span> <span class="hl kwd">length</span><span class="hl std">(bucket_amounts)){</span>
+      <span class="hl com"># Normal increment stuff</span>
+      <span class="hl std">add</span> <span class="hl kwb">&lt;-</span> <span class="hl std">bucket_amounts[</span><span class="hl kwd">length</span><span class="hl std">(bucket_amounts)]</span>
+      <span class="hl std">bucket_amounts[</span><span class="hl kwd">length</span><span class="hl std">(bucket_amounts)]</span> <span class="hl kwb">&lt;-</span> <span class="hl num">0</span>
+      <span class="hl std">cur</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">last_nonfinal_nonzero</span><span class="hl std">(bucket_amounts)</span>
+      <span class="hl com"># If everything is in the last cell, return as usual</span>
+      <span class="hl kwa">if</span><span class="hl std">(cur</span> <span class="hl opt">==</span> <span class="hl num">0</span><span class="hl std">) {</span>
+        <span class="hl kwd">return</span><span class="hl std">(</span><span class="hl kwa">NULL</span><span class="hl std">)</span>
+      <span class="hl std">}</span>
+      <span class="hl std">bucket_amounts[cur]</span> <span class="hl kwb">&lt;-</span> <span class="hl std">bucket_amounts[cur]</span> <span class="hl opt">-</span> <span class="hl num">1</span>
+      <span class="hl std">bucket_amounts[cur</span> <span class="hl opt">+</span> <span class="hl num">1</span><span class="hl std">]</span> <span class="hl kwb">&lt;-</span> <span class="hl num">1</span> <span class="hl opt">+</span> <span class="hl std">add</span>
+    <span class="hl std">}</span> <span class="hl kwa">else</span> <span class="hl std">{</span>
+      <span class="hl com"># Just slide the excess over to the next bucket</span>
+      <span class="hl std">bucket_amounts[cur</span> <span class="hl opt">+</span> <span class="hl num">1</span><span class="hl std">]</span> <span class="hl kwb">&lt;-</span> <span class="hl std">bucket_amounts[cur</span> <span class="hl opt">+</span> <span class="hl num">1</span><span class="hl std">]</span> <span class="hl opt">+</span> <span class="hl std">bucket_amounts[cur]</span> <span class="hl opt">-</span> <span class="hl kwd">nrow</span><span class="hl std">(buckets[[cur]])</span>
+      <span class="hl std">bucket_amounts[cur]</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">nrow</span><span class="hl std">(buckets[[cur]])</span>
+    <span class="hl std">}</span>
+    <span class="hl std">cur</span> <span class="hl kwb">&lt;-</span> <span class="hl std">cur</span> <span class="hl opt">+</span> <span class="hl num">1</span>
+    <span class="hl com"># Repeat to make sure there's enough space in the </span>
+    <span class="hl com"># bucket we slid the excess into</span>
+  <span class="hl std">}</span>
+  <span class="hl kwd">return</span><span class="hl std">(bucket_amounts)</span>
+<span class="hl std">}</span>
+
+<span class="hl com"># Tries all combinations of these players, but you never use</span>
+<span class="hl com"># a player unless all higher-mean players from their sd bucket</span>
+<span class="hl com"># have already been used. Takes a list of dataframes, like above,</span>
+<span class="hl com"># along with auxilary inputs.</span>
+
+<span class="hl com"># num_sd is the number of standard deviation away from the mean to</span>
+<span class="hl com"># calculate over</span>
+
+<span class="hl std">bucket_combo_teams</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">bucketlist</span><span class="hl std">,</span> <span class="hl kwc">num_sd</span><span class="hl std">,</span> <span class="hl kwc">odds</span><span class="hl std">,</span> <span class="hl kwc">score_difs</span><span class="hl std">,</span>
+                               <span class="hl kwc">team_scores</span><span class="hl std">,</span> <span class="hl kwc">rounding_places</span><span class="hl std">,</span> <span class="hl kwc">totalruns</span><span class="hl std">) {</span>
+  <span class="hl com"># This keeps track of how many people we are pulling from each bucket</span>
+  <span class="hl std">bucket_amounts</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">numeric</span><span class="hl std">(</span><span class="hl kwd">length</span><span class="hl std">(bucketlist))</span>
+  <span class="hl std">bucket_amounts[</span><span class="hl num">1</span><span class="hl std">]</span> <span class="hl kwb">&lt;-</span> <span class="hl num">10</span>
+  <span class="hl std">player1</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">c</span><span class="hl std">()</span>
+  <span class="hl std">player2</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">c</span><span class="hl std">()</span>
+  <span class="hl std">player3</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">c</span><span class="hl std">()</span>
+  <span class="hl std">player4</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">c</span><span class="hl std">()</span>
+  <span class="hl std">player5</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">c</span><span class="hl std">()</span>
+  <span class="hl std">player6</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">c</span><span class="hl std">()</span>
+  <span class="hl std">player7</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">c</span><span class="hl std">()</span>
+  <span class="hl std">player8</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">c</span><span class="hl std">()</span>
+  <span class="hl std">player9</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">c</span><span class="hl std">()</span>
+  <span class="hl std">player10</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">c</span><span class="hl std">()</span>
+  <span class="hl std">avg_wins</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">c</span><span class="hl std">()</span>
+  <span class="hl std">undefeated_chance</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">c</span><span class="hl std">()</span>
+  <span class="hl std">i</span> <span class="hl kwb">&lt;-</span> <span class="hl num">0</span>
+  <span class="hl kwa">while</span><span class="hl std">(</span><span class="hl opt">!</span><span class="hl kwd">is.null</span><span class="hl std">(bucket_amounts)) {</span>
+    <span class="hl std">players</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">make_team</span><span class="hl std">(bucket_amounts, bucketlist)</span>
+    <span class="hl std">player1[</span><span class="hl kwd">length</span><span class="hl std">(player1)</span><span class="hl opt">+</span><span class="hl num">1</span><span class="hl std">]</span> <span class="hl kwb">&lt;-</span> <span class="hl std">players</span><span class="hl opt">$</span><span class="hl std">`student label`[</span><span class="hl num">1</span><span class="hl std">]</span>
+    <span class="hl std">player2[</span><span class="hl kwd">length</span><span class="hl std">(player2)</span><span class="hl opt">+</span><span class="hl num">1</span><span class="hl std">]</span> <span class="hl kwb">&lt;-</span> <span class="hl std">players</span><span class="hl opt">$</span><span class="hl std">`student label`[</span><span class="hl num">2</span><span class="hl std">]</span>
+    <span class="hl std">player3[</span><span class="hl kwd">length</span><span class="hl std">(player3)</span><span class="hl opt">+</span><span class="hl num">1</span><span class="hl std">]</span> <span class="hl kwb">&lt;-</span> <span class="hl std">players</span><span class="hl opt">$</span><span class="hl std">`student label`[</span><span class="hl num">3</span><span class="hl std">]</span>
+    <span class="hl std">player4[</span><span class="hl kwd">length</span><span class="hl std">(player4)</span><span class="hl opt">+</span><span class="hl num">1</span><span class="hl std">]</span> <span class="hl kwb">&lt;-</span> <span class="hl std">players</span><span class="hl opt">$</span><span class="hl std">`student label`[</span><span class="hl num">4</span><span class="hl std">]</span>
+    <span class="hl std">player5[</span><span class="hl kwd">length</span><span class="hl std">(player5)</span><span class="hl opt">+</span><span class="hl num">1</span><span class="hl std">]</span> <span class="hl kwb">&lt;-</span> <span class="hl std">players</span><span class="hl opt">$</span><span class="hl std">`student label`[</span><span class="hl num">5</span><span class="hl std">]</span>
+    <span class="hl std">player6[</span><span class="hl kwd">length</span><span class="hl std">(player6)</span><span class="hl opt">+</span><span class="hl num">1</span><span class="hl std">]</span> <span class="hl kwb">&lt;-</span> <span class="hl std">players</span><span class="hl opt">$</span><span class="hl std">`student label`[</span><span class="hl num">6</span><span class="hl std">]</span>
+    <span class="hl std">player7[</span><span class="hl kwd">length</span><span class="hl std">(player7)</span><span class="hl opt">+</span><span class="hl num">1</span><span class="hl std">]</span> <span class="hl kwb">&lt;-</span> <span class="hl std">players</span><span class="hl opt">$</span><span class="hl std">`student label`[</span><span class="hl num">7</span><span class="hl std">]</span>
+    <span class="hl std">player8[</span><span class="hl kwd">length</span><span class="hl std">(player8)</span><span class="hl opt">+</span><span class="hl num">1</span><span class="hl std">]</span> <span class="hl kwb">&lt;-</span> <span class="hl std">players</span><span class="hl opt">$</span><span class="hl std">`student label`[</span><span class="hl num">8</span><span class="hl std">]</span>
+    <span class="hl std">player9[</span><span class="hl kwd">length</span><span class="hl std">(player9)</span><span class="hl opt">+</span><span class="hl num">1</span><span class="hl std">]</span> <span class="hl kwb">&lt;-</span> <span class="hl std">players</span><span class="hl opt">$</span><span class="hl std">`student label`[</span><span class="hl num">9</span><span class="hl std">]</span>
+    <span class="hl std">player10[</span><span class="hl kwd">length</span><span class="hl std">(player10)</span><span class="hl opt">+</span><span class="hl num">1</span><span class="hl std">]</span> <span class="hl kwb">&lt;-</span> <span class="hl std">players</span><span class="hl opt">$</span><span class="hl std">`student label`[</span><span class="hl num">10</span><span class="hl std">]</span>
+
+    <span class="hl com"># We can model the distribution of their average easily,</span>
+    <span class="hl com"># because each of their score distributions are normal (see graph)</span>
+    <span class="hl std">team_pdf</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">score_pdf_from_players</span><span class="hl std">(players</span><span class="hl opt">$</span><span class="hl std">mean,players</span><span class="hl opt">$</span><span class="hl std">sd)</span>
+    <span class="hl std">team_cdf</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">score_cdf_from_players</span><span class="hl std">(players</span><span class="hl opt">$</span><span class="hl std">mean,players</span><span class="hl opt">$</span><span class="hl std">sd)</span>
+    <span class="hl std">results</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">success_measures</span><span class="hl std">(odds, score_difs, team_pdf, team_cdf,</span>
+                                <span class="hl std">team_scores, rounding_places,</span>
+                                <span class="hl kwd">mean</span><span class="hl std">(players</span><span class="hl opt">$</span><span class="hl std">mean)</span> <span class="hl opt">-</span> <span class="hl std">num_sd</span> <span class="hl opt">*</span> <span class="hl kwd">sqrt</span><span class="hl std">(</span><span class="hl kwd">sum</span><span class="hl std">(players</span><span class="hl opt">$</span><span class="hl std">sd</span><span class="hl opt">^</span><span class="hl num">2</span><span class="hl std">)),</span>
+                                <span class="hl kwd">mean</span><span class="hl std">(players</span><span class="hl opt">$</span><span class="hl std">mean)</span> <span class="hl opt">+</span> <span class="hl std">num_sd</span> <span class="hl opt">*</span> <span class="hl kwd">sqrt</span><span class="hl std">(</span><span class="hl kwd">sum</span><span class="hl std">(players</span><span class="hl opt">$</span><span class="hl std">sd</span><span class="hl opt">^</span><span class="hl num">2</span><span class="hl std">)))</span>
+    <span class="hl std">avg_wins[</span><span class="hl kwd">length</span><span class="hl std">(avg_wins)</span><span class="hl opt">+</span><span class="hl num">1</span><span class="hl std">]</span> <span class="hl kwb">&lt;-</span> <span class="hl std">results[</span><span class="hl num">1</span><span class="hl std">]</span>
+    <span class="hl std">undefeated_chance[</span><span class="hl kwd">length</span><span class="hl std">(undefeated_chance)</span><span class="hl opt">+</span><span class="hl num">1</span><span class="hl std">]</span> <span class="hl kwb">&lt;-</span> <span class="hl std">results[</span><span class="hl num">2</span><span class="hl std">]</span>
+    <span class="hl std">bucket_amounts</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">increment_amounts</span><span class="hl std">(bucketlist,bucket_amounts)</span>
+    <span class="hl std">i</span> <span class="hl kwb">&lt;-</span> <span class="hl std">i</span> <span class="hl opt">+</span> <span class="hl num">1</span>
+    <span class="hl kwa">if</span><span class="hl std">(i</span> <span class="hl opt">%%</span> <span class="hl kwd">round</span><span class="hl std">(totalruns</span><span class="hl opt">/</span><span class="hl num">100</span><span class="hl std">,</span><span class="hl num">0</span><span class="hl std">)</span> <span class="hl opt">==</span> <span class="hl num">0</span><span class="hl std">) {</span>
+      <span class="hl kwd">print</span><span class="hl std">(</span><span class="hl kwd">paste</span><span class="hl std">(</span><span class="hl kwd">round</span><span class="hl std">(i</span><span class="hl opt">/</span><span class="hl std">totalruns</span> <span class="hl opt">*</span> <span class="hl num">100</span><span class="hl std">,</span><span class="hl num">1</span><span class="hl std">),</span><span class="hl str">&quot;%&quot;</span><span class="hl std">,</span><span class="hl str">&quot;done&quot;</span><span class="hl std">))</span>
+    <span class="hl std">}</span>
+  <span class="hl std">}</span>
+  <span class="hl kwd">print</span><span class="hl std">(</span><span class="hl kwd">paste</span><span class="hl std">(</span><span class="hl str">&quot;Ran&quot;</span><span class="hl std">,i,</span><span class="hl str">&quot;times&quot;</span><span class="hl std">))</span>
+  <span class="hl kwd">return</span><span class="hl std">(</span><span class="hl kwd">data.frame</span><span class="hl std">(player1,player2,player3,player4,player5,player6,</span>
+                    <span class="hl std">player7,player8,player9,player10,avg_wins,</span>
+                    <span class="hl std">undefeated_chance))</span>
+<span class="hl std">}</span>
+
+<span class="hl com">### Piecewise regression stuff</span>
+
+<span class="hl com">## Piecewise utility functions</span>
+
+<span class="hl com"># Just takes in a cutoff to determine the model and an input</span>
+<span class="hl com"># to evaluate it at and returns appropriates</span>
+<span class="hl std">piecewise_predict</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">input</span><span class="hl std">,</span> <span class="hl kwc">cutoff</span><span class="hl std">) {</span>
+  <span class="hl kwa">if</span><span class="hl std">(input</span> <span class="hl opt">&lt;= -</span><span class="hl num">1</span><span class="hl opt">*</span><span class="hl std">cutoff) {</span>
+    <span class="hl kwd">return</span><span class="hl std">(</span><span class="hl num">0</span><span class="hl std">)</span>
+  <span class="hl std">}</span>
+  <span class="hl kwa">if</span><span class="hl std">(input</span> <span class="hl opt">&gt;=</span> <span class="hl std">cutoff) {</span>
+    <span class="hl kwd">return</span><span class="hl std">(</span><span class="hl num">1</span><span class="hl std">)</span>
+  <span class="hl std">}</span>
+  <span class="hl kwd">return</span><span class="hl std">(</span><span class="hl num">0.5</span> <span class="hl opt">+</span> <span class="hl std">input</span><span class="hl opt">/</span><span class="hl std">(</span><span class="hl num">2</span><span class="hl opt">*</span><span class="hl std">cutoff))</span>
+<span class="hl std">}</span>
+
+<span class="hl com"># Same as above but optimized for vectors - significant</span>
+<span class="hl com"># time reduction</span>
+<span class="hl std">piecewise_multipredict</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">input_vec</span><span class="hl std">,</span> <span class="hl kwc">cutoff</span><span class="hl std">) {</span>
+  <span class="hl std">output</span> <span class="hl kwb">=</span> <span class="hl kwd">vector</span><span class="hl std">(</span><span class="hl kwd">mode</span><span class="hl std">(input_vec),</span><span class="hl kwd">length</span><span class="hl std">(input_vec))</span>
+  <span class="hl std">output[input_vec</span> <span class="hl opt">&lt;= -</span><span class="hl num">1</span><span class="hl opt">*</span><span class="hl std">cutoff]</span> <span class="hl kwb">&lt;-</span> <span class="hl num">0</span>
+  <span class="hl std">output[input_vec</span> <span class="hl opt">&gt;=</span> <span class="hl std">cutoff]</span> <span class="hl kwb">&lt;-</span> <span class="hl num">1</span>
+  <span class="hl std">parsed</span> <span class="hl kwb">&lt;-</span> <span class="hl std">input_vec[input_vec</span> <span class="hl opt">&lt;</span> <span class="hl std">cutoff]</span>
+  <span class="hl std">output[input_vec</span> <span class="hl opt">&lt;</span> <span class="hl std">cutoff][parsed</span>
+      <span class="hl opt">&gt;-</span><span class="hl num">1</span> <span class="hl opt">*</span> <span class="hl std">cutoff]</span> <span class="hl kwb">&lt;-</span> <span class="hl num">0.5</span> <span class="hl opt">+</span> <span class="hl std">input_vec[input_vec</span> <span class="hl opt">&lt;</span> <span class="hl std">cutoff][parsed</span>
+      <span class="hl opt">&gt;-</span><span class="hl num">1</span> <span class="hl opt">*</span> <span class="hl std">cutoff]</span><span class="hl opt">/</span><span class="hl std">(</span><span class="hl num">2</span><span class="hl opt">*</span><span class="hl std">cutoff)</span>
+  <span class="hl kwd">return</span><span class="hl std">(output)</span>
+<span class="hl std">}</span>
+
+<span class="hl com"># These three just define the lower bound of where we should</span>
+<span class="hl com"># bother searching for cutoffs</span>
+<span class="hl std">lower_limit</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">dependent</span><span class="hl std">,</span> <span class="hl kwc">independent</span><span class="hl std">) {</span>
+  <span class="hl kwd">return</span><span class="hl std">(</span><span class="hl kwd">min</span><span class="hl std">(</span><span class="hl kwd">abs</span><span class="hl std">(</span><span class="hl kwd">last_loss</span><span class="hl std">(dependent,independent)),</span><span class="hl kwd">abs</span><span class="hl std">(</span><span class="hl kwd">first_win</span><span class="hl std">(dependent,independent))))</span>
+<span class="hl std">}</span>
+
+<span class="hl std">last_loss</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">dependent</span><span class="hl std">,</span> <span class="hl kwc">independent</span><span class="hl std">) {</span>
+  <span class="hl kwd">return</span><span class="hl std">(</span><span class="hl kwd">min</span><span class="hl std">(independent[dependent</span> <span class="hl opt">==</span> <span class="hl num">1</span><span class="hl std">]))</span>
+<span class="hl std">}</span>
+
+<span class="hl std">first_win</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">dependent</span><span class="hl std">,</span> <span class="hl kwc">independent</span><span class="hl std">) {</span>
+  <span class="hl kwd">return</span><span class="hl std">(</span><span class="hl kwd">max</span><span class="hl std">(independent[dependent</span> <span class="hl opt">==</span> <span class="hl num">0</span><span class="hl std">]))</span>
+<span class="hl std">}</span>
+
+<span class="hl com">## Objective functions</span>
+
+<span class="hl com"># Notice how these have the same arguments, and both want to be</span>
+<span class="hl com"># minimized, so we can treat them the same in our functions</span>
+
+<span class="hl com"># This one caused bad skew but is included for defending why we</span>
+<span class="hl com"># didn't use it - it's vertical distance squared</span>
+<span class="hl std">piecewise_residual_square</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">dependent</span><span class="hl std">,</span> <span class="hl kwc">independent</span><span class="hl std">,</span> <span class="hl kwc">cutoff</span><span class="hl std">) {</span>
+  <span class="hl kwd">return</span><span class="hl std">(</span><span class="hl kwd">sum</span><span class="hl std">((dependent</span> <span class="hl opt">-</span> <span class="hl kwd">piecewise_multipredict</span><span class="hl std">(independent,cutoff))</span><span class="hl opt">^</span><span class="hl num">2</span><span class="hl std">))</span>
+<span class="hl std">}</span>
+
+<span class="hl com"># This one is significantly better, it's the chance of the observed</span>
+<span class="hl com"># game results happening in a particular model</span>
+<span class="hl std">piecewise_probability</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">dependent</span><span class="hl std">,</span> <span class="hl kwc">independent</span><span class="hl std">,</span> <span class="hl kwc">cutoff</span><span class="hl std">) {</span>
+  <span class="hl kwd">return</span><span class="hl std">(</span><span class="hl opt">-</span><span class="hl num">1</span> <span class="hl opt">*</span> <span class="hl kwd">abs</span><span class="hl std">(</span><span class="hl kwd">prod</span><span class="hl std">(</span><span class="hl num">1</span> <span class="hl opt">-</span> <span class="hl std">dependent</span> <span class="hl opt">-</span> <span class="hl kwd">piecewise_multipredict</span><span class="hl std">(independent,cutoff))))</span>
+<span class="hl std">}</span>
+
+<span class="hl com"># Finding residuals for each cutoff</span>
+
+<span class="hl std">multiple_piecewise_residual</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">dependent</span><span class="hl std">,</span> <span class="hl kwc">independent</span><span class="hl std">,</span> <span class="hl kwc">steps</span><span class="hl std">,</span> <span class="hl kwc">objective_func</span><span class="hl std">) {</span>
+  <span class="hl kwd">return</span><span class="hl std">(</span><span class="hl kwd">targeted_piecewise_residual</span><span class="hl std">(dependent, independent, steps,</span> <span class="hl num">0</span><span class="hl std">,</span> <span class="hl kwd">max</span><span class="hl std">(</span><span class="hl kwd">max</span><span class="hl std">(independent),</span><span class="hl kwd">max</span><span class="hl std">(</span><span class="hl opt">-</span><span class="hl num">1</span><span class="hl opt">*</span><span class="hl std">independent))</span> <span class="hl opt">*</span> <span class="hl num">1.05</span><span class="hl std">, objective_func))</span>
+<span class="hl std">}</span>
+
+<span class="hl std">targeted_piecewise_residual</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">dependent</span><span class="hl std">,</span> <span class="hl kwc">independent</span><span class="hl std">,</span> <span class="hl kwc">steps</span><span class="hl std">,</span> <span class="hl kwc">lower</span><span class="hl std">,</span> <span class="hl kwc">upper</span><span class="hl std">,</span> <span class="hl kwc">objective_func</span><span class="hl std">) {</span>
+  <span class="hl std">step</span> <span class="hl kwb">&lt;-</span> <span class="hl std">(upper</span><span class="hl opt">-</span><span class="hl std">lower)</span><span class="hl opt">/</span><span class="hl std">steps</span>
+  <span class="hl std">cutoffs</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">c</span><span class="hl std">()</span>
+  <span class="hl std">residuals</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">c</span><span class="hl std">()</span>
+  <span class="hl kwa">for</span><span class="hl std">(i</span> <span class="hl kwa">in</span> <span class="hl num">0</span><span class="hl opt">:</span><span class="hl std">steps) {</span>
+    <span class="hl std">cutoffs</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">append</span><span class="hl std">(cutoffs,lower</span> <span class="hl opt">+</span> <span class="hl std">step</span> <span class="hl opt">*</span> <span class="hl std">i)</span>
+    <span class="hl std">residuals</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">append</span><span class="hl std">(residuals,</span><span class="hl kwd">objective_func</span><span class="hl std">(dependent, independent, lower</span> <span class="hl opt">+</span> <span class="hl std">step</span> <span class="hl opt">*</span> <span class="hl std">i))</span>
+  <span class="hl std">}</span>
+  <span class="hl kwd">return</span><span class="hl std">(</span><span class="hl kwd">data.frame</span><span class="hl std">(cutoffs,residuals))</span>
+<span class="hl std">}</span>
+
+<span class="hl com"># Using these to find the best cutoff</span>
+
+<span class="hl std">optimize_cutoff</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">dependent</span><span class="hl std">,</span> <span class="hl kwc">independent</span><span class="hl std">,</span> <span class="hl kwc">objective_func</span><span class="hl std">) {</span>
+  <span class="hl std">cutoff</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">find_cutoff</span><span class="hl std">(dependent, independent,</span> <span class="hl num">1000</span><span class="hl std">,</span>
+                        <span class="hl kwd">lower_limit</span><span class="hl std">(dependent,independent)</span> <span class="hl opt">*</span> <span class="hl num">0.95</span><span class="hl std">,</span>
+                        <span class="hl kwd">max</span><span class="hl std">(</span><span class="hl kwd">abs</span><span class="hl std">(independent))</span> <span class="hl opt">*</span> <span class="hl num">1.05</span><span class="hl std">, objective_func)</span>
+  <span class="hl std">cutoff</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">find_cutoff</span><span class="hl std">(dependent, independent,</span> <span class="hl num">1000</span><span class="hl std">,</span>
+                        <span class="hl std">cutoff</span> <span class="hl opt">+</span> <span class="hl num">5</span><span class="hl std">, cutoff</span> <span class="hl opt">-</span> <span class="hl num">5</span><span class="hl std">, objective_func)</span>
+  <span class="hl std">cutoff</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">find_cutoff</span><span class="hl std">(dependent, independent,</span> <span class="hl num">400</span><span class="hl std">,</span>
+                        <span class="hl std">cutoff</span> <span class="hl opt">+</span> <span class="hl num">0.1</span><span class="hl std">, cutoff</span> <span class="hl opt">-</span> <span class="hl num">0.1</span><span class="hl std">, objective_func)</span>
+  <span class="hl kwd">return</span><span class="hl std">(</span><span class="hl kwd">round</span><span class="hl std">(cutoff,</span><span class="hl num">3</span><span class="hl std">))</span>
+<span class="hl std">}</span>
+
+<span class="hl std">find_cutoff</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">dependent</span><span class="hl std">,</span> <span class="hl kwc">independent</span><span class="hl std">,</span> <span class="hl kwc">steps</span><span class="hl std">,</span> <span class="hl kwc">lower</span><span class="hl std">,</span> <span class="hl kwc">upper</span><span class="hl std">,</span> <span class="hl kwc">objective_func</span><span class="hl std">) {</span>
+  <span class="hl std">residual_by_cutoff</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">targeted_piecewise_residual</span><span class="hl std">(dependent, independent, steps, lower, upper, objective_func)</span>
+  <span class="hl kwd">return</span><span class="hl std">(</span><span class="hl kwd">mean</span><span class="hl std">(residual_by_cutoff</span><span class="hl opt">$</span><span class="hl std">cutoffs[</span><span class="hl kwd">which</span><span class="hl std">(residual_by_cutoff</span><span class="hl opt">$</span><span class="hl std">residuals</span> <span class="hl opt">==</span> <span class="hl kwd">min</span><span class="hl std">(residual_by_cutoff</span><span class="hl opt">$</span><span class="hl std">residuals))]))</span>
+<span class="hl std">}</span>
+
+<span class="hl com">## Simulating samples to test for bias</span>
+
+<span class="hl com"># Represents a single game, randomly determines the result</span>
+<span class="hl com"># based on the model</span>
+<span class="hl std">simulate_piecewise_sample</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">input</span><span class="hl std">,</span> <span class="hl kwc">cutoff</span><span class="hl std">) {</span>
+  <span class="hl kwd">return</span><span class="hl std">(</span><span class="hl kwd">sample</span><span class="hl std">(</span><span class="hl kwd">c</span><span class="hl std">(</span><span class="hl num">0</span><span class="hl std">,</span><span class="hl num">1</span><span class="hl std">),</span> <span class="hl kwc">size</span> <span class="hl std">=</span> <span class="hl num">1</span><span class="hl std">,</span><span class="hl kwc">prob</span> <span class="hl std">=</span> <span class="hl kwd">c</span><span class="hl std">(</span><span class="hl num">1</span><span class="hl opt">-</span><span class="hl kwd">piecewise_predict</span><span class="hl std">(input, cutoff),</span><span class="hl kwd">piecewise_predict</span><span class="hl std">(input, cutoff))))</span>
+<span class="hl std">}</span>
+
+<span class="hl com"># Based on a normal distribution of score differences, this</span>
+<span class="hl com"># uses the above to generate many games in a given model</span>
+<span class="hl std">simulate_piecewise_distribution</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">cutoff</span><span class="hl std">,</span> <span class="hl kwc">n</span><span class="hl std">,</span> <span class="hl kwc">score_sd</span><span class="hl std">) {</span>
+  <span class="hl std">score_difs</span> <span class="hl kwb">=</span> <span class="hl kwd">rnorm</span><span class="hl std">(n,</span> <span class="hl kwc">sd</span><span class="hl std">=score_sd)</span>
+  <span class="hl std">winners</span> <span class="hl kwb">=</span> <span class="hl kwd">c</span><span class="hl std">()</span>
+  <span class="hl kwa">for</span><span class="hl std">(item</span> <span class="hl kwa">in</span> <span class="hl std">score_difs) {</span>
+    <span class="hl std">winners</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">append</span><span class="hl std">(winners,</span> <span class="hl kwd">simulate_piecewise_sample</span><span class="hl std">(item, cutoff))</span>
+  <span class="hl std">}</span>
+  <span class="hl kwd">return</span><span class="hl std">(</span><span class="hl kwd">data.frame</span><span class="hl std">(score_difs, winners))</span>
+<span class="hl std">}</span>
+
+<span class="hl com"># Can run ~1000 sims of n=200 per minute on residual sqaured,</span>
+<span class="hl com"># and the same in 30 seconds on probability</span>
+<span class="hl std">cutoff_distribution</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">true_cutoff</span><span class="hl std">,</span> <span class="hl kwc">numsims</span><span class="hl std">,</span> <span class="hl kwc">numsamples</span><span class="hl std">,</span> <span class="hl kwc">score_sd</span><span class="hl std">,</span> <span class="hl kwc">objective_func</span><span class="hl std">) {</span>
+  <span class="hl std">measured_cutoffs</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">c</span><span class="hl std">()</span>
+  <span class="hl kwa">for</span><span class="hl std">(i</span> <span class="hl kwa">in</span> <span class="hl num">1</span><span class="hl opt">:</span><span class="hl std">numsims) {</span>
+    <span class="hl std">score_by_winners</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">simulate_piecewise_distribution</span><span class="hl std">(true_cutoff,</span>
+                                                        <span class="hl std">numsamples, score_sd)</span>
+    <span class="hl std">measured_cutoffs</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">append</span><span class="hl std">(measured_cutoffs,</span><span class="hl kwd">optimize_cutoff</span><span class="hl std">(score_by_winners</span><span class="hl opt">$</span><span class="hl std">winners,</span>
+                                                                <span class="hl std">score_by_winners</span><span class="hl opt">$</span><span class="hl std">score_difs,</span>
+                                                                <span class="hl std">objective_func))</span>
+    <span class="hl kwa">if</span><span class="hl std">(i</span> <span class="hl opt">%%</span> <span class="hl std">(numsims</span><span class="hl opt">/</span><span class="hl num">100</span><span class="hl std">)</span> <span class="hl opt">==</span> <span class="hl num">0</span><span class="hl std">) {</span>
+      <span class="hl kwd">print</span><span class="hl std">(</span><span class="hl kwd">paste</span><span class="hl std">(i</span><span class="hl opt">/</span><span class="hl std">numsims</span><span class="hl opt">*</span><span class="hl num">100</span><span class="hl std">,</span><span class="hl str">&quot;%&quot;</span><span class="hl std">))</span>
+    <span class="hl std">}</span>
+  <span class="hl std">}</span>
+  <span class="hl kwd">return</span><span class="hl std">(measured_cutoffs)</span>
+<span class="hl std">}</span>
+
+
+<span class="hl com">### Finding the best team for normal season</span>
+
+<span class="hl com"># Takes in lists of win chances and score differences, an input, and</span>
+<span class="hl com"># the number of digits the entries in the dataframe are rounded to,</span>
+<span class="hl com"># and outputs the associated win chance</span>
+
+<span class="hl std">confidence_predict</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">odds</span><span class="hl std">,</span> <span class="hl kwc">score_difs</span><span class="hl std">,</span> <span class="hl kwc">input</span><span class="hl std">,</span> <span class="hl kwc">rounding_places</span><span class="hl std">) {</span>
+  <span class="hl kwa">if</span><span class="hl std">(</span><span class="hl kwd">round</span><span class="hl std">(input,rounding_places)</span> <span class="hl opt">%in%</span> <span class="hl std">score_difs) {</span>
+    <span class="hl kwd">return</span><span class="hl std">(odds[score_difs</span>
+              <span class="hl opt">==</span> <span class="hl kwd">round</span><span class="hl std">(input,</span> <span class="hl kwc">digits</span> <span class="hl std">= rounding_places)])</span>
+  <span class="hl std">}</span>
+  <span class="hl kwa">if</span><span class="hl std">(</span><span class="hl kwd">round</span><span class="hl std">(input,rounding_places)</span> <span class="hl opt">&lt;</span> <span class="hl kwd">min</span><span class="hl std">(score_difs)) {</span>
+    <span class="hl kwd">return</span><span class="hl std">(odds[</span><span class="hl num">1</span><span class="hl std">])</span>
+  <span class="hl std">}</span>
+  <span class="hl kwa">if</span><span class="hl std">(</span><span class="hl kwd">round</span><span class="hl std">(input,rounding_places)</span> <span class="hl opt">&gt;</span> <span class="hl kwd">max</span><span class="hl std">(score_difs)) {</span>
+    <span class="hl kwd">return</span><span class="hl std">(odds[</span><span class="hl kwd">length</span><span class="hl std">(odds)])</span>
+  <span class="hl std">}</span>
+  <span class="hl kwd">print</span><span class="hl std">(</span><span class="hl str">&quot;confidence_predict error! Score_difs have gaps&quot;</span><span class="hl std">)</span>
+<span class="hl std">}</span>
+
+<span class="hl com"># Takes in a normalized probability density function for score_dif</span>
+<span class="hl com"># and outputs the chances of winning. Also needs auxilary inputs</span>
+<span class="hl com"># like rounding places and the chances of winning at score_difs,</span>
+<span class="hl com"># along with the bounds to search over</span>
+
+<span class="hl com"># score_dif_density_func should output probability density as a function</span>
+<span class="hl com"># of score_dif</span>
+
+<span class="hl std">distribution_win_chance</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">odds</span><span class="hl std">,</span> <span class="hl kwc">score_difs</span><span class="hl std">,</span> <span class="hl kwc">score_dif_density_func</span><span class="hl std">,</span>
+                                    <span class="hl kwc">score_dif_cdf</span><span class="hl std">,</span> <span class="hl kwc">rounding_places</span><span class="hl std">,</span> <span class="hl kwc">low</span><span class="hl std">,</span> <span class="hl kwc">high</span><span class="hl std">) {</span>
+  <span class="hl kwa">if</span><span class="hl std">(low</span> <span class="hl opt">&gt;</span> <span class="hl num">0</span><span class="hl std">) {</span>
+    <span class="hl kwd">print</span><span class="hl std">(</span><span class="hl str">&quot;Distribution win chance low end must be below 0!&quot;</span><span class="hl std">)</span>
+    <span class="hl std">low</span> <span class="hl kwb">&lt;-</span> <span class="hl opt">-</span><span class="hl num">1</span>
+  <span class="hl std">}</span>
+
+  <span class="hl std">cur_score_dif</span> <span class="hl kwb">&lt;-</span> <span class="hl num">0</span>
+  <span class="hl std">step_size</span> <span class="hl kwb">&lt;-</span> <span class="hl num">10</span><span class="hl opt">^</span><span class="hl std">{</span><span class="hl opt">-</span><span class="hl num">1</span><span class="hl opt">*</span><span class="hl std">rounding_places}</span>
+  <span class="hl std">result</span> <span class="hl kwb">&lt;-</span> <span class="hl num">0</span>
+  <span class="hl kwa">for</span><span class="hl std">(i</span> <span class="hl kwa">in</span> <span class="hl num">0</span><span class="hl opt">:</span><span class="hl kwd">ceiling</span><span class="hl std">((high)</span><span class="hl opt">/</span><span class="hl std">step_size)) {</span>
+    <span class="hl kwa">if</span><span class="hl std">(</span><span class="hl kwd">confidence_predict</span><span class="hl std">(odds,score_difs,cur_score_dif,rounding_places)</span>
+       <span class="hl opt">&gt;</span> <span class="hl num">0.999</span><span class="hl std">) {</span>
+      <span class="hl std">result</span> <span class="hl kwb">&lt;-</span> <span class="hl std">result</span> <span class="hl opt">+</span> <span class="hl kwd">score_dif_cdf</span><span class="hl std">(cur_score_dif)</span>
+      <span class="hl kwa">break</span>
+    <span class="hl std">}</span>
+    <span class="hl std">result</span> <span class="hl kwb">&lt;-</span> <span class="hl std">result</span> <span class="hl opt">+</span> <span class="hl std">step_size</span> <span class="hl opt">*</span> <span class="hl kwd">score_dif_density_func</span><span class="hl std">(cur_score_dif)</span> <span class="hl opt">*</span>
+      <span class="hl kwd">confidence_predict</span><span class="hl std">(odds,score_difs,cur_score_dif,rounding_places)</span>
+    <span class="hl std">cur_score_dif</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">round</span><span class="hl std">(cur_score_dif</span> <span class="hl opt">+</span> <span class="hl std">step_size,rounding_places)</span>
+  <span class="hl std">}</span>
+  <span class="hl std">cur_score_dif</span> <span class="hl kwb">&lt;-</span> <span class="hl num">0</span>
+  <span class="hl kwa">for</span><span class="hl std">(i</span> <span class="hl kwa">in</span> <span class="hl num">0</span><span class="hl opt">:</span><span class="hl kwd">ceiling</span><span class="hl std">((low)</span><span class="hl opt">/</span><span class="hl std">step_size)) {</span>
+    <span class="hl kwa">if</span><span class="hl std">(</span><span class="hl kwd">confidence_predict</span><span class="hl std">(odds,score_difs,cur_score_dif,rounding_places)</span>
+       <span class="hl opt">&lt;</span> <span class="hl num">0.001</span><span class="hl std">) {</span>
+      <span class="hl kwa">break</span>
+    <span class="hl std">}</span>
+    <span class="hl std">result</span> <span class="hl kwb">&lt;-</span> <span class="hl std">result</span> <span class="hl opt">+</span> <span class="hl std">step_size</span> <span class="hl opt">*</span> <span class="hl kwd">score_dif_density_func</span><span class="hl std">(cur_score_dif)</span> <span class="hl opt">*</span>
+      <span class="hl kwd">confidence_predict</span><span class="hl std">(odds,score_difs,cur_score_dif,rounding_places)</span>
+    <span class="hl std">cur_score_dif</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">round</span><span class="hl std">(cur_score_dif</span> <span class="hl opt">-</span> <span class="hl std">step_size,rounding_places)</span>
+  <span class="hl std">}</span>
+  <span class="hl kwd">return</span><span class="hl std">(result)</span>
+<span class="hl std">}</span>
+
+<span class="hl com"># Uses above with a list of scores of teams we're playing against</span>
+<span class="hl com"># combined with a score_func for our team to calculate the odds</span>
+<span class="hl com"># of never losing a game and average won games - first entry</span>
+<span class="hl com"># is average, second is undefeated odds</span>
+
+<span class="hl std">success_measures</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">odds</span><span class="hl std">,</span> <span class="hl kwc">score_difs</span><span class="hl std">,</span> <span class="hl kwc">score_func</span><span class="hl std">,</span> <span class="hl kwc">score_cdf</span><span class="hl std">,</span>
+                            <span class="hl kwc">team_scores</span><span class="hl std">,</span> <span class="hl kwc">rounding_places</span><span class="hl std">,</span> <span class="hl kwc">low</span><span class="hl std">,</span> <span class="hl kwc">high</span><span class="hl std">) {</span>
+  <span class="hl std">result</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">c</span><span class="hl std">(</span><span class="hl num">0</span><span class="hl std">,</span><span class="hl num">1</span><span class="hl std">)</span>
+  <span class="hl std">win_chances</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">c</span><span class="hl std">()</span>
+  <span class="hl kwa">for</span><span class="hl std">(score</span> <span class="hl kwa">in</span> <span class="hl std">team_scores) {</span>
+    <span class="hl std">win_chances</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">append</span><span class="hl std">(win_chances,</span><span class="hl kwd">distribution_win_chance</span><span class="hl std">(</span>
+      <span class="hl std">odds, score_difs,</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">x</span><span class="hl std">){</span><span class="hl kwd">score_func</span><span class="hl std">(x</span> <span class="hl opt">+</span> <span class="hl std">score)},</span>
+      <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">x</span><span class="hl std">){</span><span class="hl kwd">score_cdf</span><span class="hl std">(x</span> <span class="hl opt">+</span> <span class="hl std">score)}, rounding_places,</span>
+      <span class="hl std">low</span> <span class="hl opt">-</span> <span class="hl std">score, high</span> <span class="hl opt">-</span> <span class="hl std">score</span>
+    <span class="hl std">))</span>
+  <span class="hl std">}</span>
+  <span class="hl kwa">for</span><span class="hl std">(chance</span> <span class="hl kwa">in</span> <span class="hl std">win_chances) {</span>
+    <span class="hl std">result[</span><span class="hl num">1</span><span class="hl std">]</span> <span class="hl kwb">&lt;-</span> <span class="hl std">result[</span><span class="hl num">1</span><span class="hl std">]</span> <span class="hl opt">+</span> <span class="hl std">chance</span>
+    <span class="hl std">result[</span><span class="hl num">2</span><span class="hl std">]</span> <span class="hl kwb">&lt;-</span> <span class="hl std">result[</span><span class="hl num">2</span><span class="hl std">]</span> <span class="hl opt">*</span> <span class="hl std">chance</span>
+  <span class="hl std">}</span>
+  <span class="hl kwd">return</span><span class="hl std">(result)</span>
+<span class="hl std">}</span>
+
+<span class="hl com"># Assuming a normal distribution, and that the overall game performance</span>
+<span class="hl com"># is the average of the players' game performance, we can make a </span>
+<span class="hl com"># helper function to calculate the score distribution for the team</span>
+
+<span class="hl com"># The normal assumption is reasonable - see the analysis sheet,</span>
+<span class="hl com"># there's a helpful plot on it</span>
+
+<span class="hl std">score_pdf_from_players</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">player_means</span><span class="hl std">,</span> <span class="hl kwc">player_sds</span><span class="hl std">) {</span>
+  <span class="hl std">output_func</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">x</span><span class="hl std">){</span><span class="hl kwd">dnorm</span><span class="hl std">(x,</span><span class="hl kwc">mean</span> <span class="hl std">=</span> <span class="hl kwd">mean</span><span class="hl std">(player_means),</span>
+                                   <span class="hl kwc">sd</span> <span class="hl std">=</span> <span class="hl kwd">sqrt</span><span class="hl std">(</span><span class="hl kwd">sum</span><span class="hl std">(player_sds</span><span class="hl opt">^</span><span class="hl num">2</span><span class="hl std">)))}</span>
+  <span class="hl kwd">return</span><span class="hl std">(output_func)</span>
+<span class="hl std">}</span>
+
+<span class="hl std">score_cdf_from_players</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">player_means</span><span class="hl std">,</span> <span class="hl kwc">player_sds</span><span class="hl std">) {</span>
+  <span class="hl std">output_func</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">x</span><span class="hl std">){</span><span class="hl kwd">pnorm</span><span class="hl std">(x,</span><span class="hl kwc">mean</span> <span class="hl std">=</span> <span class="hl kwd">mean</span><span class="hl std">(player_means),</span>
+                                   <span class="hl kwc">sd</span> <span class="hl std">=</span> <span class="hl kwd">sqrt</span><span class="hl std">(</span><span class="hl kwd">sum</span><span class="hl std">(player_sds</span><span class="hl opt">^</span><span class="hl num">2</span><span class="hl std">)),</span>
+                                   <span class="hl kwc">lower.tail</span> <span class="hl std">=</span> <span class="hl num">FALSE</span><span class="hl std">)}</span>
+  <span class="hl kwd">return</span><span class="hl std">(output_func)</span>
+<span class="hl std">}</span>
+</pre></div>
+</div></div>
+
+  <p>The R session information (including the OS info, R version and all
+    packages used):</p>
+
+<div class="chunk" id="session-info"><div class="rcode"><div class="source"><pre class="knitr r">    <span class="hl kwd">sessionInfo</span><span class="hl std">()</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## R version 4.2.2 (2022-10-31)
+## Platform: aarch64-apple-darwin20 (64-bit)
+## Running under: macOS Monterey 12.6
+## 
+## Matrix products: default
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/lib/libRlapack.dylib
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+##  [1] tinytex_0.43    MASS_7.3-58.1   rstudioapi_0.14 haven_2.5.1     lubridate_1.9.2
+##  [6] forcats_1.0.0   stringr_1.5.0   dplyr_1.1.0     purrr_1.0.1     readr_2.1.4    
+## [11] tidyr_1.3.0     tibble_3.1.8    ggplot2_3.4.1   tidyverse_2.0.0
+## 
+## loaded via a namespace (and not attached):
+##  [1] highr_0.10       pillar_1.8.1     compiler_4.2.2   tools_4.2.2      bit_4.0.5       
+##  [6] evaluate_0.19    lattice_0.20-45  nlme_3.1-160     lifecycle_1.0.3  gtable_0.3.1    
+## [11] timechange_0.2.0 mgcv_1.8-41      pkgconfig_2.0.3  rlang_1.0.6      Matrix_1.5-1    
+## [16] cli_3.6.0        parallel_4.2.2   xfun_0.36        knitr_1.41       withr_2.5.0     
+## [21] generics_0.1.3   vctrs_0.5.2      hms_1.1.2        bit64_4.0.5      grid_4.2.2      
+## [26] tidyselect_1.2.0 glue_1.6.2       R6_2.5.1         fansi_1.0.3      vroom_1.6.0     
+## [31] farver_2.1.1     tzdb_0.3.0       magrittr_2.0.3   splines_4.2.2    scales_1.2.1    
+## [36] ellipsis_0.3.2   colorspace_2.0-3 labeling_0.4.2   utf8_1.2.2       stringi_1.7.12  
+## [41] munsell_0.5.0    crayon_1.5.2
+</pre></div>
+<div class="source"><pre class="knitr r">    <span class="hl kwd">Sys.time</span><span class="hl std">()</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] &quot;2023-03-20 00:08:00 PDT&quot;
+</pre></div>
+</div></div>
+
+
+</body>
+</html>

@@ -1,0 +1,443 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+.inline {
+  background-color: #f7f7f7;
+  border:solid 1px #B0B0B0;
+}
+.error {
+	font-weight: bold;
+	color: #FF0000;
+}
+.warning {
+	font-weight: bold;
+}
+.message {
+	font-style: italic;
+}
+.source, .output, .warning, .error, .message {
+	padding: 0 1em;
+  border:solid 1px #F7F7F7;
+}
+.source {
+  background-color: #f5f5f5;
+}
+.left {
+  text-align: left;
+}
+.right {
+  text-align: right;
+}
+.center {
+  text-align: center;
+}
+.hl.num {
+  color: #AF0F91;
+}
+.hl.str {
+  color: #317ECC;
+}
+.hl.com {
+  color: #AD95AF;
+  font-style: italic;
+}
+.hl.opt {
+  color: #000000;
+}
+.hl.std {
+  color: #585858;
+}
+.hl.kwa {
+  color: #295F94;
+  font-weight: bold;
+}
+.hl.kwb {
+  color: #B05A65;
+}
+.hl.kwc {
+  color: #55aa55;
+}
+.hl.kwd {
+  color: #BC5A65;
+  font-weight: bold;
+}
+</style>
+  <script src="https://yihui.name/media/js/center-images.js"></script>
+  <title>\title{}</title>
+</head>
+<body>
+
+  <p>This report is automatically generated with the R
+    package <a href="https://yihui.name/knitr/"><strong>knitr</strong></a>
+    (version <code class="knitr inline">1.41</code>)
+    .</p>
+
+<div class="chunk" id="auto-report"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com"># Install packages (uncomment and run when needed)</span>
+<span class="hl com"># install.packages('tidyverse')</span>
+<span class="hl com"># install.packages('haven')</span>
+
+<span class="hl com"># Libraries and helpers</span>
+<span class="hl kwd">library</span><span class="hl std">(tidyverse)</span>
+<span class="hl kwd">library</span><span class="hl std">(haven)</span>
+<span class="hl kwd">library</span><span class="hl std">(rstudioapi)</span>
+
+<span class="hl com"># Adjust wd</span>
+<span class="hl std">file_path</span> <span class="hl kwb">&lt;-</span> <span class="hl std">rstudioapi</span><span class="hl opt">::</span><span class="hl kwd">getSourceEditorContext</span><span class="hl std">()</span><span class="hl opt">$</span><span class="hl std">path</span>
+<span class="hl kwd">setwd</span><span class="hl std">(</span><span class="hl kwd">dirname</span><span class="hl std">(file_path))</span>
+
+<span class="hl com"># Import helpers</span>
+<span class="hl kwd">source</span><span class="hl std">(</span><span class="hl str">&quot;helper_functions.R&quot;</span><span class="hl std">)</span>
+
+<span class="hl com"># Import processed data</span>
+<span class="hl std">previous_results</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">read_csv</span><span class="hl std">(</span><span class="hl str">&quot;../PROCESSED_DATA/processed_previous_results.csv&quot;</span><span class="hl std">)</span>
+</pre></div>
+<div class="message"><pre class="knitr r">## Rows: 200 Columns: 5
+## ── Column specification ──────────────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## dbl (5): game label, team 1 score, team 2 score, winning team, score_dif
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl std">match_ups</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">read_csv</span><span class="hl std">(</span><span class="hl str">&quot;../RAW_DATA/season_match_up.csv&quot;</span><span class="hl std">)</span>
+</pre></div>
+<div class="message"><pre class="knitr r">## Rows: 1 Columns: 21
+## ── Column specification ──────────────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr  (1): team label
+## dbl (20): 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl std">match_ups</span> <span class="hl kwb">&lt;-</span> <span class="hl std">match_ups[</span><span class="hl num">1</span><span class="hl std">,</span><span class="hl num">2</span><span class="hl opt">:</span><span class="hl num">20</span><span class="hl std">]</span>
+
+<span class="hl com">##### PREVIOUS RESULTS ANALYSIS #####</span>
+
+
+<span class="hl com">## Understanding the distribution of previous results</span>
+<span class="hl kwd">length</span><span class="hl std">(previous_results</span><span class="hl opt">$</span><span class="hl std">score_dif)</span> <span class="hl com"># n = 200</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] 200
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl kwd">summary</span><span class="hl std">(previous_results</span><span class="hl opt">$</span><span class="hl std">score_dif)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+## -82.1400 -14.8375   1.1750  -0.1155  16.5375  53.2700
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl kwd">ggplot</span><span class="hl std">(previous_results,</span> <span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span><span class="hl std">=score_dif))</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_histogram</span><span class="hl std">(</span><span class="hl kwc">binwidth</span><span class="hl std">=</span><span class="hl num">5</span><span class="hl std">,</span> <span class="hl kwc">color</span><span class="hl std">=</span><span class="hl str">&quot;grey50&quot;</span><span class="hl std">,</span> <span class="hl kwc">fill</span><span class="hl std">=</span><span class="hl str">&quot;lightblue&quot;</span><span class="hl std">,</span> <span class="hl kwc">alpha</span><span class="hl std">=</span><span class="hl num">0.8</span><span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl kwd">theme_minimal</span><span class="hl std">()</span> <span class="hl opt">+</span>
+  <span class="hl kwd">stat_function</span><span class="hl std">(</span><span class="hl kwc">fun</span> <span class="hl std">=</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">x</span><span class="hl std">){</span><span class="hl kwd">dnorm</span><span class="hl std">(x,</span><span class="hl kwc">mean</span> <span class="hl std">=</span> <span class="hl kwd">mean</span><span class="hl std">(previous_results</span><span class="hl opt">$</span><span class="hl std">score_dif)</span>
+                                        <span class="hl std">,</span><span class="hl kwc">sd</span> <span class="hl std">=</span> <span class="hl kwd">sd</span><span class="hl std">(previous_results</span><span class="hl opt">$</span><span class="hl std">score_dif))}</span><span class="hl opt">*</span><span class="hl kwd">length</span><span class="hl std">(previous_results</span><span class="hl opt">$</span><span class="hl std">score_dif)</span><span class="hl opt">*</span><span class="hl num">5</span><span class="hl std">)</span>
+</pre></div>
+</div><div class="rimage center"><img src="figure/previous-results-probabilities-Rhtmlauto-report-1.png" alt="plot of chunk auto-report" class="plot" /></div><div class="rcode">
+<div class="source"><pre class="knitr r"><span class="hl com"># Looks approximately normally distributed, with a mean of:</span>
+<span class="hl kwd">mean</span><span class="hl std">(previous_results</span><span class="hl opt">$</span><span class="hl std">score_dif)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] -0.11555
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">#-0.116, and standard deviation of:</span>
+<span class="hl std">score_sd</span> <span class="hl kwb">=</span> <span class="hl kwd">sd</span><span class="hl std">(previous_results</span><span class="hl opt">$</span><span class="hl std">score_dif)</span>
+<span class="hl com"># 23.328, for a standard error on the mean of:</span>
+<span class="hl kwd">sd</span><span class="hl std">(previous_results</span><span class="hl opt">$</span><span class="hl std">score_dif)</span><span class="hl opt">/</span><span class="hl kwd">length</span><span class="hl std">(previous_results</span><span class="hl opt">$</span><span class="hl std">score_dif)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] 0.116638
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com"># 0.116. So the mean is not significantly different from 0,</span>
+<span class="hl com"># and it's approximately normally distributed with SD = 23.328</span>
+<span class="hl com"># This will be useful later.</span>
+
+<span class="hl std">previous_results_means</span> <span class="hl kwb">&lt;-</span> <span class="hl std">previous_results</span> <span class="hl opt">%&gt;%</span>
+  <span class="hl kwd">mutate</span><span class="hl std">(</span><span class="hl kwc">bucket</span> <span class="hl std">=</span> <span class="hl kwd">floor</span><span class="hl std">(score_dif</span><span class="hl opt">/</span><span class="hl num">5</span><span class="hl std">)</span> <span class="hl opt">+</span> <span class="hl num">0.5</span><span class="hl std">)</span> <span class="hl opt">%&gt;%</span>
+  <span class="hl kwd">group_by</span><span class="hl std">(bucket)</span> <span class="hl opt">%&gt;%</span>
+  <span class="hl kwd">summarize</span><span class="hl std">(</span>
+    <span class="hl kwc">n</span> <span class="hl std">=</span> <span class="hl kwd">sum</span><span class="hl std">(</span><span class="hl opt">!</span><span class="hl kwd">is.na</span><span class="hl std">(`winning team`)),</span>
+    <span class="hl kwc">mean</span> <span class="hl std">=</span> <span class="hl kwd">mean</span><span class="hl std">(`winning team`)</span>
+  <span class="hl std">)</span>
+
+<span class="hl com"># From these, we can see that the bulk of the data is between</span>
+<span class="hl com"># -35 and +35 on the score_dif axis. This will be useful later.</span>
+
+<span class="hl com"># This one shows the winrate in the buckets as a function of score difference:</span>
+<span class="hl com"># (buckets of 5)</span>
+<span class="hl com"># TODO: (fast) Rename the axis on these</span>
+<span class="hl kwd">ggplot</span><span class="hl std">(previous_results_means,</span> <span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span><span class="hl std">=bucket</span><span class="hl opt">*</span><span class="hl num">5</span><span class="hl std">,</span> <span class="hl kwc">y</span><span class="hl std">=mean,</span> <span class="hl kwc">fill</span><span class="hl std">=bucket))</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_bar</span><span class="hl std">(</span><span class="hl kwc">stat</span><span class="hl std">=</span><span class="hl str">&quot;identity&quot;</span><span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl kwd">labs</span><span class="hl std">(</span><span class="hl kwc">y</span><span class="hl std">=</span><span class="hl str">&quot;Chance of winning&quot;</span><span class="hl std">,</span> <span class="hl kwc">x</span><span class="hl std">=</span><span class="hl str">&quot;Score difference&quot;</span><span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_text</span><span class="hl std">(</span><span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">label</span><span class="hl std">=</span><span class="hl kwd">round</span><span class="hl std">(mean,</span> <span class="hl kwc">digits</span><span class="hl std">=</span><span class="hl num">3</span><span class="hl std">)),</span> <span class="hl kwc">color</span><span class="hl std">=</span><span class="hl str">&quot;green&quot;</span><span class="hl std">,</span> <span class="hl kwc">vjust</span><span class="hl std">=</span><span class="hl opt">-</span><span class="hl num">2.5</span><span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl kwd">theme_minimal</span><span class="hl std">()</span>
+</pre></div>
+</div><div class="rimage center"><img src="figure/previous-results-probabilities-Rhtmlauto-report-2.png" alt="plot of chunk auto-report" class="plot" /></div><div class="rcode">
+<div class="source"><pre class="knitr r"><span class="hl com"># We can see from this that for score_dif &lt; -35, we lose (almost) every game -</span>
+<span class="hl com"># there would be a confidence interval on that which makes for a small chance,</span>
+<span class="hl com"># but anyway - and for score_dif &gt; 35, we win (almost) any game</span>
+
+<span class="hl com"># Thus, we can model this function piecewise. Below some cutoff, we always lose,</span>
+<span class="hl com"># and above another, we always win. Between, we can model it as linear.</span>
+
+<span class="hl com"># Notably, this function should be symmetric about score_dif = 0, mean = 0.5</span>
+<span class="hl com"># due to the win chance at score_dif=x being equal to the lose chance at </span>
+<span class="hl com"># score_dif = -x (in a perfect world)</span>
+
+<span class="hl com"># Also notably, this function should be continuous (or at least close) -</span>
+<span class="hl com"># this means that we expect the function's confidence interval to contain</span>
+<span class="hl com"># (-35,0) and (35,1), or whatever our cutoffs are.</span>
+
+<span class="hl com"># This one limits it to those bounds, and makes a pretty reasonable trendline</span>
+<span class="hl com"># It makes an error message but the issue it says is happening isn't actually</span>
+<span class="hl com"># happening</span>
+<span class="hl kwd">ggplot</span><span class="hl std">(</span><span class="hl kwd">filter</span><span class="hl std">(previous_results_means,</span> <span class="hl kwd">abs</span><span class="hl std">(bucket</span><span class="hl opt">*</span><span class="hl num">5</span><span class="hl std">)</span> <span class="hl opt">&lt;=</span> <span class="hl num">35</span><span class="hl std">),</span> <span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span><span class="hl std">=bucket</span><span class="hl opt">*</span><span class="hl num">5</span><span class="hl std">,</span> <span class="hl kwc">y</span><span class="hl std">=mean,</span> <span class="hl kwc">fill</span><span class="hl std">=bucket))</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_bar</span><span class="hl std">(</span><span class="hl kwc">stat</span><span class="hl std">=</span><span class="hl str">&quot;identity&quot;</span><span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_text</span><span class="hl std">(</span><span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">label</span><span class="hl std">=</span><span class="hl kwd">round</span><span class="hl std">(mean,</span> <span class="hl kwc">digits</span><span class="hl std">=</span><span class="hl num">3</span><span class="hl std">)),</span> <span class="hl kwc">color</span><span class="hl std">=</span><span class="hl str">&quot;green&quot;</span><span class="hl std">,</span> <span class="hl kwc">vjust</span><span class="hl std">=</span><span class="hl opt">-</span><span class="hl num">2.5</span><span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl kwd">stat_smooth</span><span class="hl std">(</span><span class="hl kwc">method</span><span class="hl std">=</span><span class="hl str">&quot;lm&quot;</span><span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl kwd">theme_minimal</span><span class="hl std">()</span>
+</pre></div>
+<div class="message"><pre class="knitr r">## `geom_smooth()` using formula = 'y ~ x'
+</pre></div>
+<div class="warning"><pre class="knitr r">## Warning: The following aesthetics were dropped during statistical transformation: fill
+## ℹ This can happen when ggplot fails to infer the correct grouping structure in the data.
+## ℹ Did you forget to specify a `group` aesthetic or to convert a numerical variable into a
+##   factor?
+</pre></div>
+</div><div class="rimage center"><img src="figure/previous-results-probabilities-Rhtmlauto-report-3.png" alt="plot of chunk auto-report" class="plot" /></div><div class="rcode">
+<div class="source"><pre class="knitr r"><span class="hl com"># But we can do better than that! Lets do some regressions</span>
+
+<span class="hl com">### Regression stuff with helper functions</span>
+
+<span class="hl com"># Initially, I did this with vertical distance squared. The code</span>
+<span class="hl com"># below is left as a record of that, but is not actually helpful for</span>
+<span class="hl com"># regression - it turns out vertical distance squared has a strong</span>
+<span class="hl com"># bias towards underestimating the cutoff</span>
+
+<span class="hl com">## With vertical distance squared</span>
+<span class="hl kwd">piecewise_residual_square</span><span class="hl std">(previous_results</span><span class="hl opt">$</span><span class="hl std">`winning team`,</span>
+                          <span class="hl std">previous_results</span><span class="hl opt">$</span><span class="hl std">score_dif,</span> <span class="hl num">35</span><span class="hl std">)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] 27.10651
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl std">residual_by_cutoff</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">multiple_piecewise_residual</span><span class="hl std">(previous_results</span><span class="hl opt">$</span><span class="hl std">`winning team`,</span>
+                                                  <span class="hl std">previous_results</span><span class="hl opt">$</span><span class="hl std">score_dif,</span> <span class="hl num">2000</span><span class="hl std">, piecewise_residual_square)</span>
+
+<span class="hl com"># We can minimize this</span>
+<span class="hl kwd">ggplot</span><span class="hl std">(residual_by_cutoff,</span> <span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span><span class="hl std">=cutoffs,</span> <span class="hl kwc">y</span><span class="hl std">=residuals))</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_point</span><span class="hl std">()</span> <span class="hl opt">+</span>
+  <span class="hl kwd">theme_minimal</span><span class="hl std">()</span>
+</pre></div>
+</div><div class="rimage center"><img src="figure/previous-results-probabilities-Rhtmlauto-report-4.png" alt="plot of chunk auto-report" class="plot" /></div><div class="rcode">
+<div class="source"><pre class="knitr r"><span class="hl std">cutoff</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">mean</span><span class="hl std">(residual_by_cutoff</span><span class="hl opt">$</span><span class="hl std">cutoffs[</span><span class="hl kwd">which</span><span class="hl std">(residual_by_cutoff</span><span class="hl opt">$</span><span class="hl std">residuals</span> <span class="hl opt">==</span> <span class="hl kwd">min</span><span class="hl std">(residual_by_cutoff</span><span class="hl opt">$</span><span class="hl std">residuals))])</span>
+
+<span class="hl com"># Now we know the region to search in</span>
+<span class="hl std">targeted_range</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">targeted_piecewise_residual</span><span class="hl std">(previous_results</span><span class="hl opt">$</span><span class="hl std">`winning team`,</span>
+                                              <span class="hl std">previous_results</span><span class="hl opt">$</span><span class="hl std">score_dif,</span> <span class="hl num">50000</span><span class="hl std">, cutoff</span> <span class="hl opt">-</span> <span class="hl num">5</span><span class="hl std">, cutoff</span> <span class="hl opt">+</span> <span class="hl num">5</span><span class="hl std">,</span>
+                                              <span class="hl std">piecewise_residual_square)</span>
+<span class="hl com"># Accurate to three decimal places - because we searched </span>
+<span class="hl com"># a range of length 10 in 50,000 intervals</span>
+<span class="hl std">cutoff</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">round</span><span class="hl std">(</span><span class="hl kwd">mean</span><span class="hl std">(targeted_range</span><span class="hl opt">$</span><span class="hl std">cutoffs[</span><span class="hl kwd">which</span><span class="hl std">(targeted_range</span><span class="hl opt">$</span><span class="hl std">residuals</span> <span class="hl opt">==</span> <span class="hl kwd">min</span><span class="hl std">(targeted_range</span><span class="hl opt">$</span><span class="hl std">residuals))]),</span><span class="hl num">3</span><span class="hl std">)</span>
+
+
+<span class="hl std">a</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">read.csv</span><span class="hl std">(</span><span class="hl str">&quot;../PROCESSED_DATA/cutoff_distribution_demo.csv&quot;</span><span class="hl std">)</span><span class="hl opt">$</span><span class="hl std">a</span>
+<span class="hl com"># Proof-of-concept simulation:</span>
+<span class="hl com"># WARNING: TAKES 1 MINUTE TO RUN</span>
+<span class="hl com"># a &lt;- append(a,cutoff_distribution(cutoff, 1000, 200, score_sd, piecewise_residual_square))</span>
+
+
+<span class="hl com"># This is the plot that makes the bias clear. The true cutoff is shown in</span>
+<span class="hl com"># red, and as you can see, the data are significantly and systematically</span>
+<span class="hl com"># skewed from it. This means we can't trust the results of this regression</span>
+<span class="hl com"># without significant adjustments, so we might as well regress a different</span>
+<span class="hl com"># way</span>
+<span class="hl kwd">ggplot</span><span class="hl std">(</span><span class="hl kwd">data.frame</span><span class="hl std">(a),</span> <span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span><span class="hl std">=a))</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_histogram</span><span class="hl std">(</span><span class="hl kwc">binwidth</span><span class="hl std">=</span><span class="hl num">0.5</span><span class="hl std">,</span> <span class="hl kwc">color</span><span class="hl std">=</span><span class="hl str">&quot;grey50&quot;</span><span class="hl std">,</span> <span class="hl kwc">fill</span><span class="hl std">=</span><span class="hl str">&quot;lightblue&quot;</span><span class="hl std">,</span> <span class="hl kwc">alpha</span><span class="hl std">=</span><span class="hl num">0.8</span><span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl kwd">theme_minimal</span><span class="hl std">()</span> <span class="hl opt">+</span>
+  <span class="hl kwd">stat_function</span><span class="hl std">(</span><span class="hl kwc">fun</span> <span class="hl std">=</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">x</span><span class="hl std">){</span><span class="hl kwd">dnorm</span><span class="hl std">(x,</span><span class="hl kwc">mean</span> <span class="hl std">=</span> <span class="hl kwd">mean</span><span class="hl std">(a),</span><span class="hl kwc">sd</span> <span class="hl std">=</span> <span class="hl kwd">sd</span><span class="hl std">(a))}</span><span class="hl opt">*</span><span class="hl kwd">length</span><span class="hl std">(a)</span><span class="hl opt">*</span><span class="hl num">0.5</span><span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_vline</span><span class="hl std">(</span><span class="hl kwc">xintercept</span> <span class="hl std">= cutoff,</span> <span class="hl kwc">color</span> <span class="hl std">=</span> <span class="hl str">&quot;red&quot;</span><span class="hl std">)</span>
+</pre></div>
+</div><div class="rimage center"><img src="figure/previous-results-probabilities-Rhtmlauto-report-5.png" alt="plot of chunk auto-report" class="plot" /></div><div class="rcode">
+<div class="source"><pre class="knitr r"><span class="hl com"># write.csv(data.frame(a),&quot;../PROCESSED_DATA/cutoff_distribution_demo.csv&quot;)</span>
+
+<span class="hl com"># The new objective function is the likelihood of the observed data</span>
+<span class="hl com"># occurring in the theorized model. All of these chances will be small,</span>
+<span class="hl com"># but some will be much smaller than others.</span>
+
+<span class="hl com">## With -1 times probability of occurring</span>
+<span class="hl com"># The -1 is so that we can minimize this, instead of maximizing -</span>
+<span class="hl com"># it lets us use the same functions as vertical distance squared</span>
+<span class="hl kwd">piecewise_probability</span><span class="hl std">(previous_results</span><span class="hl opt">$</span><span class="hl std">`winning team`,</span>
+                      <span class="hl std">previous_results</span><span class="hl opt">$</span><span class="hl std">score_dif,</span> <span class="hl num">35</span><span class="hl std">)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] -8.116819e-37
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl std">probs_by_cutoff</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">multiple_piecewise_residual</span><span class="hl std">(previous_results</span><span class="hl opt">$</span><span class="hl std">`winning team`,</span>
+                                               <span class="hl std">previous_results</span><span class="hl opt">$</span><span class="hl std">score_dif,</span> <span class="hl num">2000</span><span class="hl std">, piecewise_probability)</span>
+
+<span class="hl kwd">ggplot</span><span class="hl std">(probs_by_cutoff,</span> <span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span><span class="hl std">=cutoffs,</span> <span class="hl kwc">y</span><span class="hl std">=</span><span class="hl opt">-</span><span class="hl num">1</span><span class="hl opt">*</span><span class="hl std">residuals))</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_point</span><span class="hl std">()</span> <span class="hl opt">+</span>
+  <span class="hl kwd">theme_minimal</span><span class="hl std">()</span> <span class="hl opt">+</span>
+  <span class="hl kwd">labs</span><span class="hl std">(</span><span class="hl kwc">y</span><span class="hl std">=</span><span class="hl str">&quot;MLE&quot;</span><span class="hl std">,</span> <span class="hl kwc">x</span><span class="hl std">=</span><span class="hl str">&quot;Cutoff&quot;</span><span class="hl std">)</span>
+</pre></div>
+</div><div class="rimage center"><img src="figure/previous-results-probabilities-Rhtmlauto-report-6.png" alt="plot of chunk auto-report" class="plot" /></div><div class="rcode">
+<div class="source"><pre class="knitr r"><span class="hl std">probs_by_cutoff</span><span class="hl opt">$</span><span class="hl std">residuals</span> <span class="hl kwb">&lt;-</span> <span class="hl std">probs_by_cutoff</span><span class="hl opt">$</span><span class="hl std">residuals</span><span class="hl opt">/</span><span class="hl kwd">sum</span><span class="hl std">(probs_by_cutoff</span><span class="hl opt">$</span><span class="hl std">cutoffs[</span><span class="hl num">2</span><span class="hl std">]</span> <span class="hl opt">*</span> <span class="hl std">probs_by_cutoff</span><span class="hl opt">$</span><span class="hl std">residuals)</span>
+
+<span class="hl std">probs_by_cutoff</span> <span class="hl kwb">&lt;-</span> <span class="hl std">probs_by_cutoff</span> <span class="hl opt">%&gt;%</span> <span class="hl kwd">mutate</span><span class="hl std">(</span>
+  <span class="hl kwc">cumprob</span> <span class="hl std">=</span> <span class="hl kwd">cumsum</span><span class="hl std">(residuals)</span><span class="hl opt">*</span><span class="hl std">probs_by_cutoff</span><span class="hl opt">$</span><span class="hl std">cutoffs[</span><span class="hl num">2</span><span class="hl std">]</span>
+<span class="hl std">)</span>
+
+<span class="hl std">percentile_2.5</span> <span class="hl kwb">&lt;-</span> <span class="hl std">probs_by_cutoff</span><span class="hl opt">$</span><span class="hl std">cutoff[probs_by_cutoff</span><span class="hl opt">$</span><span class="hl std">cumsum</span><span class="hl opt">&gt;</span><span class="hl num">0.025</span><span class="hl std">][</span><span class="hl num">1</span><span class="hl std">]</span>
+
+<span class="hl std">percentile_97.5</span> <span class="hl kwb">&lt;-</span> <span class="hl std">probs_by_cutoff</span><span class="hl opt">$</span><span class="hl std">cutoff[probs_by_cutoff</span><span class="hl opt">$</span><span class="hl std">cumsum</span><span class="hl opt">&gt;</span><span class="hl num">0.975</span><span class="hl std">][</span><span class="hl num">1</span><span class="hl std">]</span>
+
+<span class="hl com"># Plot with lines denoting the 95% confidence interval for the cutoff</span>
+<span class="hl com"># From this plot, you can already see the expected cutoff and how</span>
+<span class="hl com"># we expect the possible true cutoffs to be distributed given these</span>
+<span class="hl com"># data.</span>
+<span class="hl kwd">ggplot</span><span class="hl std">(probs_by_cutoff,</span> <span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span><span class="hl std">=cutoffs,</span> <span class="hl kwc">y</span><span class="hl std">=residuals))</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_point</span><span class="hl std">()</span> <span class="hl opt">+</span>
+  <span class="hl kwd">theme_minimal</span><span class="hl std">()</span> <span class="hl opt">+</span>
+  <span class="hl kwd">labs</span><span class="hl std">(</span><span class="hl kwc">y</span><span class="hl std">=</span><span class="hl str">&quot;Probability density (given observed results)&quot;</span><span class="hl std">,</span> <span class="hl kwc">x</span><span class="hl std">=</span><span class="hl str">&quot;Cutoff&quot;</span><span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_vline</span><span class="hl std">(</span><span class="hl kwc">xintercept</span> <span class="hl std">= percentile_2.5,</span> <span class="hl kwc">color</span> <span class="hl std">=</span> <span class="hl str">&quot;red&quot;</span><span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_vline</span><span class="hl std">(</span><span class="hl kwc">xintercept</span> <span class="hl std">= percentile_97.5,</span> <span class="hl kwc">color</span> <span class="hl std">=</span> <span class="hl str">&quot;red&quot;</span><span class="hl std">)</span>
+</pre></div>
+<div class="warning"><pre class="knitr r">## Warning: Removed 1 rows containing missing values (`geom_vline()`).
+</pre></div>
+<div class="warning"><pre class="knitr r">## Warning: Removed 1 rows containing missing values (`geom_vline()`).
+</pre></div>
+</div><div class="rimage center"><img src="figure/previous-results-probabilities-Rhtmlauto-report-7.png" alt="plot of chunk auto-report" class="plot" /></div><div class="rcode">
+<div class="source"><pre class="knitr r"><span class="hl std">cutoff</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">mean</span><span class="hl std">(residual_by_cutoff</span><span class="hl opt">$</span><span class="hl std">cutoffs[</span><span class="hl kwd">which</span><span class="hl std">(residual_by_cutoff</span><span class="hl opt">$</span><span class="hl std">residuals</span> <span class="hl opt">==</span> <span class="hl kwd">min</span><span class="hl std">(residual_by_cutoff</span><span class="hl opt">$</span><span class="hl std">residuals))])</span>
+
+<span class="hl com"># Now we know the region to search in</span>
+<span class="hl std">targeted_range</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">targeted_piecewise_residual</span><span class="hl std">(previous_results</span><span class="hl opt">$</span><span class="hl std">`winning team`,</span>
+                                              <span class="hl std">previous_results</span><span class="hl opt">$</span><span class="hl std">score_dif,</span> <span class="hl num">50000</span><span class="hl std">, cutoff</span> <span class="hl opt">-</span> <span class="hl num">5</span><span class="hl std">, cutoff</span> <span class="hl opt">+</span> <span class="hl num">5</span><span class="hl std">,</span>
+                                              <span class="hl std">piecewise_probability)</span>
+<span class="hl com"># Accurate to three decimal places - because we searched </span>
+<span class="hl com"># a range of length 10 in 50,000 intervals</span>
+<span class="hl std">cutoff</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">round</span><span class="hl std">(</span><span class="hl kwd">mean</span><span class="hl std">(targeted_range</span><span class="hl opt">$</span><span class="hl std">cutoffs[</span><span class="hl kwd">which</span><span class="hl std">(targeted_range</span><span class="hl opt">$</span><span class="hl std">residuals</span> <span class="hl opt">==</span> <span class="hl kwd">min</span><span class="hl std">(targeted_range</span><span class="hl opt">$</span><span class="hl std">residuals))]),</span><span class="hl num">3</span><span class="hl std">)</span>
+
+
+<span class="hl std">p_distribution</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">read.csv</span><span class="hl std">(</span><span class="hl str">&quot;../PROCESSED_DATA/p_cutoff_distribution_demo.csv&quot;</span><span class="hl std">)</span>
+<span class="hl com"># Proof-of-concept simulation:</span>
+<span class="hl com"># WARNING: TAKES 5 MINUTES TO RUN (if you uncomment it)</span>
+<span class="hl com"># p_distribution &lt;- append(p_distribution,cutoff_distribution(cutoff, 10000, 200, score_sd, piecewise_probability))</span>
+
+<span class="hl kwd">ggplot</span><span class="hl std">(</span><span class="hl kwd">data.frame</span><span class="hl std">(p_distribution),</span> <span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span><span class="hl std">=p_distribution))</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_histogram</span><span class="hl std">(</span><span class="hl kwc">binwidth</span><span class="hl std">=</span><span class="hl num">0.5</span><span class="hl std">,</span> <span class="hl kwc">color</span><span class="hl std">=</span><span class="hl str">&quot;grey50&quot;</span><span class="hl std">,</span> <span class="hl kwc">fill</span><span class="hl std">=</span><span class="hl str">&quot;lightblue&quot;</span><span class="hl std">,</span> <span class="hl kwc">alpha</span><span class="hl std">=</span><span class="hl num">0.8</span><span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl kwd">theme_minimal</span><span class="hl std">()</span> <span class="hl opt">+</span>
+  <span class="hl kwd">stat_function</span><span class="hl std">(</span><span class="hl kwc">fun</span> <span class="hl std">=</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">x</span><span class="hl std">){</span><span class="hl kwd">dnorm</span><span class="hl std">(x,</span><span class="hl kwc">mean</span> <span class="hl std">=</span> <span class="hl kwd">mean</span><span class="hl std">(p_distribution</span><span class="hl opt">$</span><span class="hl std">p_distribution),</span>
+                                        <span class="hl kwc">sd</span> <span class="hl std">=</span> <span class="hl kwd">sd</span><span class="hl std">(p_distribution</span><span class="hl opt">$</span><span class="hl std">p_distribution))}</span><span class="hl opt">*</span><span class="hl kwd">length</span><span class="hl std">(p_distribution</span><span class="hl opt">$</span><span class="hl std">p_distribution)</span><span class="hl opt">*</span><span class="hl num">0.5</span><span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_vline</span><span class="hl std">(</span><span class="hl kwc">xintercept</span> <span class="hl std">= cutoff,</span> <span class="hl kwc">color</span><span class="hl std">=</span><span class="hl str">&quot;red&quot;</span><span class="hl std">)</span>
+</pre></div>
+</div><div class="rimage center"><img src="figure/previous-results-probabilities-Rhtmlauto-report-8.png" alt="plot of chunk auto-report" class="plot" /></div><div class="rcode">
+<div class="source"><pre class="knitr r"><span class="hl com"># Plot shows a little bias on the mean, but none on the mode - </span>
+<span class="hl com"># seems acceptable</span>
+
+<span class="hl com"># write.csv(data.frame(p_distribution),&quot;../PROCESSED_DATA/p_cutoff_distribution_demo.csv&quot;)</span>
+
+<span class="hl com"># Now we want probabilities of winning at different score</span>
+<span class="hl com"># differences, given this distribution of cutoffs - the mean chance</span>
+<span class="hl com"># of winning, given that we observed this distribution.</span>
+
+<span class="hl com"># We'll round to 2 decimal places and evaluate integrals with</span>
+<span class="hl com"># subintervals of 0.01, because those are the gradations on the</span>
+<span class="hl com"># score data we have</span>
+<span class="hl std">rounding_places</span> <span class="hl kwb">&lt;-</span> <span class="hl num">2</span>
+
+<span class="hl com">## Takes ~3 minutes to run (if you uncomment it)</span>
+
+<span class="hl com"># This code just runs all the computations. We stored it so</span>
+<span class="hl com"># we don't have to recalculate it every time.</span>
+<span class="hl com"># It just goes through and for a given score difference, adds up</span>
+<span class="hl com"># the products of winning under a given model times our confidence</span>
+<span class="hl com"># of that model being true under these observations.</span>
+
+<span class="hl com"># chance_winning &lt;- c()</span>
+<span class="hl com"># score_difs &lt;- c()</span>
+<span class="hl com"># score_step_size &lt;- 10^{-1*rounding_places}</span>
+<span class="hl com"># current_score_dif &lt;- min(previous_results$score_dif)</span>
+<span class="hl com"># no_zeros &lt;- filter(probs_by_cutoff,residuals&gt;0)</span>
+<span class="hl com"># for(j in 1:ceiling((max(previous_results$score_dif)</span>
+<span class="hl com">#                  - min(previous_results$score_dif))/score_step_size)) {</span>
+<span class="hl com">#   score_difs &lt;- append(score_difs,round(current_score_dif, rounding_places))</span>
+<span class="hl com">#   current_sum &lt;- 0</span>
+<span class="hl com">#   for(i in 1:nrow(no_zeros)) {</span>
+<span class="hl com">#       current_sum &lt;- current_sum + no_zeros[i,2] * piecewise_predict(</span>
+<span class="hl com">#         current_score_dif, no_zeros[i,1])</span>
+<span class="hl com">#   }</span>
+<span class="hl com">#   chance_winning &lt;- append(chance_winning,current_sum * probs_by_cutoff$cutoffs[2])</span>
+<span class="hl com">#   current_score_dif &lt;- current_score_dif + score_step_size</span>
+<span class="hl com"># }</span>
+<span class="hl com"># win_chances &lt;- data.frame(score_difs,chance_winning)</span>
+<span class="hl com"># write_csv(win_chances,&quot;../PROCESSED_DATA/confidence_win_rates.csv&quot;)</span>
+
+<span class="hl std">win_chances</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">read_csv</span><span class="hl std">(</span><span class="hl str">&quot;../PROCESSED_DATA/confidence_win_rates.csv&quot;</span><span class="hl std">)</span>
+</pre></div>
+<div class="message"><pre class="knitr r">## Rows: 13541 Columns: 2
+## ── Column specification ──────────────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## dbl (2): score_difs, chance_winning
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com"># This is what our probability curve looks like after accounting</span>
+<span class="hl com"># for our confidence distribution in true cutoffs</span>
+<span class="hl kwd">ggplot</span><span class="hl std">(win_chances,</span> <span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span><span class="hl std">=score_difs,</span> <span class="hl kwc">y</span><span class="hl std">=chance_winning))</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_point</span><span class="hl std">()</span> <span class="hl opt">+</span>
+  <span class="hl kwd">theme_minimal</span><span class="hl std">()</span> <span class="hl opt">+</span>
+  <span class="hl kwd">labs</span><span class="hl std">(</span><span class="hl kwc">y</span><span class="hl std">=</span><span class="hl str">&quot;Chance of winning (given observed dist.)&quot;</span><span class="hl std">,</span> <span class="hl kwc">x</span><span class="hl std">=</span><span class="hl str">&quot;Score difference&quot;</span><span class="hl std">)</span>
+</pre></div>
+</div><div class="rimage center"><img src="figure/previous-results-probabilities-Rhtmlauto-report-9.png" alt="plot of chunk auto-report" class="plot" /></div><div class="rcode">
+<div class="source"><pre class="knitr r"><span class="hl com"># Example use of success_measures</span>
+<span class="hl kwd">success_measures</span><span class="hl std">(win_chances</span><span class="hl opt">$</span><span class="hl std">chance_winning,win_chances</span><span class="hl opt">$</span><span class="hl std">score_difs,</span>
+                 <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">x</span><span class="hl std">){</span><span class="hl kwd">dnorm</span><span class="hl std">(x,</span><span class="hl kwc">mean</span><span class="hl std">=</span><span class="hl num">50</span><span class="hl std">,</span><span class="hl kwc">sd</span><span class="hl std">=</span><span class="hl num">15</span><span class="hl std">)},</span>
+                 <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">x</span><span class="hl std">){</span><span class="hl kwd">pnorm</span><span class="hl std">(x,</span><span class="hl kwc">mean</span><span class="hl std">=</span><span class="hl num">50</span><span class="hl std">,</span><span class="hl kwc">sd</span><span class="hl std">=</span><span class="hl num">15</span><span class="hl std">,</span><span class="hl kwc">lower.tail</span> <span class="hl std">=</span> <span class="hl num">FALSE</span><span class="hl std">)},</span>
+                 <span class="hl std">match_ups,</span><span class="hl num">2</span><span class="hl std">,</span><span class="hl num">5</span><span class="hl std">,</span><span class="hl num">95</span><span class="hl std">)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] 3.926551e+00 2.024547e-17
+</pre></div>
+</div></div>
+
+  <p>The R session information (including the OS info, R version and all
+    packages used):</p>
+
+<div class="chunk" id="session-info"><div class="rcode"><div class="source"><pre class="knitr r">    <span class="hl kwd">sessionInfo</span><span class="hl std">()</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## R version 4.2.2 (2022-10-31)
+## Platform: aarch64-apple-darwin20 (64-bit)
+## Running under: macOS Monterey 12.6
+## 
+## Matrix products: default
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/lib/libRlapack.dylib
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+##  [1] tinytex_0.43    MASS_7.3-58.1   rstudioapi_0.14 haven_2.5.1     lubridate_1.9.2
+##  [6] forcats_1.0.0   stringr_1.5.0   dplyr_1.1.0     purrr_1.0.1     readr_2.1.4    
+## [11] tidyr_1.3.0     tibble_3.1.8    ggplot2_3.4.1   tidyverse_2.0.0
+## 
+## loaded via a namespace (and not attached):
+##  [1] highr_0.10       pillar_1.8.1     compiler_4.2.2   tools_4.2.2      bit_4.0.5       
+##  [6] evaluate_0.19    lattice_0.20-45  nlme_3.1-160     lifecycle_1.0.3  gtable_0.3.1    
+## [11] timechange_0.2.0 mgcv_1.8-41      pkgconfig_2.0.3  rlang_1.0.6      Matrix_1.5-1    
+## [16] cli_3.6.0        parallel_4.2.2   xfun_0.36        knitr_1.41       withr_2.5.0     
+## [21] generics_0.1.3   vctrs_0.5.2      hms_1.1.2        bit64_4.0.5      grid_4.2.2      
+## [26] tidyselect_1.2.0 glue_1.6.2       R6_2.5.1         fansi_1.0.3      vroom_1.6.0     
+## [31] farver_2.1.1     tzdb_0.3.0       magrittr_2.0.3   splines_4.2.2    scales_1.2.1    
+## [36] ellipsis_0.3.2   colorspace_2.0-3 labeling_0.4.2   utf8_1.2.2       stringi_1.7.12  
+## [41] munsell_0.5.0    crayon_1.5.2
+</pre></div>
+<div class="source"><pre class="knitr r">    <span class="hl kwd">Sys.time</span><span class="hl std">()</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] &quot;2023-03-20 00:09:07 PDT&quot;
+</pre></div>
+</div></div>
+
+
+</body>
+</html>

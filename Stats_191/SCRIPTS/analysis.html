@@ -1,0 +1,1251 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+.inline {
+  background-color: #f7f7f7;
+  border:solid 1px #B0B0B0;
+}
+.error {
+	font-weight: bold;
+	color: #FF0000;
+}
+.warning {
+	font-weight: bold;
+}
+.message {
+	font-style: italic;
+}
+.source, .output, .warning, .error, .message {
+	padding: 0 1em;
+  border:solid 1px #F7F7F7;
+}
+.source {
+  background-color: #f5f5f5;
+}
+.left {
+  text-align: left;
+}
+.right {
+  text-align: right;
+}
+.center {
+  text-align: center;
+}
+.hl.num {
+  color: #AF0F91;
+}
+.hl.str {
+  color: #317ECC;
+}
+.hl.com {
+  color: #AD95AF;
+  font-style: italic;
+}
+.hl.opt {
+  color: #000000;
+}
+.hl.std {
+  color: #585858;
+}
+.hl.kwa {
+  color: #295F94;
+  font-weight: bold;
+}
+.hl.kwb {
+  color: #B05A65;
+}
+.hl.kwc {
+  color: #55aa55;
+}
+.hl.kwd {
+  color: #BC5A65;
+  font-weight: bold;
+}
+</style>
+  <script src="https://yihui.name/media/js/center-images.js"></script>
+  <title>\title{}</title>
+</head>
+<body>
+
+  <p>This report is automatically generated with the R
+    package <a href="https://yihui.name/knitr/"><strong>knitr</strong></a>
+    (version <code class="knitr inline">1.41</code>)
+    .</p>
+
+<div class="chunk" id="unnamed-chunk-1"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com"># Install packages (uncomment and run when needed)</span>
+<span class="hl com"># install.packages('tidyverse')</span>
+<span class="hl com"># install.packages('haven')</span>
+
+<span class="hl com"># Libraries and helpers</span>
+<span class="hl kwd">library</span><span class="hl std">(tidyverse)</span>
+<span class="hl kwd">library</span><span class="hl std">(haven)</span>
+<span class="hl kwd">library</span><span class="hl std">(rstudioapi)</span>
+<span class="hl kwd">library</span><span class="hl std">(MASS)</span>
+
+<span class="hl com"># Adjust wd</span>
+<span class="hl std">file_path</span> <span class="hl kwb">&lt;-</span> <span class="hl std">rstudioapi</span><span class="hl opt">::</span><span class="hl kwd">getSourceEditorContext</span><span class="hl std">()</span><span class="hl opt">$</span><span class="hl std">path</span>
+<span class="hl kwd">setwd</span><span class="hl std">(</span><span class="hl kwd">dirname</span><span class="hl std">(file_path))</span>
+
+<span class="hl com"># Import helpers</span>
+<span class="hl kwd">source</span><span class="hl std">(</span><span class="hl str">&quot;helper_functions.R&quot;</span><span class="hl std">)</span>
+
+<span class="hl com"># Import processed data</span>
+<span class="hl std">normalized_games</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">read_csv</span><span class="hl std">(</span><span class="hl str">&quot;../PROCESSED_DATA/processed_normalized_all_games.csv&quot;</span><span class="hl std">)</span>
+</pre></div>
+<div class="message"><pre class="knitr r">## Rows: 10000 Columns: 17
+## ── Column specification ──────────────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr  (4): coast, game scheduled, early bird/night owl, previous competitive sports
+## dbl (13): student label, game score, percent training sessions attended, overall fitne...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl std">all_games</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">read_csv</span><span class="hl std">(</span><span class="hl str">&quot;../PROCESSED_DATA/processed_all_games.csv&quot;</span><span class="hl std">)</span>
+</pre></div>
+<div class="message"><pre class="knitr r">## Rows: 10000 Columns: 25
+## ── Column specification ──────────────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr  (4): coast, game scheduled, early bird/night owl, previous competitive sports
+## dbl (21): student label, game score, percent training sessions attended, overall fitne...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl std">previous_results</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">read_csv</span><span class="hl std">(</span><span class="hl str">&quot;../PROCESSED_DATA/processed_previous_results.csv&quot;</span><span class="hl std">)</span>
+</pre></div>
+<div class="message"><pre class="knitr r">## Rows: 200 Columns: 5
+## ── Column specification ──────────────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## dbl (5): game label, team 1 score, team 2 score, winning team, score_dif
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl std">match_ups</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">read_csv</span><span class="hl std">(</span><span class="hl str">&quot;../RAW_DATA/season_match_up.csv&quot;</span><span class="hl std">)</span>
+</pre></div>
+<div class="message"><pre class="knitr r">## Rows: 1 Columns: 21
+## ── Column specification ──────────────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr  (1): team label
+## dbl (20): 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl std">match_ups</span> <span class="hl kwb">&lt;-</span> <span class="hl std">match_ups[</span><span class="hl num">1</span><span class="hl std">,</span><span class="hl num">2</span><span class="hl opt">:</span><span class="hl num">20</span><span class="hl std">]</span>
+
+<span class="hl com">## Preliminary transformations and regressions</span>
+
+<span class="hl com"># Do regressions on all relevant covariates and add</span>
+<span class="hl com"># the predicted values and residuals into the dataframes</span>
+
+<span class="hl com"># Because night_owl interacts with the evening and morning variables,</span>
+<span class="hl com"># we need to add extra terms to account for the cross-variable</span>
+<span class="hl com"># interaction - this makes sense, because being a night owl affects</span>
+<span class="hl com"># your performance differently based on the time of day</span>
+<span class="hl std">overallmodel</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">lm</span><span class="hl std">(`game score`</span> <span class="hl opt">~</span> <span class="hl std">`percent training sessions attended`</span>
+                   <span class="hl opt">+</span> <span class="hl std">`overall fitness score`</span>
+                   <span class="hl opt">+</span> <span class="hl std">`# extra strategy sessions attended`</span>
+                   <span class="hl opt">+</span> <span class="hl std">`hours of sleep the night before game`</span>
+                   <span class="hl opt">+</span> <span class="hl std">`# meals on day prior to game`</span>
+                   <span class="hl opt">+</span> <span class="hl std">`university year`</span>
+                   <span class="hl opt">+</span> <span class="hl std">`curling`</span> <span class="hl opt">+</span> <span class="hl std">`gymnastics`</span> <span class="hl opt">+</span> <span class="hl std">`baseball`</span> <span class="hl opt">+</span> <span class="hl std">`martial_arts`</span>
+                   <span class="hl opt">+</span> <span class="hl std">`frisbee`</span> <span class="hl opt">+</span> <span class="hl std">`table_tennis`</span> <span class="hl opt">+</span> <span class="hl std">`basketball`</span>
+                   <span class="hl opt">+</span> <span class="hl std">evening</span> <span class="hl opt">+</span> <span class="hl std">morning</span> <span class="hl opt">+</span> <span class="hl std">night_owl</span>
+                   <span class="hl opt">+</span> <span class="hl std">night_owl</span> <span class="hl opt">*</span> <span class="hl std">morning</span> <span class="hl opt">+</span> <span class="hl std">night_owl</span> <span class="hl opt">*</span> <span class="hl std">evening,</span>
+                   <span class="hl kwc">data</span><span class="hl std">=all_games)</span>
+<span class="hl kwd">summary</span><span class="hl std">(overallmodel)</span> <span class="hl com"># Run lines like this again to see the model</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## 
+## Call:
+## lm(formula = `game score` ~ `percent training sessions attended` + 
+##     `overall fitness score` + `# extra strategy sessions attended` + 
+##     `hours of sleep the night before game` + `# meals on day prior to game` + 
+##     `university year` + curling + gymnastics + baseball + martial_arts + 
+##     frisbee + table_tennis + basketball + evening + morning + 
+##     night_owl + night_owl * morning + night_owl * evening, data = all_games)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -34.493  -7.032  -0.371   6.625 101.483 
+## 
+## Coefficients:
+##                                        Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                             2.53884    0.75278   3.373 0.000747 ***
+## `percent training sessions attended`   26.80310    0.32129  83.423  &lt; 2e-16 ***
+## `overall fitness score`                22.54530    0.32902  68.522  &lt; 2e-16 ***
+## `# extra strategy sessions attended`    1.54357    0.04119  37.470  &lt; 2e-16 ***
+## `hours of sleep the night before game`  0.33426    0.03299  10.132  &lt; 2e-16 ***
+## `# meals on day prior to game`         -0.84742    0.09338  -9.075  &lt; 2e-16 ***
+## `university year`                       0.03513    0.13357   0.263 0.792527    
+## curling                                -0.59852    0.42401  -1.412 0.158113    
+## gymnastics                             -2.09892    0.55520  -3.780 0.000157 ***
+## baseball                               -1.24266    0.45112  -2.755 0.005886 ** 
+## martial_arts                            4.94071    0.44492  11.105  &lt; 2e-16 ***
+## frisbee                                 5.47228    0.45988  11.899  &lt; 2e-16 ***
+## table_tennis                           -0.70959    0.43318  -1.638 0.101434    
+## basketball                              5.06037    0.53900   9.388  &lt; 2e-16 ***
+## evening                                -0.38195    0.68511  -0.558 0.577195    
+## morning                                 7.71937    0.92515   8.344  &lt; 2e-16 ***
+## night_owl                               0.94990    0.36917   2.573 0.010095 *  
+## morning:night_owl                      -8.20912    1.02030  -8.046 9.54e-16 ***
+## evening:night_owl                       7.28970    0.75183   9.696  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 11.45 on 9981 degrees of freedom
+## Multiple R-squared:  0.6814,	Adjusted R-squared:  0.6808 
+## F-statistic:  1186 on 18 and 9981 DF,  p-value: &lt; 2.2e-16
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl std">all_games</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">subset</span><span class="hl std">(</span><span class="hl kwd">cbind</span><span class="hl std">(all_games,</span><span class="hl kwd">predict</span><span class="hl std">(overallmodel,</span> <span class="hl kwc">se.fit</span> <span class="hl std">=</span> <span class="hl num">TRUE</span><span class="hl std">))</span> <span class="hl opt">%&gt;%</span>
+                      <span class="hl kwd">mutate</span><span class="hl std">(</span><span class="hl kwc">residual</span> <span class="hl std">= `game score`</span> <span class="hl opt">-</span> <span class="hl std">`fit`),</span> <span class="hl kwc">select</span> <span class="hl std">=</span> <span class="hl opt">-</span><span class="hl kwd">c</span><span class="hl std">(`df`,`residual.scale`))</span>
+
+<span class="hl std">normalizedmodel</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">lm</span><span class="hl std">(`game score`</span> <span class="hl opt">~</span> <span class="hl std">`percent training sessions attended`</span>
+                      <span class="hl opt">+</span> <span class="hl std">`overall fitness score`</span>
+                      <span class="hl opt">+</span> <span class="hl std">`# extra strategy sessions attended`</span>
+                      <span class="hl opt">+</span> <span class="hl std">`hours of sleep the night before game`</span>
+                      <span class="hl opt">+</span> <span class="hl std">`# meals on day prior to game`</span>
+                      <span class="hl opt">+</span> <span class="hl std">`university year`</span>
+                      <span class="hl opt">+</span> <span class="hl std">evening</span> <span class="hl opt">+</span> <span class="hl std">morning</span> <span class="hl opt">+</span> <span class="hl std">night_owl,</span>
+                      <span class="hl kwc">data</span><span class="hl std">=normalized_games)</span>
+
+<span class="hl kwd">summary</span><span class="hl std">(normalizedmodel)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## 
+## Call:
+## lm(formula = `game score` ~ `percent training sessions attended` + 
+##     `overall fitness score` + `# extra strategy sessions attended` + 
+##     `hours of sleep the night before game` + `# meals on day prior to game` + 
+##     `university year` + evening + morning + night_owl, data = normalized_games)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -36.951  -7.426  -0.168   7.060 100.400 
+## 
+## Coefficients:
+##                                        Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                             5.73175    0.65774   8.714  &lt; 2e-16 ***
+## `percent training sessions attended`   27.27642    0.33164  82.247  &lt; 2e-16 ***
+## `overall fitness score`                24.76341    0.32356  76.533  &lt; 2e-16 ***
+## `# extra strategy sessions attended`    1.41283    0.04220  33.483  &lt; 2e-16 ***
+## `hours of sleep the night before game`  0.31872    0.03411   9.344  &lt; 2e-16 ***
+## `# meals on day prior to game`         -1.36861    0.09353 -14.633  &lt; 2e-16 ***
+## `university year`                      -0.43773    0.13536  -3.234  0.00123 ** 
+## evening                                 5.72868    0.29238  19.593  &lt; 2e-16 ***
+## morning                                 0.99846    0.40341   2.475  0.01334 *  
+## night_owl                               1.77506    0.31569   5.623 1.93e-08 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 11.86 on 9990 degrees of freedom
+## Multiple R-squared:  0.658,	Adjusted R-squared:  0.6577 
+## F-statistic:  2136 on 9 and 9990 DF,  p-value: &lt; 2.2e-16
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl std">normalized_games</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">subset</span><span class="hl std">(</span><span class="hl kwd">cbind</span><span class="hl std">(normalized_games,</span><span class="hl kwd">predict</span><span class="hl std">(normalizedmodel,</span> <span class="hl kwc">se.fit</span> <span class="hl std">=</span> <span class="hl num">TRUE</span><span class="hl std">))</span> <span class="hl opt">%&gt;%</span>
+                             <span class="hl kwd">mutate</span><span class="hl std">(</span><span class="hl kwc">residual</span> <span class="hl std">= `game score`</span> <span class="hl opt">-</span> <span class="hl std">fit),</span> <span class="hl kwc">select</span> <span class="hl std">=</span> <span class="hl opt">-</span><span class="hl kwd">c</span><span class="hl std">(df,residual.scale))</span>
+
+<span class="hl com">####################################################################################</span>
+<span class="hl com"># OUTLIER DETECTION</span>
+
+<span class="hl com"># Begin by generating frequency distributions for all covariates in order to identify</span>
+<span class="hl com"># high-leverage points.</span>
+
+<span class="hl kwd">multi_histogram</span><span class="hl std">(all_games,</span> <span class="hl kwc">cols</span> <span class="hl std">=</span> <span class="hl kwd">c</span><span class="hl std">(</span><span class="hl str">&quot;hours of sleep the night before game&quot;</span><span class="hl std">,</span>
+                                    <span class="hl str">&quot;# meals on day prior to game&quot;</span><span class="hl std">,</span>
+                                    <span class="hl str">&quot;overall fitness score&quot;</span><span class="hl std">))</span>
+
+<span class="hl com">####################################################################################</span>
+<span class="hl com"># TRANSFORMATIONS AND RESIDUALS</span>
+
+<span class="hl com"># We want to plot the residuals of our model's game score predictions against the</span>
+<span class="hl com"># predictions themselves. Let's extract this from all_games and create a scatterplot.</span>
+
+<span class="hl kwd">png</span><span class="hl std">(</span><span class="hl str">&quot;../OUTPUTS/initial_residuals.png&quot;</span><span class="hl std">)</span>
+<span class="hl std">all_games_residuals</span> <span class="hl kwb">&lt;-</span> <span class="hl std">dplyr</span><span class="hl opt">::</span><span class="hl kwd">select</span><span class="hl std">(all_games, `fit`, `se.fit`, `residual`)</span>
+<span class="hl std">all_games_residuals</span> <span class="hl kwb">&lt;-</span> <span class="hl std">all_games_residuals</span> <span class="hl opt">%&gt;%</span> <span class="hl kwd">mutate</span><span class="hl std">(</span><span class="hl kwc">standard_residuals</span> <span class="hl std">=</span> <span class="hl kwd">rstandard</span><span class="hl std">(overallmodel))</span>
+<span class="hl kwd">ggplot</span><span class="hl std">(all_games_residuals,</span> <span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span> <span class="hl std">= fit,</span> <span class="hl kwc">y</span> <span class="hl std">= standard_residuals))</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_point</span><span class="hl std">(</span><span class="hl kwc">color</span> <span class="hl std">=</span> <span class="hl str">'red'</span><span class="hl std">)</span>
+<span class="hl kwd">dev.off</span><span class="hl std">()</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## RStudioGD 
+##         2
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">############################# ARCSIN TRANSFORM #########################################</span>
+<span class="hl std">arcsin_games</span> <span class="hl kwb">&lt;-</span> <span class="hl std">all_games</span>
+</pre></div>
+</div><div class="rimage center"><img src="figure/analysis-Rhtmlunnamed-chunk-1-1.png" alt="plot of chunk unnamed-chunk-1" class="plot" /></div><div class="rcode">
+<div class="source"><pre class="knitr r"><span class="hl std">arcsin_games</span> <span class="hl kwb">&lt;-</span> <span class="hl std">arcsin_games</span> <span class="hl opt">%&gt;%</span> <span class="hl kwd">mutate</span><span class="hl std">(</span><span class="hl kwc">arcsin_scores</span> <span class="hl std">=</span> <span class="hl kwd">asinh</span><span class="hl std">(`game score`))</span>
+
+<span class="hl std">arcsinmodel</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">lm</span><span class="hl std">(`arcsin_scores`</span> <span class="hl opt">~</span> <span class="hl std">`percent training sessions attended`</span>
+                      <span class="hl opt">+</span> <span class="hl std">`overall fitness score`</span>
+                      <span class="hl opt">+</span> <span class="hl std">`# extra strategy sessions attended`</span>
+                      <span class="hl opt">+</span> <span class="hl std">`hours of sleep the night before game`</span>
+                      <span class="hl opt">+</span> <span class="hl std">`# meals on day prior to game`</span>
+                      <span class="hl opt">+</span> <span class="hl std">`university year`</span>
+                      <span class="hl opt">+</span> <span class="hl std">evening</span> <span class="hl opt">+</span> <span class="hl std">morning</span> <span class="hl opt">+</span> <span class="hl std">night_owl</span>
+                      <span class="hl opt">+</span> <span class="hl std">night_owl</span> <span class="hl opt">*</span> <span class="hl std">morning</span> <span class="hl opt">+</span> <span class="hl std">night_owl</span> <span class="hl opt">*</span> <span class="hl std">evening,</span>
+                      <span class="hl kwc">data</span><span class="hl std">=arcsin_games)</span>
+
+<span class="hl kwd">summary</span><span class="hl std">(arcsinmodel)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## 
+## Call:
+## lm(formula = arcsin_scores ~ `percent training sessions attended` + 
+##     `overall fitness score` + `# extra strategy sessions attended` + 
+##     `hours of sleep the night before game` + `# meals on day prior to game` + 
+##     `university year` + evening + morning + night_owl + night_owl * 
+##     morning + night_owl * evening, data = arcsin_games)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.9822 -0.1591  0.0911  0.3622  2.9747 
+## 
+## Coefficients:
+##                                         Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                             2.796848   0.047768  58.551  &lt; 2e-16 ***
+## `percent training sessions attended`    1.137294   0.023099  49.235  &lt; 2e-16 ***
+## `overall fitness score`                 0.897730   0.022520  39.863  &lt; 2e-16 ***
+## `# extra strategy sessions attended`    0.066627   0.002939  22.668  &lt; 2e-16 ***
+## `hours of sleep the night before game`  0.024717   0.002375  10.409  &lt; 2e-16 ***
+## `# meals on day prior to game`         -0.080817   0.006527 -12.382  &lt; 2e-16 ***
+## `university year`                      -0.021636   0.009478  -2.283   0.0225 *  
+## evening                                -0.001369   0.049401  -0.028   0.9779    
+## morning                                 0.360140   0.066692   5.400 6.82e-08 ***
+## night_owl                               0.006438   0.026607   0.242   0.8088    
+## morning:night_owl                      -0.381085   0.073543  -5.182 2.24e-07 ***
+## evening:night_owl                       0.325032   0.054215   5.995 2.10e-09 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.8259 on 9988 degrees of freedom
+## Multiple R-squared:  0.4077,	Adjusted R-squared:  0.4071 
+## F-statistic:   625 on 11 and 9988 DF,  p-value: &lt; 2.2e-16
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl std">arcsin_games</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">subset</span><span class="hl std">(arcsin_games,</span> <span class="hl kwc">select</span> <span class="hl std">=</span> <span class="hl opt">-</span><span class="hl kwd">c</span><span class="hl std">(`fit`, `residual`, `se.fit`))</span>
+<span class="hl std">arcsin_games</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">subset</span><span class="hl std">(</span><span class="hl kwd">cbind</span><span class="hl std">(arcsin_games,</span><span class="hl kwd">predict</span><span class="hl std">(arcsinmodel,</span> <span class="hl kwc">se.fit</span> <span class="hl std">=</span> <span class="hl num">TRUE</span><span class="hl std">))</span> <span class="hl opt">%&gt;%</span>
+                      <span class="hl kwd">mutate</span><span class="hl std">(</span><span class="hl kwc">standard_residual</span> <span class="hl std">= `arcsin_scores`</span> <span class="hl opt">-</span> <span class="hl std">`fit`),</span> <span class="hl kwc">select</span> <span class="hl std">=</span> <span class="hl opt">-</span><span class="hl kwd">c</span><span class="hl std">(`df`,`residual.scale`))</span>
+
+<span class="hl std">arcsin_games</span><span class="hl opt">$</span><span class="hl std">`residual`</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">rstandard</span><span class="hl std">(arcsinmodel)</span>
+
+<span class="hl kwd">png</span><span class="hl std">(</span><span class="hl str">&quot;../OUTPUTS/arcsin_residuals.png&quot;</span><span class="hl std">)</span>
+
+<span class="hl kwd">ggplot</span><span class="hl std">(arcsin_games,</span> <span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span> <span class="hl std">= fit,</span> <span class="hl kwc">y</span> <span class="hl std">= standard_residual))</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_point</span><span class="hl std">(</span><span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">color</span> <span class="hl std">= night_owl))</span> <span class="hl opt">+</span>
+  <span class="hl kwd">ggtitle</span><span class="hl std">(</span><span class="hl str">&quot;Residuals of arcsin(score)&quot;</span><span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl kwd">theme</span><span class="hl std">(</span><span class="hl kwc">plot.title</span> <span class="hl std">=</span> <span class="hl kwd">element_text</span><span class="hl std">(</span><span class="hl kwc">hjust</span> <span class="hl std">=</span> <span class="hl num">0.5</span><span class="hl std">,</span> <span class="hl kwc">vjust</span> <span class="hl std">=</span> <span class="hl num">0.5</span><span class="hl std">))</span>
+
+<span class="hl kwd">dev.off</span><span class="hl std">()</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## RStudioGD 
+##         2
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">#################################### BOXCOX #######################################</span>
+<span class="hl std">boxcox_all_games</span> <span class="hl kwb">&lt;-</span> <span class="hl std">all_games</span>
+
+<span class="hl com"># Ensure that all responses (scores) are above zero</span>
+<span class="hl std">boxcox_all_games</span><span class="hl opt">$</span><span class="hl std">`game score`</span> <span class="hl kwb">&lt;-</span> <span class="hl std">boxcox_all_games</span><span class="hl opt">$</span><span class="hl std">`game score`</span> <span class="hl opt">+</span> <span class="hl num">0.001</span>
+
+<span class="hl com"># boxcox() requires a linear model arg lm(), for some reason.</span>
+<span class="hl std">boxcox_overall_model</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">lm</span><span class="hl std">(`game score`</span> <span class="hl opt">~</span> <span class="hl std">`percent training sessions attended`</span>
+                           <span class="hl opt">+</span> <span class="hl std">`overall fitness score`</span>
+                           <span class="hl opt">+</span> <span class="hl std">`# extra strategy sessions attended`</span>
+                           <span class="hl opt">+</span> <span class="hl std">`hours of sleep the night before game`</span>
+                           <span class="hl opt">+</span> <span class="hl std">`# meals on day prior to game`</span>
+                           <span class="hl opt">+</span> <span class="hl std">`university year`</span>
+                           <span class="hl opt">+</span> <span class="hl std">`curling`</span> <span class="hl opt">+</span> <span class="hl std">`gymnastics`</span> <span class="hl opt">+</span> <span class="hl std">`baseball`</span> <span class="hl opt">+</span> <span class="hl std">`martial_arts`</span>
+                           <span class="hl opt">+</span> <span class="hl std">`frisbee`</span> <span class="hl opt">+</span> <span class="hl std">`table_tennis`</span> <span class="hl opt">+</span> <span class="hl std">`basketball`</span>
+                           <span class="hl opt">+</span> <span class="hl std">evening</span> <span class="hl opt">+</span> <span class="hl std">morning</span> <span class="hl opt">+</span> <span class="hl std">night_owl</span>
+                           <span class="hl opt">+</span> <span class="hl std">night_owl</span> <span class="hl opt">*</span> <span class="hl std">morning</span> <span class="hl opt">+</span> <span class="hl std">night_owl</span> <span class="hl opt">*</span> <span class="hl std">evening,</span>
+                           <span class="hl kwc">data</span><span class="hl std">=boxcox_all_games)</span>
+
+<span class="hl com"># Find the optimal lambda</span>
+<span class="hl std">bc</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">boxcox</span><span class="hl std">(boxcox_overall_model)</span>
+</pre></div>
+</div><div class="rimage center"><img src="figure/analysis-Rhtmlunnamed-chunk-1-2.png" alt="plot of chunk unnamed-chunk-1" class="plot" /></div><div class="rcode">
+<div class="source"><pre class="knitr r"><span class="hl std">lambda</span> <span class="hl kwb">&lt;-</span> <span class="hl std">bc[[</span><span class="hl num">1</span><span class="hl std">]][</span><span class="hl kwd">which.max</span><span class="hl std">(bc[[</span><span class="hl num">2</span><span class="hl std">]])]</span> <span class="hl com"># This is the lambda we'll use for Box-Cox</span>
+
+<span class="hl com"># Transform the scores column</span>
+<span class="hl std">boxcox_all_games</span><span class="hl opt">$</span><span class="hl std">`game score`</span> <span class="hl kwb">&lt;-</span> <span class="hl std">((boxcox_all_games</span><span class="hl opt">$</span><span class="hl std">`game score`)</span><span class="hl opt">^</span><span class="hl std">(lambda)</span> <span class="hl opt">-</span> <span class="hl num">1</span><span class="hl std">)</span><span class="hl opt">/</span><span class="hl std">lambda</span>
+
+<span class="hl com"># Run regression with transformed scores</span>
+<span class="hl std">fin_boxcox_overall_model</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">lm</span><span class="hl std">(`game score`</span> <span class="hl opt">~</span> <span class="hl std">`percent training sessions attended`</span>
+                               <span class="hl opt">+</span> <span class="hl std">`overall fitness score`</span>
+                               <span class="hl opt">+</span> <span class="hl std">`# extra strategy sessions attended`</span>
+                               <span class="hl opt">+</span> <span class="hl std">`hours of sleep the night before game`</span>
+                               <span class="hl opt">+</span> <span class="hl std">`# meals on day prior to game`</span>
+                               <span class="hl opt">+</span> <span class="hl std">`university year`</span>
+                               <span class="hl opt">+</span> <span class="hl std">`curling`</span> <span class="hl opt">+</span> <span class="hl std">`gymnastics`</span> <span class="hl opt">+</span> <span class="hl std">`baseball`</span> <span class="hl opt">+</span> <span class="hl std">`martial_arts`</span>
+                               <span class="hl opt">+</span> <span class="hl std">`frisbee`</span> <span class="hl opt">+</span> <span class="hl std">`table_tennis`</span> <span class="hl opt">+</span> <span class="hl std">`basketball`</span>
+                               <span class="hl opt">+</span> <span class="hl std">evening</span> <span class="hl opt">+</span> <span class="hl std">morning</span> <span class="hl opt">+</span> <span class="hl std">night_owl</span>
+                               <span class="hl opt">+</span> <span class="hl std">night_owl</span> <span class="hl opt">*</span> <span class="hl std">morning</span> <span class="hl opt">+</span> <span class="hl std">night_owl</span> <span class="hl opt">*</span> <span class="hl std">evening,</span>
+                               <span class="hl kwc">data</span><span class="hl std">=boxcox_all_games)</span>
+
+<span class="hl com"># Fit the model and plot residuals</span>
+<span class="hl std">boxcox_all_games</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">subset</span><span class="hl std">(boxcox_all_games,</span> <span class="hl kwc">select</span> <span class="hl std">=</span><span class="hl opt">-</span><span class="hl kwd">c</span><span class="hl std">(`fit`, `se.fit`, `residual`))</span>
+<span class="hl std">boxcox_all_games</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">subset</span><span class="hl std">(</span><span class="hl kwd">cbind</span><span class="hl std">(boxcox_all_games,</span><span class="hl kwd">predict</span><span class="hl std">(fin_boxcox_overall_model,</span> <span class="hl kwc">se.fit</span> <span class="hl std">=</span> <span class="hl num">TRUE</span><span class="hl std">))</span> <span class="hl opt">%&gt;%</span>
+                      <span class="hl kwd">mutate</span><span class="hl std">(</span><span class="hl kwc">residual</span> <span class="hl std">= `game score`</span> <span class="hl opt">-</span> <span class="hl std">`fit`),</span> <span class="hl kwc">select</span> <span class="hl std">=</span> <span class="hl opt">-</span><span class="hl kwd">c</span><span class="hl std">(`df`,`residual.scale`))</span>
+
+<span class="hl std">standard_residuals</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">rstandard</span><span class="hl std">(fin_boxcox_overall_model)</span>
+<span class="hl kwd">png</span><span class="hl std">(</span><span class="hl str">&quot;../OUTPUTS/boxcox_residuals.png&quot;</span><span class="hl std">)</span>
+
+<span class="hl com"># Plot</span>
+<span class="hl kwd">ggplot</span><span class="hl std">(boxcox_all_games,</span> <span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span> <span class="hl std">= fit,</span> <span class="hl kwc">y</span> <span class="hl std">= standard_residuals))</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_point</span><span class="hl std">(</span><span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">color</span> <span class="hl std">= night_owl))</span> <span class="hl opt">+</span>
+  <span class="hl kwd">ggtitle</span><span class="hl std">(</span><span class="hl str">&quot;Box-Cox Residuals&quot;</span><span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl kwd">theme</span><span class="hl std">(</span><span class="hl kwc">plot.title</span> <span class="hl std">=</span> <span class="hl kwd">element_text</span><span class="hl std">(</span><span class="hl kwc">hjust</span> <span class="hl std">=</span> <span class="hl num">0.5</span><span class="hl std">,</span> <span class="hl kwc">vjust</span> <span class="hl std">=</span> <span class="hl num">0.5</span><span class="hl std">))</span>
+
+<span class="hl kwd">dev.off</span><span class="hl std">()</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## RStudioGD 
+##         2
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">#############################################################################</span>
+
+<span class="hl com"># ALL GAMES ANALYSIS </span>
+
+<span class="hl com">## Errors are approximately normal</span>
+<span class="hl kwd">ggplot</span><span class="hl std">(</span><span class="hl kwd">data.frame</span><span class="hl std">(overallmodel</span><span class="hl opt">$</span><span class="hl std">residuals),</span> <span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span><span class="hl std">=overallmodel</span><span class="hl opt">$</span><span class="hl std">residuals))</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_histogram</span><span class="hl std">(</span><span class="hl kwc">binwidth</span><span class="hl std">=</span><span class="hl num">1</span><span class="hl std">,</span> <span class="hl kwc">color</span><span class="hl std">=</span><span class="hl str">&quot;grey50&quot;</span><span class="hl std">,</span> <span class="hl kwc">fill</span><span class="hl std">=</span><span class="hl str">&quot;lightblue&quot;</span><span class="hl std">,</span> <span class="hl kwc">alpha</span><span class="hl std">=</span><span class="hl num">0.8</span><span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl kwd">theme_minimal</span><span class="hl std">()</span> <span class="hl opt">+</span>
+  <span class="hl kwd">stat_function</span><span class="hl std">(</span><span class="hl kwc">fun</span> <span class="hl std">=</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">x</span><span class="hl std">){</span><span class="hl kwd">dnorm</span><span class="hl std">(x,</span><span class="hl kwc">mean</span> <span class="hl std">=</span> <span class="hl kwd">mean</span><span class="hl std">(overallmodel</span><span class="hl opt">$</span><span class="hl std">residuals),</span>
+                                        <span class="hl kwc">sd</span> <span class="hl std">=</span> <span class="hl kwd">sd</span><span class="hl std">(overallmodel</span><span class="hl opt">$</span><span class="hl std">residuals))}</span><span class="hl opt">*</span><span class="hl kwd">length</span><span class="hl std">(overallmodel</span><span class="hl opt">$</span><span class="hl std">residuals)</span><span class="hl opt">*</span><span class="hl num">1</span><span class="hl std">)</span>
+</pre></div>
+</div><div class="rimage center"><img src="figure/analysis-Rhtmlunnamed-chunk-1-3.png" alt="plot of chunk unnamed-chunk-1" class="plot" /></div><div class="rcode">
+<div class="source"><pre class="knitr r"><span class="hl com"># Number of meals is initially positively correlated</span>
+<span class="hl std">model</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">lm</span><span class="hl std">(`game score`</span> <span class="hl opt">~</span> <span class="hl std">`# meals on day prior to game`,</span>
+            <span class="hl kwc">data</span><span class="hl std">=all_games)</span>
+<span class="hl kwd">summary</span><span class="hl std">(model)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## 
+## Call:
+## lm(formula = `game score` ~ `# meals on day prior to game`, data = all_games)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -38.390 -14.022  -1.228  13.923  62.334 
+## 
+## Coefficients:
+##                                Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                     38.5345     0.6023  63.976   &lt;2e-16 ***
+## `# meals on day prior to game`  -0.1447     0.1480  -0.978    0.328    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 20.27 on 9998 degrees of freedom
+## Multiple R-squared:  9.561e-05,	Adjusted R-squared:  -4.4e-06 
+## F-statistic: 0.956 on 1 and 9998 DF,  p-value: 0.3282
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl kwd">ggplot</span><span class="hl std">(all_games,</span> <span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span><span class="hl std">=`# meals on day prior to game`,</span><span class="hl kwc">y</span><span class="hl std">=`game score`))</span> <span class="hl opt">+</span>
+  <span class="hl kwd">stat_smooth</span><span class="hl std">(</span><span class="hl kwc">method</span> <span class="hl std">=</span> <span class="hl str">&quot;lm&quot;</span><span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_point</span><span class="hl std">()</span> <span class="hl opt">+</span>
+  <span class="hl kwd">theme_minimal</span><span class="hl std">()</span>
+</pre></div>
+<div class="message"><pre class="knitr r">## `geom_smooth()` using formula = 'y ~ x'
+</pre></div>
+</div><div class="rimage center"><img src="figure/analysis-Rhtmlunnamed-chunk-1-4.png" alt="plot of chunk unnamed-chunk-1" class="plot" /></div><div class="rcode">
+<div class="source"><pre class="knitr r"><span class="hl com"># But after accounting for training sessions attended, it's negatively correlated (and significantly so)</span>
+<span class="hl std">model</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">lm</span><span class="hl std">(`game score`</span> <span class="hl opt">~</span> <span class="hl std">`# meals on day prior to game`</span> <span class="hl opt">+</span> <span class="hl std">`percent training sessions attended`,</span>
+            <span class="hl kwc">data</span><span class="hl std">=all_games)</span>
+<span class="hl kwd">summary</span><span class="hl std">(model)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## 
+## Call:
+## lm(formula = `game score` ~ `# meals on day prior to game` + 
+##     `percent training sessions attended`, data = all_games)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -53.25 -11.38   0.33  11.60  82.91 
+## 
+## Coefficients:
+##                                      Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                           27.5884     0.4932   55.93   &lt;2e-16 ***
+## `# meals on day prior to game`        -1.7495     0.1181  -14.82   &lt;2e-16 ***
+## `percent training sessions attended`  33.0892     0.4202   78.74   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 15.93 on 9997 degrees of freedom
+## Multiple R-squared:  0.3828,	Adjusted R-squared:  0.3827 
+## F-statistic:  3101 on 2 and 9997 DF,  p-value: &lt; 2.2e-16
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl kwd">ggplot</span><span class="hl std">(all_games,</span> <span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span><span class="hl std">=`# meals on day prior to game`,</span><span class="hl kwc">y</span><span class="hl std">=`percent training sessions attended`))</span> <span class="hl opt">+</span>
+  <span class="hl kwd">stat_smooth</span><span class="hl std">(</span><span class="hl kwc">method</span> <span class="hl std">=</span> <span class="hl str">&quot;lm&quot;</span><span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_point</span><span class="hl std">()</span> <span class="hl opt">+</span>
+  <span class="hl kwd">theme_minimal</span><span class="hl std">()</span>
+</pre></div>
+<div class="message"><pre class="knitr r">## `geom_smooth()` using formula = 'y ~ x'
+</pre></div>
+</div><div class="rimage center"><img src="figure/analysis-Rhtmlunnamed-chunk-1-5.png" alt="plot of chunk unnamed-chunk-1" class="plot" /></div><div class="rcode">
+<div class="source"><pre class="knitr r"><span class="hl com"># There's two ways to manage this: we can say that there might be an unknown</span>
+<span class="hl com"># causal relationship present and so it's simply impossible to vary the number</span>
+<span class="hl com"># of meals eaten without affecting the other covariates, which is what the </span>
+<span class="hl com"># beta value represents (think of the midterm). OR we can ignore that and say</span>
+<span class="hl com"># we should have them eat less meals for better coaching - I think the former</span>
+<span class="hl com"># is better.</span>
+
+<span class="hl com">## Check for correlation between covariates</span>
+<span class="hl std">used_covariates</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">c</span><span class="hl std">(</span><span class="hl str">&quot;percent training sessions attended&quot;</span><span class="hl std">,</span>
+                     <span class="hl str">&quot;overall fitness score&quot;</span><span class="hl std">,</span>
+                     <span class="hl str">&quot;# extra strategy sessions attended&quot;</span><span class="hl std">,</span>
+                     <span class="hl str">&quot;hours of sleep the night before game&quot;</span><span class="hl std">,</span>
+                     <span class="hl str">&quot;# meals on day prior to game&quot;</span><span class="hl std">,</span>
+                     <span class="hl str">&quot;university year&quot;</span><span class="hl std">,</span>
+                     <span class="hl str">&quot;curling&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;gymnastics&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;baseball&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;martial_arts&quot;</span><span class="hl std">,</span>
+                     <span class="hl str">&quot;frisbee&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;table_tennis&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;basketball&quot;</span><span class="hl std">,</span>
+                     <span class="hl str">&quot;evening&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;morning&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;night_owl&quot;</span><span class="hl std">)</span>
+
+<span class="hl std">correlations</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">c</span><span class="hl std">()</span>
+<span class="hl kwa">for</span><span class="hl std">(var</span> <span class="hl kwa">in</span> <span class="hl std">used_covariates) {</span>
+  <span class="hl std">correlations</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">append</span><span class="hl std">(correlations,</span> <span class="hl kwd">summary</span><span class="hl std">(</span><span class="hl kwd">lm</span><span class="hl std">(</span><span class="hl kwd">as.formula</span><span class="hl std">(</span><span class="hl kwd">paste</span><span class="hl std">(</span><span class="hl str">&quot;`&quot;</span><span class="hl std">, var,</span> <span class="hl str">&quot;`~.&quot;</span><span class="hl std">,</span> <span class="hl kwc">sep</span> <span class="hl std">=</span> <span class="hl str">&quot;&quot;</span><span class="hl std">)),</span><span class="hl kwc">data</span> <span class="hl std">=</span>
+                                                    <span class="hl std">all_games[,</span><span class="hl kwd">names</span><span class="hl std">(all_games)</span> <span class="hl opt">%in%</span> <span class="hl std">used_covariates]))</span><span class="hl opt">$</span><span class="hl std">r.squared)</span>
+<span class="hl std">}</span>
+
+<span class="hl std">correlations_by_covar</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">data.frame</span><span class="hl std">(used_covariates,correlations)</span>
+
+<span class="hl kwa">if</span><span class="hl std">(</span><span class="hl kwd">length</span><span class="hl std">(correlations_by_covar</span><span class="hl opt">$</span><span class="hl std">correlations[correlations_by_covar</span><span class="hl opt">$</span><span class="hl std">correlations</span> <span class="hl opt">&gt;=</span> <span class="hl num">0.8</span><span class="hl std">])</span> <span class="hl opt">&gt;</span> <span class="hl num">0</span><span class="hl std">) {</span>
+  <span class="hl kwd">print</span><span class="hl std">(</span><span class="hl str">&quot;Some variables are very correlated (inflation factor &gt; 5)!&quot;</span><span class="hl std">)</span>
+<span class="hl std">}</span>
+
+<span class="hl com">## Check for non-linearity</span>
+<span class="hl kwd">ggplot</span><span class="hl std">(all_games,</span> <span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span> <span class="hl std">= `percent training sessions attended`,</span> <span class="hl kwc">y</span> <span class="hl std">= residual))</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_point</span><span class="hl std">(</span><span class="hl kwc">color</span> <span class="hl std">=</span> <span class="hl str">'black'</span><span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl kwd">ggtitle</span><span class="hl std">(</span><span class="hl str">&quot;Percent training sessions attended residuals&quot;</span><span class="hl std">)</span>
+</pre></div>
+</div><div class="rimage center"><img src="figure/analysis-Rhtmlunnamed-chunk-1-6.png" alt="plot of chunk unnamed-chunk-1" class="plot" /></div><div class="rcode">
+<div class="source"><pre class="knitr r"><span class="hl kwd">ggplot</span><span class="hl std">(all_games,</span> <span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span> <span class="hl std">= `overall fitness score`,</span> <span class="hl kwc">y</span> <span class="hl std">= residual))</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_point</span><span class="hl std">(</span><span class="hl kwc">color</span> <span class="hl std">=</span> <span class="hl str">'black'</span><span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl kwd">ggtitle</span><span class="hl std">(</span><span class="hl str">&quot;Overall fitness score residuals&quot;</span><span class="hl std">)</span>
+</pre></div>
+</div><div class="rimage center"><img src="figure/analysis-Rhtmlunnamed-chunk-1-7.png" alt="plot of chunk unnamed-chunk-1" class="plot" /></div><div class="rcode">
+<div class="source"><pre class="knitr r"><span class="hl kwd">ggplot</span><span class="hl std">(all_games,</span> <span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span> <span class="hl std">= `# extra strategy sessions attended`,</span> <span class="hl kwc">y</span> <span class="hl std">= residual))</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_point</span><span class="hl std">(</span><span class="hl kwc">color</span> <span class="hl std">=</span> <span class="hl str">'black'</span><span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl kwd">ggtitle</span><span class="hl std">(</span><span class="hl str">&quot;# extra strategy sessions attended residuals&quot;</span><span class="hl std">)</span>
+</pre></div>
+</div><div class="rimage center"><img src="figure/analysis-Rhtmlunnamed-chunk-1-8.png" alt="plot of chunk unnamed-chunk-1" class="plot" /></div><div class="rcode">
+<div class="source"><pre class="knitr r"><span class="hl kwd">ggplot</span><span class="hl std">(all_games,</span> <span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span> <span class="hl std">= `hours of sleep the night before game`,</span> <span class="hl kwc">y</span> <span class="hl std">= residual))</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_point</span><span class="hl std">(</span><span class="hl kwc">color</span> <span class="hl std">=</span> <span class="hl str">'black'</span><span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl kwd">ggtitle</span><span class="hl std">(</span><span class="hl str">&quot;Hours of sleep the night before game residuals&quot;</span><span class="hl std">)</span>
+</pre></div>
+</div><div class="rimage center"><img src="figure/analysis-Rhtmlunnamed-chunk-1-9.png" alt="plot of chunk unnamed-chunk-1" class="plot" /></div><div class="rcode">
+<div class="source"><pre class="knitr r"><span class="hl kwd">ggplot</span><span class="hl std">(all_games,</span> <span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span> <span class="hl std">= `# meals on day prior to game`,</span> <span class="hl kwc">y</span> <span class="hl std">= residual))</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_point</span><span class="hl std">(</span><span class="hl kwc">color</span> <span class="hl std">=</span> <span class="hl str">'black'</span><span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl kwd">ggtitle</span><span class="hl std">(</span><span class="hl str">&quot;# meals on day prior to game the night before game residuals&quot;</span><span class="hl std">)</span>
+</pre></div>
+</div><div class="rimage center"><img src="figure/analysis-Rhtmlunnamed-chunk-1-10.png" alt="plot of chunk unnamed-chunk-1" class="plot" /></div><div class="rcode">
+<div class="source"><pre class="knitr r"><span class="hl com">## Models for morning and evening games</span>
+
+<span class="hl com"># This is useful for checking whether our model is a good fit - </span>
+<span class="hl com"># specifically, whether the relationship between game score and</span>
+<span class="hl com"># the other covariates depends on whether it's a morning or evening game.</span>
+
+<span class="hl com"># Notably, the most significant difference (by far) between the two is </span>
+<span class="hl com"># for the night_owl indicator variable - which is what we expect to see,</span>
+<span class="hl com"># intuitively. None of the other ones are particularly significant,</span>
+<span class="hl com"># especially with the multiple testing fallacy. There is also a significant</span>
+<span class="hl com"># difference in the intercept - which makes sense too, because the intercept</span>
+<span class="hl com"># represents early birds. So early birds have an 11 point difference (after</span>
+<span class="hl com"># accounting for changes in the other variables) between morning and evening</span>
+<span class="hl com"># games, while night owls only have about a 3 point difference</span>
+
+<span class="hl std">eveningmodel</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">lm</span><span class="hl std">(`game score`</span> <span class="hl opt">~</span> <span class="hl std">`percent training sessions attended`</span>
+                   <span class="hl opt">+</span> <span class="hl std">`overall fitness score`</span>
+                   <span class="hl opt">+</span> <span class="hl std">`# extra strategy sessions attended`</span>
+                   <span class="hl opt">+</span> <span class="hl std">`hours of sleep the night before game`</span>
+                   <span class="hl opt">+</span> <span class="hl std">`# meals on day prior to game`</span>
+                   <span class="hl opt">+</span> <span class="hl std">`university year`</span> <span class="hl opt">+</span> <span class="hl std">`curling`</span> <span class="hl opt">+</span> <span class="hl std">`gymnastics`</span> <span class="hl opt">+</span> <span class="hl std">`baseball`</span> <span class="hl opt">+</span> <span class="hl std">`martial_arts`</span>
+                   <span class="hl opt">+</span> <span class="hl std">`frisbee`</span> <span class="hl opt">+</span> <span class="hl std">`table_tennis`</span> <span class="hl opt">+</span> <span class="hl std">`basketball`</span>
+                   <span class="hl opt">+</span> <span class="hl std">night_owl,</span>
+                   <span class="hl kwc">data</span><span class="hl std">=</span><span class="hl kwd">filter</span><span class="hl std">(all_games, evening</span> <span class="hl opt">==</span> <span class="hl num">1</span><span class="hl std">))</span>
+<span class="hl kwd">summary</span><span class="hl std">(eveningmodel)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## 
+## Call:
+## lm(formula = `game score` ~ `percent training sessions attended` + 
+##     `overall fitness score` + `# extra strategy sessions attended` + 
+##     `hours of sleep the night before game` + `# meals on day prior to game` + 
+##     `university year` + curling + gymnastics + baseball + martial_arts + 
+##     frisbee + table_tennis + basketball + night_owl, data = filter(all_games, 
+##     evening == 1))
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -33.930  -5.810  -0.054   5.764  72.185 
+## 
+## Coefficients:
+##                                        Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                            -0.70575    1.32200  -0.534   0.5935    
+## `percent training sessions attended`   28.23703    0.62704  45.032  &lt; 2e-16 ***
+## `overall fitness score`                23.80548    0.63505  37.486  &lt; 2e-16 ***
+## `# extra strategy sessions attended`    1.74739    0.07604  22.980  &lt; 2e-16 ***
+## `hours of sleep the night before game`  0.35386    0.06060   5.839 6.05e-09 ***
+## `# meals on day prior to game`         -0.98684    0.17316  -5.699 1.37e-08 ***
+## `university year`                       0.25961    0.24179   1.074   0.2831    
+## curling                                -0.66593    0.74636  -0.892   0.3724    
+## gymnastics                             -1.79243    0.97922  -1.830   0.0673 .  
+## baseball                               -1.76261    0.82572  -2.135   0.0329 *  
+## martial_arts                            6.48938    0.78423   8.275 2.23e-16 ***
+## frisbee                                 6.23494    0.81790   7.623 3.69e-14 ***
+## table_tennis                           -1.12085    0.77856  -1.440   0.1501    
+## basketball                              5.49054    0.95929   5.724 1.19e-08 ***
+## night_owl                               8.24885    0.54648  15.094  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 9.511 on 2155 degrees of freedom
+## Multiple R-squared:  0.7782,	Adjusted R-squared:  0.7768 
+## F-statistic: 540.1 on 14 and 2155 DF,  p-value: &lt; 2.2e-16
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl std">morningmodel</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">lm</span><span class="hl std">(`game score`</span> <span class="hl opt">~</span> <span class="hl std">`percent training sessions attended`</span>
+                   <span class="hl opt">+</span> <span class="hl std">`overall fitness score`</span>
+                   <span class="hl opt">+</span> <span class="hl std">`# extra strategy sessions attended`</span>
+                   <span class="hl opt">+</span> <span class="hl std">`hours of sleep the night before game`</span>
+                   <span class="hl opt">+</span> <span class="hl std">`# meals on day prior to game`</span>
+                   <span class="hl opt">+</span> <span class="hl std">`university year`</span> <span class="hl opt">+</span> <span class="hl std">`curling`</span> <span class="hl opt">+</span> <span class="hl std">`gymnastics`</span> <span class="hl opt">+</span> <span class="hl std">`baseball`</span> <span class="hl opt">+</span> <span class="hl std">`martial_arts`</span>
+                   <span class="hl opt">+</span> <span class="hl std">`frisbee`</span> <span class="hl opt">+</span> <span class="hl std">`table_tennis`</span> <span class="hl opt">+</span> <span class="hl std">`basketball`</span>
+                   <span class="hl opt">+</span> <span class="hl std">night_owl,</span>
+                   <span class="hl kwc">data</span><span class="hl std">=</span><span class="hl kwd">filter</span><span class="hl std">(all_games, morning</span> <span class="hl opt">==</span> <span class="hl num">1</span><span class="hl std">))</span>
+<span class="hl kwd">summary</span><span class="hl std">(morningmodel)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## 
+## Call:
+## lm(formula = `game score` ~ `percent training sessions attended` + 
+##     `overall fitness score` + `# extra strategy sessions attended` + 
+##     `hours of sleep the night before game` + `# meals on day prior to game` + 
+##     `university year` + curling + gymnastics + baseball + martial_arts + 
+##     frisbee + table_tennis + basketball + night_owl, data = filter(all_games, 
+##     morning == 1))
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -28.857  -6.537   0.006   6.318  69.449 
+## 
+## Coefficients:
+##                                        Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                              8.4525     2.3557   3.588 0.000350 ***
+## `percent training sessions attended`    28.4781     1.0550  26.993  &lt; 2e-16 ***
+## `overall fitness score`                 23.1455     1.0682  21.668  &lt; 2e-16 ***
+## `# extra strategy sessions attended`     1.4360     0.1305  11.006  &lt; 2e-16 ***
+## `hours of sleep the night before game`   0.2130     0.1004   2.122 0.034076 *  
+## `# meals on day prior to game`          -1.0375     0.2923  -3.549 0.000405 ***
+## `university year`                       -0.3495     0.4315  -0.810 0.418179    
+## curling                                  3.4971     1.3667   2.559 0.010652 *  
+## gymnastics                               0.3061     1.8514   0.165 0.868738    
+## baseball                                 2.8432     1.3677   2.079 0.037895 *  
+## martial_arts                             9.0980     1.3813   6.586 7.36e-11 ***
+## frisbee                                  9.4807     1.4567   6.508 1.21e-10 ***
+## table_tennis                             4.2273     1.3707   3.084 0.002100 ** 
+## basketball                               8.3717     1.7954   4.663 3.55e-06 ***
+## night_owl                               -7.2238     0.9380  -7.701 3.30e-14 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 11.08 on 975 degrees of freedom
+## Multiple R-squared:  0.6969,	Adjusted R-squared:  0.6925 
+## F-statistic: 160.1 on 14 and 975 DF,  p-value: &lt; 2.2e-16
+</pre></div>
+</div></div>
+<div class="chunk" id="unnamed-chunk-2"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com">## MORNING AND EVENING RESIDUAL PLOTS</span>
+</pre></div>
+</div></div>
+<div class="chunk" id="unnamed-chunk-3"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com"># Let's explore the residual plots of each of these models. Start w/ morning:</span>
+<span class="hl std">morning_residuals</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">filter</span><span class="hl std">(all_games, morning</span> <span class="hl opt">==</span> <span class="hl num">1</span><span class="hl std">)</span> <span class="hl opt">%&gt;%</span>
+  <span class="hl std">dplyr</span><span class="hl opt">::</span><span class="hl kwd">select</span><span class="hl std">(`game score`, `early bird/night owl`)</span>
+
+<span class="hl std">morning_residuals</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">cbind</span><span class="hl std">(morning_residuals,</span> <span class="hl kwd">predict</span><span class="hl std">(morningmodel,</span> <span class="hl kwc">se.fit</span> <span class="hl std">=</span> <span class="hl num">TRUE</span><span class="hl std">))</span> <span class="hl opt">%&gt;%</span>
+  <span class="hl kwd">mutate</span><span class="hl std">(</span><span class="hl kwc">residuals</span> <span class="hl std">= `game score`</span> <span class="hl opt">-</span> <span class="hl std">fit)</span>
+
+<span class="hl com"># General residual plot</span>
+
+<span class="hl kwd">png</span><span class="hl std">(</span><span class="hl str">&quot;../OUTPUTS/Morning_General_Residuals.png&quot;</span><span class="hl std">)</span>
+
+<span class="hl kwd">ggplot</span><span class="hl std">(morning_residuals,</span> <span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span> <span class="hl std">= fit,</span> <span class="hl kwc">y</span> <span class="hl std">= residuals))</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_point</span><span class="hl std">(</span><span class="hl kwc">color</span> <span class="hl std">=</span> <span class="hl str">'green'</span><span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl kwd">ggtitle</span><span class="hl std">(</span><span class="hl str">&quot;Morning Model Residuals&quot;</span><span class="hl std">)</span>
+
+<span class="hl kwd">dev.off</span><span class="hl std">()</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## RStudioGD 
+##         2
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl kwd">png</span><span class="hl std">(</span><span class="hl str">&quot;../OUTPUTS/Morning_Grouped_Residuals.png&quot;</span><span class="hl std">)</span>
+
+<span class="hl com"># Grouping by night owl/early bird</span>
+<span class="hl kwd">ggplot</span><span class="hl std">(morning_residuals,</span> <span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span> <span class="hl std">= fit,</span> <span class="hl kwc">y</span> <span class="hl std">= residuals))</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_point</span><span class="hl std">(</span><span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">color</span> <span class="hl std">= `early bird/night owl`))</span> <span class="hl opt">+</span>
+  <span class="hl kwd">ggtitle</span><span class="hl std">(</span><span class="hl str">&quot;Morning Model Residuals&quot;</span><span class="hl std">)</span>
+
+<span class="hl kwd">dev.off</span><span class="hl std">()</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## RStudioGD 
+##         2
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com"># Let's explore the evening model now!</span>
+<span class="hl std">evening_residuals</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">filter</span><span class="hl std">(all_games, evening</span> <span class="hl opt">==</span> <span class="hl num">1</span><span class="hl std">)</span> <span class="hl opt">%&gt;%</span>
+  <span class="hl kwd">select</span><span class="hl std">(`game score`, `early bird/night owl`)</span>
+</pre></div>
+<div class="error"><pre class="knitr r">## Error in select(., `game score`, `early bird/night owl`): unused arguments (`game score`, `early bird/night owl`)
+</pre></div>
+</div><div class="rimage center"><img src="figure/analysis-Rhtmlunnamed-chunk-3-1.png" alt="plot of chunk unnamed-chunk-3" class="plot" /></div><div class="rcode">
+<div class="source"><pre class="knitr r"><span class="hl std">evening_residuals</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">cbind</span><span class="hl std">(evening_residuals,</span> <span class="hl kwd">predict</span><span class="hl std">(eveningmodel,</span> <span class="hl kwc">se.fit</span> <span class="hl std">=</span> <span class="hl num">TRUE</span><span class="hl std">))</span> <span class="hl opt">%&gt;%</span>
+  <span class="hl kwd">mutate</span><span class="hl std">(</span><span class="hl kwc">residuals</span> <span class="hl std">= `game score`</span> <span class="hl opt">-</span> <span class="hl std">fit)</span>
+</pre></div>
+<div class="error"><pre class="knitr r">## Error in cbind(evening_residuals, predict(eveningmodel, se.fit = TRUE)): object 'evening_residuals' not found
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com"># General residual plot   </span>
+<span class="hl kwd">png</span><span class="hl std">(</span><span class="hl str">&quot;../OUTPUTS/Evening_General_Residuals.png&quot;</span><span class="hl std">)</span>
+
+<span class="hl kwd">ggplot</span><span class="hl std">(evening_residuals,</span> <span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span> <span class="hl std">= fit,</span> <span class="hl kwc">y</span> <span class="hl std">= residuals))</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_point</span><span class="hl std">(</span><span class="hl kwc">color</span> <span class="hl std">=</span> <span class="hl str">'green'</span><span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl kwd">ggtitle</span><span class="hl std">(</span><span class="hl str">&quot;Evening Model Residuals&quot;</span><span class="hl std">)</span>
+</pre></div>
+<div class="error"><pre class="knitr r">## Error in ggplot(evening_residuals, aes(x = fit, y = residuals)): object 'evening_residuals' not found
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl kwd">dev.off</span><span class="hl std">()</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## RStudioGD 
+##         2
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl kwd">png</span><span class="hl std">(</span><span class="hl str">&quot;../OUTPUTS/Evening_Grouped_Residuals.png&quot;</span><span class="hl std">)</span>
+<span class="hl com"># Grouping by night owl/early bird</span>
+<span class="hl kwd">ggplot</span><span class="hl std">(evening_residuals,</span> <span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span> <span class="hl std">= fit,</span> <span class="hl kwc">y</span> <span class="hl std">= residuals))</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_point</span><span class="hl std">(</span><span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">color</span> <span class="hl std">= `early bird/night owl`))</span> <span class="hl opt">+</span>
+  <span class="hl kwd">ggtitle</span><span class="hl std">(</span><span class="hl str">&quot;Evening Model Residuals&quot;</span><span class="hl std">)</span>
+</pre></div>
+<div class="error"><pre class="knitr r">## Error in ggplot(evening_residuals, aes(x = fit, y = residuals)): object 'evening_residuals' not found
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl kwd">dev.off</span><span class="hl std">()</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## RStudioGD 
+##         2
+</pre></div>
+</div></div>
+<div class="chunk" id="unnamed-chunk-4"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com">## HYPOTHESIS TESTING</span>
+</pre></div>
+</div></div>
+<div class="chunk" id="unnamed-chunk-5"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com"># extract betas and standard errors from evening and morning models</span>
+<span class="hl std">evening_betas</span> <span class="hl kwb">&lt;-</span> <span class="hl std">eveningmodel</span><span class="hl opt">$</span><span class="hl std">coefficients</span>
+<span class="hl std">morning_betas</span> <span class="hl kwb">&lt;-</span> <span class="hl std">morningmodel</span><span class="hl opt">$</span><span class="hl std">coefficients</span>
+<span class="hl std">evening_errors</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">sqrt</span><span class="hl std">(</span><span class="hl kwd">diag</span><span class="hl std">(</span><span class="hl kwd">vcov</span><span class="hl std">(eveningmodel)))</span>
+<span class="hl std">morning_errors</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">sqrt</span><span class="hl std">(</span><span class="hl kwd">diag</span><span class="hl std">(</span><span class="hl kwd">vcov</span><span class="hl std">(morningmodel)))</span>
+
+<span class="hl com"># run t-test between evening and morning betas, using adjusted</span>
+<span class="hl com"># significance threshold</span>
+<span class="hl std">new_alpha</span> <span class="hl kwb">=</span> <span class="hl num">0.05</span> <span class="hl opt">/</span> <span class="hl kwd">length</span><span class="hl std">(morning_betas)</span>
+<span class="hl std">new_conf_level</span> <span class="hl kwb">=</span> <span class="hl num">1</span> <span class="hl opt">-</span> <span class="hl std">new_alpha</span>
+<span class="hl std">names_betas</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">names</span><span class="hl std">(morning_betas)</span>
+
+<span class="hl kwa">for</span> <span class="hl std">(i</span> <span class="hl kwa">in</span> <span class="hl num">1</span><span class="hl opt">:</span><span class="hl kwd">length</span><span class="hl std">(evening_betas)) {</span>
+  <span class="hl std">betas</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">c</span><span class="hl std">(evening_betas[i], morning_betas[i])</span>
+  <span class="hl std">std_dev</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">sqrt</span><span class="hl std">((evening_errors[i])</span><span class="hl opt">^</span><span class="hl num">2</span> <span class="hl opt">+</span> <span class="hl std">(morning_errors[i])</span><span class="hl opt">^</span><span class="hl num">2</span><span class="hl std">)</span>
+  <span class="hl kwd">print</span><span class="hl std">(names_betas[i])</span>
+  <span class="hl kwd">print</span><span class="hl std">(</span><span class="hl kwd">t.test</span><span class="hl std">(betas,</span> <span class="hl kwc">mu</span><span class="hl std">=</span><span class="hl num">0</span><span class="hl std">,</span> <span class="hl kwc">sd</span><span class="hl std">=std_dev,</span> <span class="hl kwc">conf.level</span><span class="hl std">=new_conf_level))</span>
+<span class="hl std">}</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] &quot;(Intercept)&quot;
+## 
+## 	One Sample t-test
+## 
+## data:  betas
+## t = 0.84588, df = 1, p-value = 0.553
+## alternative hypothesis: true mean is not equal to 0
+## 99.66667 percent confidence interval:
+##  -870.6655  878.4122
+## sample estimates:
+## mean of x 
+##  3.873362 
+## 
+## [1] &quot;`percent training sessions attended`&quot;
+## 
+## 	One Sample t-test
+## 
+## data:  betas
+## t = 235.28, df = 1, p-value = 0.002706
+## alternative hypothesis: true mean is not equal to 0
+## 99.66667 percent confidence interval:
+##   5.338873 51.376233
+## sample estimates:
+## mean of x 
+##  28.35755 
+## 
+## [1] &quot;`overall fitness score`&quot;
+## 
+## 	One Sample t-test
+## 
+## data:  betas
+## t = 71.138, df = 1, p-value = 0.008948
+## alternative hypothesis: true mean is not equal to 0
+## 99.66667 percent confidence interval:
+##  -39.54874  86.49971
+## sample estimates:
+## mean of x 
+##  23.47549 
+## 
+## [1] &quot;`# extra strategy sessions attended`&quot;
+## 
+## 	One Sample t-test
+## 
+## data:  betas
+## t = 10.223, df = 1, p-value = 0.06208
+## alternative hypothesis: true mean is not equal to 0
+## 99.66667 percent confidence interval:
+##  -28.14528  31.32865
+## sample estimates:
+## mean of x 
+##  1.591687 
+## 
+## [1] &quot;`hours of sleep the night before game`&quot;
+## 
+## 	One Sample t-test
+## 
+## data:  betas
+## t = 4.0246, df = 1, p-value = 0.155
+## alternative hypothesis: true mean is not equal to 0
+## 99.66667 percent confidence interval:
+##  -13.16658  13.73344
+## sample estimates:
+## mean of x 
+## 0.2834337 
+## 
+## [1] &quot;`# meals on day prior to game`&quot;
+## 
+## 	One Sample t-test
+## 
+## data:  betas
+## t = -39.954, df = 1, p-value = 0.01593
+## alternative hypothesis: true mean is not equal to 0
+## 99.66667 percent confidence interval:
+##  -5.850443  3.826102
+## sample estimates:
+## mean of x 
+## -1.012171 
+## 
+## [1] &quot;`university year`&quot;
+## 
+## 	One Sample t-test
+## 
+## data:  betas
+## t = -0.14756, df = 1, p-value = 0.9067
+## alternative hypothesis: true mean is not equal to 0
+## 99.66667 percent confidence interval:
+##  -58.20871  58.11883
+## sample estimates:
+##   mean of x 
+## -0.04494004 
+## 
+## [1] &quot;curling&quot;
+## 
+## 	One Sample t-test
+## 
+## data:  betas
+## t = 0.68007, df = 1, p-value = 0.6198
+## alternative hypothesis: true mean is not equal to 0
+## 99.66667 percent confidence interval:
+##  -396.1205  398.9517
+## sample estimates:
+## mean of x 
+##   1.41558 
+## 
+## [1] &quot;gymnastics&quot;
+## 
+## 	One Sample t-test
+## 
+## data:  betas
+## t = -0.70831, df = 1, p-value = 0.6077
+## alternative hypothesis: true mean is not equal to 0
+## 99.66667 percent confidence interval:
+##  -201.1318  199.6454
+## sample estimates:
+##  mean of x 
+## -0.7431868 
+## 
+## [1] &quot;baseball&quot;
+## 
+## 	One Sample t-test
+## 
+## data:  betas
+## t = 0.23462, df = 1, p-value = 0.8533
+## alternative hypothesis: true mean is not equal to 0
+## 99.66667 percent confidence interval:
+##  -439.2816  440.3622
+## sample estimates:
+## mean of x 
+## 0.5403108 
+## 
+## [1] &quot;martial_arts&quot;
+## 
+## 	One Sample t-test
+## 
+## data:  betas
+## t = 5.9754, df = 1, p-value = 0.1056
+## alternative hypothesis: true mean is not equal to 0
+## 99.66667 percent confidence interval:
+##  -241.3075  256.8949
+## sample estimates:
+## mean of x 
+##  7.793683 
+## 
+## [1] &quot;frisbee&quot;
+## 
+## 	One Sample t-test
+## 
+## data:  betas
+## t = 4.8419, df = 1, p-value = 0.1297
+## alternative hypothesis: true mean is not equal to 0
+## 99.66667 percent confidence interval:
+##  -302.0848  317.8004
+## sample estimates:
+## mean of x 
+##  7.857811 
+## 
+## [1] &quot;table_tennis&quot;
+## 
+## 	One Sample t-test
+## 
+## data:  betas
+## t = 0.58084, df = 1, p-value = 0.665
+## alternative hypothesis: true mean is not equal to 0
+## 99.66667 percent confidence interval:
+##  -509.1493  512.2557
+## sample estimates:
+## mean of x 
+##  1.553208 
+## 
+## [1] &quot;basketball&quot;
+## 
+## 	One Sample t-test
+## 
+## data:  betas
+## t = 4.8114, df = 1, p-value = 0.1305
+## alternative hypothesis: true mean is not equal to 0
+## 99.66667 percent confidence interval:
+##  -268.1941  282.0563
+## sample estimates:
+## mean of x 
+##  6.931109 
+## 
+## [1] &quot;night_owl&quot;
+## 
+## 	One Sample t-test
+## 
+## data:  betas
+## t = 0.066247, df = 1, p-value = 0.9579
+## alternative hypothesis: true mean is not equal to 0
+## 99.66667 percent confidence interval:
+##  -1477.006  1478.031
+## sample estimates:
+## mean of x 
+## 0.5125065
+</pre></div>
+</div></div>
+<div class="chunk" id="unnamed-chunk-6"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com">## Finding the best morning &amp; evening players</span>
+</pre></div>
+</div></div>
+<div class="chunk" id="unnamed-chunk-7"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com"># Make a hypothetical version of the data where every game was played</span>
+<span class="hl com"># in the or in the evening</span>
+<span class="hl std">morningized_games</span> <span class="hl kwb">&lt;-</span> <span class="hl std">all_games</span>
+<span class="hl std">morningized_games</span><span class="hl opt">$</span><span class="hl std">morning</span> <span class="hl kwb">&lt;-</span> <span class="hl num">1</span>
+<span class="hl std">morningized_games</span><span class="hl opt">$</span><span class="hl std">evening</span> <span class="hl kwb">&lt;-</span> <span class="hl num">0</span>
+
+<span class="hl std">eveningized_games</span> <span class="hl kwb">&lt;-</span> <span class="hl std">all_games</span>
+<span class="hl std">eveningized_games</span><span class="hl opt">$</span><span class="hl std">morning</span> <span class="hl kwb">&lt;-</span> <span class="hl num">0</span>
+<span class="hl std">eveningized_games</span><span class="hl opt">$</span><span class="hl std">evening</span> <span class="hl kwb">&lt;-</span> <span class="hl num">1</span>
+
+<span class="hl com"># Set the variables we see as mutable to the average to remove their effects.</span>
+<span class="hl com"># We decided the training and strategy sessions could be controlled</span>
+<span class="hl com"># the coach on real teams, so we shouldn't consider their impact</span>
+<span class="hl com"># on an individual's score.</span>
+<span class="hl std">morningized_games</span><span class="hl opt">$</span><span class="hl std">`percent training sessions attended`</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">max</span><span class="hl std">(all_games</span><span class="hl opt">$</span><span class="hl std">`percent training sessions attended`)</span>
+<span class="hl std">morningized_games</span><span class="hl opt">$</span><span class="hl std">`# extra strategy sessions attended`</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">max</span><span class="hl std">(all_games</span><span class="hl opt">$</span><span class="hl std">`# extra strategy sessions attended`)</span>
+<span class="hl std">eveningized_games</span><span class="hl opt">$</span><span class="hl std">`percent training sessions attended`</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">max</span><span class="hl std">(all_games</span><span class="hl opt">$</span><span class="hl std">`percent training sessions attended`)</span>
+<span class="hl std">eveningized_games</span><span class="hl opt">$</span><span class="hl std">`# extra strategy sessions attended`</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">max</span><span class="hl std">(all_games</span><span class="hl opt">$</span><span class="hl std">`# extra strategy sessions attended`)</span>
+
+<span class="hl com"># Then predict how the players would have scored. We can use</span>
+<span class="hl com"># overallmodel for this, because we know that the only night_owl</span>
+<span class="hl com"># has a significant difference between morning and evening games</span>
+<span class="hl com"># and its interaction with that has been accounted for.</span>
+
+<span class="hl com"># It's better to use overallmodel to avoid bias due to </span>
+<span class="hl com"># non-statistically significant, but still potentially impactful,</span>
+<span class="hl com"># differences between overallmodel and morning/evening model</span>
+<span class="hl std">morningized_games</span><span class="hl opt">$</span><span class="hl std">`game score`</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">predict.lm</span><span class="hl std">(overallmodel, morningized_games)</span>
+<span class="hl std">eveningized_games</span><span class="hl opt">$</span><span class="hl std">`game score`</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">predict.lm</span><span class="hl std">(overallmodel, eveningized_games)</span>
+
+<span class="hl com"># Adjust by the residual, in case there is some confounding variable</span>
+<span class="hl com"># biasing them. (The residual in these dataframes is still the </span>
+<span class="hl com"># residual from all_games, which is useful here.)</span>
+<span class="hl std">morningized_games</span><span class="hl opt">$</span><span class="hl std">`game score`</span> <span class="hl kwb">&lt;-</span> <span class="hl std">morningized_games</span><span class="hl opt">$</span><span class="hl std">`game score`</span> <span class="hl opt">+</span> <span class="hl std">morningized_games</span><span class="hl opt">$</span><span class="hl std">residual</span>
+<span class="hl std">eveningized_games</span><span class="hl opt">$</span><span class="hl std">`game score`</span> <span class="hl kwb">&lt;-</span> <span class="hl std">eveningized_games</span><span class="hl opt">$</span><span class="hl std">`game score`</span> <span class="hl opt">+</span> <span class="hl std">eveningized_games</span><span class="hl opt">$</span><span class="hl std">residual</span>
+
+<span class="hl com"># Then, average these by player</span>
+<span class="hl std">morning_players</span> <span class="hl kwb">&lt;-</span> <span class="hl std">morningized_games</span> <span class="hl opt">%&gt;%</span> <span class="hl kwd">group_by</span><span class="hl std">(`student label`)</span> <span class="hl opt">%&gt;%</span> <span class="hl kwd">summarize</span><span class="hl std">(</span>
+  <span class="hl kwc">mean</span> <span class="hl std">=</span> <span class="hl kwd">mean</span><span class="hl std">(`game score`),</span>
+  <span class="hl kwc">sd</span> <span class="hl std">=</span> <span class="hl kwd">sd</span><span class="hl std">(`game score`)</span>
+<span class="hl std">)</span>
+<span class="hl std">top_morning</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">top_n</span><span class="hl std">(morning_players,</span><span class="hl num">20</span><span class="hl std">,mean)</span>
+<span class="hl std">top_morning</span> <span class="hl kwb">&lt;-</span> <span class="hl std">top_morning[</span><span class="hl kwd">order</span><span class="hl std">(top_morning</span><span class="hl opt">$</span><span class="hl std">mean,</span><span class="hl kwc">decreasing</span> <span class="hl std">=</span> <span class="hl num">TRUE</span><span class="hl std">),]</span>
+
+<span class="hl std">evening_players</span> <span class="hl kwb">&lt;-</span> <span class="hl std">eveningized_games</span> <span class="hl opt">%&gt;%</span> <span class="hl kwd">group_by</span><span class="hl std">(`student label`)</span> <span class="hl opt">%&gt;%</span> <span class="hl kwd">summarize</span><span class="hl std">(</span>
+  <span class="hl kwc">mean</span> <span class="hl std">=</span> <span class="hl kwd">mean</span><span class="hl std">(`game score`),</span>
+  <span class="hl kwc">sd</span> <span class="hl std">=</span> <span class="hl kwd">sd</span><span class="hl std">(`game score`)</span>
+<span class="hl std">)</span>
+<span class="hl std">top_evening</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">top_n</span><span class="hl std">(evening_players,</span><span class="hl num">20</span><span class="hl std">,mean)</span>
+<span class="hl std">top_evening</span> <span class="hl kwb">&lt;-</span> <span class="hl std">top_evening[</span><span class="hl kwd">order</span><span class="hl std">(top_evening</span><span class="hl opt">$</span><span class="hl std">mean,</span><span class="hl kwc">decreasing</span> <span class="hl std">=</span> <span class="hl num">TRUE</span><span class="hl std">),]</span>
+
+
+<span class="hl std">best_morning</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">c</span><span class="hl std">()</span>
+<span class="hl std">best_evening</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">c</span><span class="hl std">()</span>
+<span class="hl kwa">for</span><span class="hl std">(i</span> <span class="hl kwa">in</span> <span class="hl num">1</span><span class="hl opt">:</span><span class="hl num">20</span><span class="hl std">) {</span>
+  <span class="hl kwa">if</span><span class="hl std">(</span><span class="hl opt">!</span><span class="hl std">(top_morning</span><span class="hl opt">$</span><span class="hl std">`student label`[i]</span> <span class="hl opt">%in%</span> <span class="hl std">best_evening)) {</span>
+    <span class="hl kwa">if</span><span class="hl std">(top_morning</span><span class="hl opt">$</span><span class="hl std">`student label`[i]</span> <span class="hl opt">==</span>
+       <span class="hl std">top_evening</span><span class="hl opt">$</span><span class="hl std">`student label`[i]) {</span>
+      <span class="hl kwa">if</span><span class="hl std">(top_morning</span><span class="hl opt">$</span><span class="hl std">mean[i]</span> <span class="hl opt">-</span> <span class="hl kwd">mean</span><span class="hl std">(top_morning</span><span class="hl opt">$</span><span class="hl std">mean)</span> <span class="hl opt">&gt;</span>
+         <span class="hl std">top_evening</span><span class="hl opt">$</span><span class="hl std">mean[i]</span> <span class="hl opt">-</span> <span class="hl kwd">mean</span><span class="hl std">(top_evening</span><span class="hl opt">$</span><span class="hl std">mean)) {</span>
+        <span class="hl std">best_morning</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">append</span><span class="hl std">(best_morning, top_morning</span><span class="hl opt">$</span><span class="hl std">`student label`[i])</span>
+      <span class="hl std">}</span> <span class="hl kwa">else</span> <span class="hl std">{</span>
+        <span class="hl std">best_evening</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">append</span><span class="hl std">(best_evening, top_evening</span><span class="hl opt">$</span><span class="hl std">`student label`[i])</span>
+      <span class="hl std">}</span>
+    <span class="hl std">}</span> <span class="hl kwa">else</span> <span class="hl std">{</span>
+      <span class="hl std">best_morning</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">append</span><span class="hl std">(best_morning, top_morning</span><span class="hl opt">$</span><span class="hl std">`student label`[i])</span>
+      <span class="hl std">best_evening</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">append</span><span class="hl std">(best_evening, top_evening</span><span class="hl opt">$</span><span class="hl std">`student label`[i])</span>
+    <span class="hl std">}</span>
+  <span class="hl std">}</span>
+<span class="hl std">}</span>
+
+<span class="hl com"># Keep only the top 10 from each. Those are our teams!</span>
+<span class="hl std">best_morning</span> <span class="hl kwb">&lt;-</span> <span class="hl std">best_morning[</span><span class="hl num">1</span><span class="hl opt">:</span><span class="hl num">10</span><span class="hl std">]</span>
+<span class="hl kwd">write.csv</span><span class="hl std">(</span><span class="hl kwd">data.frame</span><span class="hl std">(best_morning),</span><span class="hl str">&quot;../PROCESSED_DATA/west_coast_team.csv&quot;</span><span class="hl std">)</span>
+<span class="hl std">best_evening</span> <span class="hl kwb">&lt;-</span> <span class="hl std">best_evening[</span><span class="hl num">1</span><span class="hl opt">:</span><span class="hl num">10</span><span class="hl std">]</span>
+<span class="hl kwd">write.csv</span><span class="hl std">(</span><span class="hl kwd">data.frame</span><span class="hl std">(best_evening),</span><span class="hl str">&quot;../PROCESSED_DATA/east_coast_team.csv&quot;</span><span class="hl std">)</span>
+</pre></div>
+</div></div>
+<div class="chunk" id="unnamed-chunk-8"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com">## Find our regular season team</span>
+</pre></div>
+</div></div>
+<div class="chunk" id="unnamed-chunk-9"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com"># Create another set for all noon games</span>
+<span class="hl std">noonized_games</span> <span class="hl kwb">&lt;-</span> <span class="hl std">all_games</span>
+<span class="hl std">noonized_games</span><span class="hl opt">$</span><span class="hl std">morning</span> <span class="hl kwb">&lt;-</span> <span class="hl num">0</span>
+<span class="hl std">noonized_games</span><span class="hl opt">$</span><span class="hl std">evening</span> <span class="hl kwb">&lt;-</span> <span class="hl num">0</span>
+
+<span class="hl com"># Remove the players used for east coast/west coast cups</span>
+<span class="hl std">noonized_games</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">filter</span><span class="hl std">(noonized_games,</span><span class="hl opt">!</span><span class="hl std">(`student label`</span> <span class="hl opt">%in%</span> <span class="hl std">best_morning))</span>
+<span class="hl std">noonized_games</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">filter</span><span class="hl std">(noonized_games,</span><span class="hl opt">!</span><span class="hl std">(`student label`</span> <span class="hl opt">%in%</span> <span class="hl std">best_evening))</span>
+<span class="hl std">morningized_games</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">filter</span><span class="hl std">(noonized_games,</span><span class="hl opt">!</span><span class="hl std">(`student label`</span> <span class="hl opt">%in%</span> <span class="hl std">best_morning))</span>
+<span class="hl std">morningized_games</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">filter</span><span class="hl std">(noonized_games,</span><span class="hl opt">!</span><span class="hl std">(`student label`</span> <span class="hl opt">%in%</span> <span class="hl std">best_evening))</span>
+<span class="hl std">eveningized_games</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">filter</span><span class="hl std">(noonized_games,</span><span class="hl opt">!</span><span class="hl std">(`student label`</span> <span class="hl opt">%in%</span> <span class="hl std">best_morning))</span>
+<span class="hl std">eveningized_games</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">filter</span><span class="hl std">(noonized_games,</span><span class="hl opt">!</span><span class="hl std">(`student label`</span> <span class="hl opt">%in%</span> <span class="hl std">best_evening))</span>
+
+<span class="hl com"># Again, we want to remove the effect of the training and strategy sessions.</span>
+<span class="hl com"># However, because we care about absolute scores, and not relative scores,</span>
+<span class="hl com"># we can't just assign them all to the mean. Instead, it makes more sense</span>
+<span class="hl com"># to assign them to the max: we want our players to be the best, so</span>
+<span class="hl com"># we will send them to as many training and strategy sessions as possible.</span>
+<span class="hl std">noonized_games</span><span class="hl opt">$</span><span class="hl std">`percent training sessions attended`</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">max</span><span class="hl std">(all_games</span><span class="hl opt">$</span><span class="hl std">`percent training sessions attended`)</span>
+<span class="hl std">noonized_games</span><span class="hl opt">$</span><span class="hl std">`# extra strategy sessions attended`</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">max</span><span class="hl std">(all_games</span><span class="hl opt">$</span><span class="hl std">`# extra strategy sessions attended`)</span>
+<span class="hl std">noonized_games</span><span class="hl opt">$</span><span class="hl std">`game score`</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">predict.lm</span><span class="hl std">(overallmodel, noonized_games)</span>
+<span class="hl std">noonized_games</span><span class="hl opt">$</span><span class="hl std">`game score`</span> <span class="hl kwb">&lt;-</span> <span class="hl std">noonized_games</span><span class="hl opt">$</span><span class="hl std">`game score`</span> <span class="hl opt">+</span> <span class="hl std">noonized_games</span><span class="hl opt">$</span><span class="hl std">residual</span>
+
+<span class="hl std">morningized_games</span><span class="hl opt">$</span><span class="hl std">`percent training sessions attended`</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">max</span><span class="hl std">(all_games</span><span class="hl opt">$</span><span class="hl std">`percent training sessions attended`)</span>
+<span class="hl std">morningized_games</span><span class="hl opt">$</span><span class="hl std">`# extra strategy sessions attended`</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">max</span><span class="hl std">(all_games</span><span class="hl opt">$</span><span class="hl std">`# extra strategy sessions attended`)</span>
+<span class="hl std">morningized_games</span><span class="hl opt">$</span><span class="hl std">`game score`</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">predict.lm</span><span class="hl std">(overallmodel, morningized_games)</span>
+<span class="hl std">morningized_games</span><span class="hl opt">$</span><span class="hl std">`game score`</span> <span class="hl kwb">&lt;-</span> <span class="hl std">morningized_games</span><span class="hl opt">$</span><span class="hl std">`game score`</span> <span class="hl opt">+</span> <span class="hl std">morningized_games</span><span class="hl opt">$</span><span class="hl std">residual</span>
+
+<span class="hl std">eveningized_games</span><span class="hl opt">$</span><span class="hl std">`percent training sessions attended`</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">max</span><span class="hl std">(all_games</span><span class="hl opt">$</span><span class="hl std">`percent training sessions attended`)</span>
+<span class="hl std">eveningized_games</span><span class="hl opt">$</span><span class="hl std">`# extra strategy sessions attended`</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">max</span><span class="hl std">(all_games</span><span class="hl opt">$</span><span class="hl std">`# extra strategy sessions attended`)</span>
+<span class="hl std">eveningized_games</span><span class="hl opt">$</span><span class="hl std">`game score`</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">predict.lm</span><span class="hl std">(overallmodel, eveningized_games)</span>
+<span class="hl std">eveningized_games</span><span class="hl opt">$</span><span class="hl std">`game score`</span> <span class="hl kwb">&lt;-</span> <span class="hl std">eveningized_games</span><span class="hl opt">$</span><span class="hl std">`game score`</span> <span class="hl opt">+</span> <span class="hl std">eveningized_games</span><span class="hl opt">$</span><span class="hl std">residual</span>
+
+<span class="hl std">adjusted_games</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">rbind</span><span class="hl std">(noonized_games,morningized_games,eveningized_games)</span>
+
+<span class="hl com"># Summarize the average of the three by player</span>
+<span class="hl std">all_players</span> <span class="hl kwb">&lt;-</span> <span class="hl std">adjusted_games</span> <span class="hl opt">%&gt;%</span> <span class="hl kwd">group_by</span><span class="hl std">(`student label`)</span> <span class="hl opt">%&gt;%</span> <span class="hl kwd">summarize</span><span class="hl std">(</span>
+  <span class="hl kwc">mean</span> <span class="hl std">=</span> <span class="hl kwd">mean</span><span class="hl std">(`game score`),</span>
+  <span class="hl kwc">sd</span> <span class="hl std">=</span> <span class="hl kwd">sd</span><span class="hl std">(`game score`)</span>
+<span class="hl std">)</span>
+
+<span class="hl com"># Naively select the best 10, and compare everyone to the 10th best</span>
+<span class="hl std">best_10</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">top_n</span><span class="hl std">(all_players,</span><span class="hl num">10</span><span class="hl std">,mean)</span>
+<span class="hl std">best_10</span> <span class="hl kwb">&lt;-</span> <span class="hl std">best_10[</span><span class="hl kwd">order</span><span class="hl std">(best_10</span><span class="hl opt">$</span><span class="hl std">mean,</span><span class="hl kwc">decreasing</span> <span class="hl std">=</span> <span class="hl num">TRUE</span><span class="hl std">),]</span>
+
+<span class="hl std">all_players</span> <span class="hl kwb">&lt;-</span> <span class="hl std">all_players</span> <span class="hl opt">%&gt;%</span> <span class="hl kwd">mutate</span><span class="hl std">(</span>
+  <span class="hl kwc">chance_better_than_10</span> <span class="hl std">=</span> <span class="hl kwd">pnorm</span><span class="hl std">((mean</span> <span class="hl opt">-</span> <span class="hl std">best_10</span><span class="hl opt">$</span><span class="hl std">mean[</span><span class="hl num">10</span><span class="hl std">])</span><span class="hl opt">/</span><span class="hl kwd">sqrt</span><span class="hl std">(sd</span><span class="hl opt">^</span><span class="hl num">2</span> <span class="hl opt">+</span> <span class="hl std">best_10</span><span class="hl opt">$</span><span class="hl std">sd[</span><span class="hl num">10</span><span class="hl std">]</span><span class="hl opt">^</span><span class="hl num">2</span><span class="hl std">))</span>
+<span class="hl std">)</span>
+
+<span class="hl com"># In order to have a 5% chance of being better than the tenth best</span>
+<span class="hl com"># player in 10 of the 20 games, a player needs to have: </span>
+<span class="hl com"># 20 C 10 * x^10 = 0.05</span>
+<span class="hl com"># x = 0.22</span>
+<span class="hl com"># a 22% chance of being better than the tenth best player on a</span>
+<span class="hl com"># single game.</span>
+
+<span class="hl com"># All the remaining players:</span>
+<span class="hl kwd">ggplot</span><span class="hl std">(all_players,</span> <span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span> <span class="hl std">= mean,</span> <span class="hl kwc">y</span> <span class="hl std">= sd))</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_point</span><span class="hl std">()</span> <span class="hl opt">+</span>
+  <span class="hl kwd">ggtitle</span><span class="hl std">(</span><span class="hl str">&quot;Players for general season&quot;</span><span class="hl std">)</span>  <span class="hl opt">+</span>
+  <span class="hl kwd">scale_x_continuous</span><span class="hl std">(</span><span class="hl kwc">limits</span> <span class="hl std">=</span> <span class="hl kwd">c</span><span class="hl std">(</span><span class="hl num">0</span><span class="hl std">,</span><span class="hl num">100</span><span class="hl std">))</span>
+</pre></div>
+</div><div class="rimage center"><img src="figure/analysis-Rhtmlunnamed-chunk-9-1.png" alt="plot of chunk unnamed-chunk-9" class="plot" /></div><div class="rcode">
+<div class="source"><pre class="knitr r"><span class="hl com"># Same, but only the players with a &gt;5% chance of being better </span>
+<span class="hl com"># than the 10th best player on average in over half the games</span>
+<span class="hl kwd">ggplot</span><span class="hl std">(</span><span class="hl kwd">filter</span><span class="hl std">(all_players, chance_better_than_10</span> <span class="hl opt">&gt;</span> <span class="hl num">0.22</span><span class="hl std">),</span> <span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span> <span class="hl std">= mean,</span> <span class="hl kwc">y</span> <span class="hl std">= sd))</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_point</span><span class="hl std">()</span> <span class="hl opt">+</span>
+  <span class="hl kwd">ggtitle</span><span class="hl std">(</span><span class="hl str">&quot;Top cut of players for general season&quot;</span><span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl kwd">scale_x_continuous</span><span class="hl std">(</span><span class="hl kwc">limits</span> <span class="hl std">=</span> <span class="hl kwd">c</span><span class="hl std">(</span><span class="hl num">0</span><span class="hl std">,</span><span class="hl num">100</span><span class="hl std">))</span>
+</pre></div>
+</div><div class="rimage center"><img src="figure/analysis-Rhtmlunnamed-chunk-9-2.png" alt="plot of chunk unnamed-chunk-9" class="plot" /></div><div class="rcode">
+<div class="source"><pre class="knitr r"><span class="hl com"># Splits the players by standard deviation, the organizes them</span>
+<span class="hl com"># in each SD group by mean, keeping only the 10 best means</span>
+
+<span class="hl com">## DO NOT RUN, TAKES ~13.5 HOURS</span>
+
+<span class="hl com"># bucketed_players &lt;- partition(all_players,&quot;sd&quot;,&quot;mean&quot;,2.5,10)</span>
+<span class="hl com"># </span>
+<span class="hl com"># # Test how many runs it'll take</span>
+<span class="hl com"># a &lt;- numeric(length(bucketed_players))</span>
+<span class="hl com"># a[1] &lt;- 10</span>
+<span class="hl com"># i &lt;- 0</span>
+<span class="hl com"># while(sum(a)==10){</span>
+<span class="hl com">#   a &lt;- increment_amounts(bucketed_players,a)</span>
+<span class="hl com">#   i &lt;- i + 1</span>
+<span class="hl com"># }</span>
+<span class="hl com"># print(paste(i, &quot;runs incoming&quot;))</span>
+<span class="hl com"># </span>
+<span class="hl com"># win_chances &lt;- read_csv(&quot;../PROCESSED_DATA/confidence_win_rates.csv&quot;)</span>
+<span class="hl com"># </span>
+<span class="hl com"># all_possible_teams &lt;- bucket_combo_teams(bucketed_players, 4, win_chances$chance_winning,</span>
+<span class="hl com">#                                          win_chances$score_difs, match_ups, 0, i)</span>
+
+<span class="hl com"># 13.5 hour run successfully done and saved here, please don't overwrite</span>
+<span class="hl com"># write.csv(all_possible_teams, &quot;../PROCESSED_DATA/all_possible_teams.csv&quot;)</span>
+<span class="hl std">all_possible_teams</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">read_csv</span><span class="hl std">(</span><span class="hl str">&quot;../PROCESSED_DATA/all_possible_teams.csv&quot;</span><span class="hl std">)</span>
+</pre></div>
+<div class="message"><pre class="knitr r">## New names:
+## Rows: 369512 Columns: 13
+## ── Column specification
+## ────────────────────────────────────────────────────────────────── Delimiter: &quot;,&quot; dbl
+## (13): ...1, player1, player2, player3, player4, player5, player6, player7, player8...
+## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ Specify the
+## column types or set `show_col_types = FALSE` to quiet this message.
+## • `` -&gt; `...1`
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com"># Double check these teams with higher precision to guarantee they're</span>
+<span class="hl com"># the best</span>
+
+<span class="hl com"># Takes ~13 minutes to check if you limit it to priority &lt;= 30</span>
+<span class="hl com"># because it's extremely high precision</span>
+
+<span class="hl com"># best_teams &lt;- all_possible_teams %&gt;% mutate(</span>
+<span class="hl com">#   avg_place = ntile(avg_wins,nrow(all_possible_teams)),</span>
+<span class="hl com">#   und_place = ntile(undefeated_chance,nrow(all_possible_teams)),</span>
+<span class="hl com">#   priority = nrow(all_possible_teams)</span>
+<span class="hl com"># )</span>
+<span class="hl com"># </span>
+<span class="hl com"># for(i in 1:nrow(best_teams)) {</span>
+<span class="hl com">#   best_teams[i,&quot;priority&quot;] = min(best_teams[i,&quot;und_place&quot;],</span>
+<span class="hl com">#                                  best_teams[i,&quot;avg_place&quot;])</span>
+<span class="hl com"># }</span>
+<span class="hl com"># </span>
+<span class="hl com"># best_teams &lt;- best_teams[order(best_teams$priority,</span>
+<span class="hl com">#                                decreasing = FALSE),]</span>
+<span class="hl com"># </span>
+<span class="hl com"># # You can just let this run for however long you have, it goes back</span>
+<span class="hl com"># # through the existing data and retabulates the the success measures</span>
+<span class="hl com"># # with maximum precision, in descending order- from the ones that </span>
+<span class="hl com"># # performed best on the imprecise run to the ones that performed</span>
+<span class="hl com"># # worst</span>
+<span class="hl com"># for(i in 1:nrow(best_teams)) {</span>
+<span class="hl com">#   players &lt;- filter(all_players,`student label` %in% best_teams[i,1:10])</span>
+<span class="hl com">#   team_pdf &lt;- score_pdf_from_players(players$mean,players$sd)</span>
+<span class="hl com">#   team_cdf &lt;- score_cdf_from_players(players$mean,players$sd)</span>
+<span class="hl com">#   results &lt;- success_measures(win_chances$chance_winning, win_chances$score_difs,</span>
+<span class="hl com">#                               team_pdf, team_cdf, match_ups, 2,</span>
+<span class="hl com">#                               mean(players$mean) - 8 * sqrt(sum(players$sd^2)),</span>
+<span class="hl com">#                               mean(players$mean) + 8 * sqrt(sum(players$sd^2)))</span>
+<span class="hl com">#   best_teams[i,&quot;avg_wins&quot;] &lt;- results[1]</span>
+<span class="hl com">#   best_teams[i,&quot;undefeated_chance&quot;] &lt;- results[2]</span>
+<span class="hl com">#   if(best_teams[i,&quot;priority&quot;] %% 10 == 0) {</span>
+<span class="hl com">#     print(paste(best_teams[i,&quot;priority&quot;],&quot;out of&quot;,nrow(best_on_average_teams),&quot;rows&quot;))</span>
+<span class="hl com">#   }</span>
+<span class="hl com"># }</span>
+<span class="hl com"># # Notably, the #1 spot doesn't change on this one</span>
+<span class="hl com"># best_on_average_teams &lt;- best_teams[order(best_teams$avg_wins,</span>
+<span class="hl com">#                                                      decreasing = TRUE),]</span>
+<span class="hl com"># best_on_average_teams &lt;- best_on_average_teams[1:10,]</span>
+<span class="hl com"># </span>
+<span class="hl com"># best_undefeated_teams &lt;- best_teams[order(best_teams$undefeated_chance,</span>
+<span class="hl com">#                                                      decreasing = TRUE),]</span>
+<span class="hl com"># best_undefeated_teams &lt;- best_undefeated_teams[1:10,]</span>
+<span class="hl com"># </span>
+<span class="hl com"># write.csv(best_on_average_teams, &quot;../PROCESSED_DATA/best_on_average_teams.csv&quot;)</span>
+<span class="hl com"># write.csv(best_undefeated_teams, &quot;../PROCESSED_DATA/best_undefeated_teams.csv&quot;)</span>
+
+<span class="hl std">best_on_average_teams</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">read_csv</span><span class="hl std">(</span><span class="hl str">&quot;../PROCESSED_DATA/best_on_average_teams.csv&quot;</span><span class="hl std">)</span>
+</pre></div>
+<div class="message"><pre class="knitr r">## New names:
+## Rows: 10 Columns: 13
+## ── Column specification
+## ────────────────────────────────────────────────────────────────── Delimiter: &quot;,&quot; dbl
+## (13): ...1, player1, player2, player3, player4, player5, player6, player7, player8...
+## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ Specify the
+## column types or set `show_col_types = FALSE` to quiet this message.
+## • `` -&gt; `...1`
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl std">best_undefeated_teams</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">read_csv</span><span class="hl std">(</span><span class="hl str">&quot;../PROCESSED_DATA/best_undefeated_teams.csv&quot;</span><span class="hl std">)</span>
+</pre></div>
+<div class="message"><pre class="knitr r">## New names:
+## Rows: 10 Columns: 13
+## ── Column specification
+## ────────────────────────────────────────────────────────────────── Delimiter: &quot;,&quot; dbl
+## (13): ...1, player1, player2, player3, player4, player5, player6, player7, player8...
+## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ Specify the
+## column types or set `show_col_types = FALSE` to quiet this message.
+## • `` -&gt; `...1`
+</pre></div>
+</div></div>
+
+  <p>The R session information (including the OS info, R version and all
+    packages used):</p>
+
+<div class="chunk" id="session-info"><div class="rcode"><div class="source"><pre class="knitr r">    <span class="hl kwd">sessionInfo</span><span class="hl std">()</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## R version 4.2.2 (2022-10-31)
+## Platform: aarch64-apple-darwin20 (64-bit)
+## Running under: macOS Monterey 12.6
+## 
+## Matrix products: default
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/lib/libRlapack.dylib
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+##  [1] tinytex_0.43    MASS_7.3-58.1   rstudioapi_0.14 haven_2.5.1     lubridate_1.9.2
+##  [6] forcats_1.0.0   stringr_1.5.0   dplyr_1.1.0     purrr_1.0.1     readr_2.1.4    
+## [11] tidyr_1.3.0     tibble_3.1.8    ggplot2_3.4.1   tidyverse_2.0.0
+## 
+## loaded via a namespace (and not attached):
+##  [1] highr_0.10       pillar_1.8.1     compiler_4.2.2   tools_4.2.2      bit_4.0.5       
+##  [6] evaluate_0.19    lattice_0.20-45  nlme_3.1-160     lifecycle_1.0.3  gtable_0.3.1    
+## [11] timechange_0.2.0 mgcv_1.8-41      pkgconfig_2.0.3  rlang_1.0.6      Matrix_1.5-1    
+## [16] cli_3.6.0        parallel_4.2.2   xfun_0.36        knitr_1.41       withr_2.5.0     
+## [21] generics_0.1.3   vctrs_0.5.2      hms_1.1.2        bit64_4.0.5      grid_4.2.2      
+## [26] tidyselect_1.2.0 glue_1.6.2       R6_2.5.1         fansi_1.0.3      vroom_1.6.0     
+## [31] farver_2.1.1     tzdb_0.3.0       magrittr_2.0.3   splines_4.2.2    scales_1.2.1    
+## [36] ellipsis_0.3.2   colorspace_2.0-3 labeling_0.4.2   utf8_1.2.2       stringi_1.7.12  
+## [41] munsell_0.5.0    crayon_1.5.2
+</pre></div>
+<div class="source"><pre class="knitr r">    <span class="hl kwd">Sys.time</span><span class="hl std">()</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] &quot;2023-03-20 00:07:11 PDT&quot;
+</pre></div>
+</div></div>
+
+
+</body>
+</html>

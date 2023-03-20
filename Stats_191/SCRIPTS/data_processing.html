@@ -1,0 +1,350 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+.inline {
+  background-color: #f7f7f7;
+  border:solid 1px #B0B0B0;
+}
+.error {
+	font-weight: bold;
+	color: #FF0000;
+}
+.warning {
+	font-weight: bold;
+}
+.message {
+	font-style: italic;
+}
+.source, .output, .warning, .error, .message {
+	padding: 0 1em;
+  border:solid 1px #F7F7F7;
+}
+.source {
+  background-color: #f5f5f5;
+}
+.left {
+  text-align: left;
+}
+.right {
+  text-align: right;
+}
+.center {
+  text-align: center;
+}
+.hl.num {
+  color: #AF0F91;
+}
+.hl.str {
+  color: #317ECC;
+}
+.hl.com {
+  color: #AD95AF;
+  font-style: italic;
+}
+.hl.opt {
+  color: #000000;
+}
+.hl.std {
+  color: #585858;
+}
+.hl.kwa {
+  color: #295F94;
+  font-weight: bold;
+}
+.hl.kwb {
+  color: #B05A65;
+}
+.hl.kwc {
+  color: #55aa55;
+}
+.hl.kwd {
+  color: #BC5A65;
+  font-weight: bold;
+}
+</style>
+  <script src="https://yihui.name/media/js/center-images.js"></script>
+  <title>\title{}</title>
+</head>
+<body>
+
+  <p>This report is automatically generated with the R
+    package <a href="https://yihui.name/knitr/"><strong>knitr</strong></a>
+    (version <code class="knitr inline">1.41</code>)
+    .</p>
+
+<div class="chunk" id="auto-report"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com">##### RUN THIS CODE BEFORE DOING ANYTHING ELSE #####</span>
+
+<span class="hl com"># MAKE SURE YOU HAVE ALL CSVs DOWNLOADED AND IN YOUR WORKING DIRECTORY</span>
+
+<span class="hl com"># Throughout this, there are varying difficulties of tasks marked TODO.</span>
+<span class="hl com"># They represent places where my work has been left at a place where there</span>
+<span class="hl com"># is a natural continuation of my work. Feel free to continue or start anew</span>
+<span class="hl com"># however you see fit, just the TODO activities give leads for stuck moments.</span>
+
+<span class="hl com">## Dependencies</span>
+<span class="hl kwd">library</span><span class="hl std">(tidyverse)</span>
+<span class="hl kwd">library</span><span class="hl std">(haven)</span>
+
+<span class="hl com"># Adjust wd, verify</span>
+<span class="hl std">file_path</span> <span class="hl kwb">&lt;-</span> <span class="hl std">rstudioapi</span><span class="hl opt">::</span><span class="hl kwd">getSourceEditorContext</span><span class="hl std">()</span><span class="hl opt">$</span><span class="hl std">path</span>
+<span class="hl kwd">setwd</span><span class="hl std">(</span><span class="hl kwd">dirname</span><span class="hl std">(file_path))</span>
+
+<span class="hl kwd">source</span><span class="hl std">(</span><span class="hl str">'../SCRIPTS/helper_functions.R'</span><span class="hl std">)</span> <span class="hl com"># Import helpers</span>
+
+<span class="hl com">## Open data and make their storage variables</span>
+<span class="hl std">games</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">list</span><span class="hl std">(</span><span class="hl kwd">read_csv</span><span class="hl std">(</span><span class="hl str">&quot;../RAW_DATA/game_1_data.csv&quot;</span><span class="hl std">),</span>
+              <span class="hl kwd">read_csv</span><span class="hl std">(</span><span class="hl str">&quot;../RAW_DATA/game_2_data.csv&quot;</span><span class="hl std">),</span>
+              <span class="hl kwd">read_csv</span><span class="hl std">(</span><span class="hl str">&quot;../RAW_DATA/game_3_data.csv&quot;</span><span class="hl std">),</span>
+              <span class="hl kwd">read_csv</span><span class="hl std">(</span><span class="hl str">&quot;../RAW_DATA/game_4_data.csv&quot;</span><span class="hl std">),</span>
+              <span class="hl kwd">read_csv</span><span class="hl std">(</span><span class="hl str">&quot;../RAW_DATA/game_5_data.csv&quot;</span><span class="hl std">),</span>
+              <span class="hl kwd">read_csv</span><span class="hl std">(</span><span class="hl str">&quot;../RAW_DATA/game_6_data.csv&quot;</span><span class="hl std">),</span>
+              <span class="hl kwd">read_csv</span><span class="hl std">(</span><span class="hl str">&quot;../RAW_DATA/game_7_data.csv&quot;</span><span class="hl std">),</span>
+              <span class="hl kwd">read_csv</span><span class="hl std">(</span><span class="hl str">&quot;../RAW_DATA/game_8_data.csv&quot;</span><span class="hl std">),</span>
+              <span class="hl kwd">read_csv</span><span class="hl std">(</span><span class="hl str">&quot;../RAW_DATA/game_9_data.csv&quot;</span><span class="hl std">),</span>
+              <span class="hl kwd">read_csv</span><span class="hl std">(</span><span class="hl str">&quot;../RAW_DATA/game_10_data.csv&quot;</span><span class="hl std">))</span>
+</pre></div>
+<div class="message"><pre class="knitr r">## Rows: 1000 Columns: 12
+## ── Column specification ──────────────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (5): coast, game scheduled, early bird/night owl, previous competitive sports, uni...
+## dbl (7): student label, game score, percent training sessions attended, overall fitnes...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## Rows: 1000 Columns: 12
+## ── Column specification ──────────────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (5): coast, game scheduled, early bird/night owl, previous competitive sports, uni...
+## dbl (7): student label, game score, percent training sessions attended, overall fitnes...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## Rows: 1000 Columns: 12
+## ── Column specification ──────────────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (5): coast, game scheduled, early bird/night owl, previous competitive sports, uni...
+## dbl (7): student label, game score, percent training sessions attended, overall fitnes...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## Rows: 1000 Columns: 12
+## ── Column specification ──────────────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (5): coast, game scheduled, early bird/night owl, previous competitive sports, uni...
+## dbl (7): student label, game score, percent training sessions attended, overall fitnes...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## Rows: 1000 Columns: 12
+## ── Column specification ──────────────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (5): coast, game scheduled, early bird/night owl, previous competitive sports, uni...
+## dbl (7): student label, game score, percent training sessions attended, overall fitnes...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## Rows: 1000 Columns: 12
+## ── Column specification ──────────────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (5): coast, game scheduled, early bird/night owl, previous competitive sports, uni...
+## dbl (7): student label, game score, percent training sessions attended, overall fitnes...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## Rows: 1000 Columns: 12
+## ── Column specification ──────────────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (5): coast, game scheduled, early bird/night owl, previous competitive sports, uni...
+## dbl (7): student label, game score, percent training sessions attended, overall fitnes...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## Rows: 1000 Columns: 12
+## ── Column specification ──────────────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (5): coast, game scheduled, early bird/night owl, previous competitive sports, uni...
+## dbl (7): student label, game score, percent training sessions attended, overall fitnes...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## Rows: 1000 Columns: 12
+## ── Column specification ──────────────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (5): coast, game scheduled, early bird/night owl, previous competitive sports, uni...
+## dbl (7): student label, game score, percent training sessions attended, overall fitnes...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## Rows: 1000 Columns: 12
+## ── Column specification ──────────────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (5): coast, game scheduled, early bird/night owl, previous competitive sports, uni...
+## dbl (7): student label, game score, percent training sessions attended, overall fitnes...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com"># Reads the games list into one big dataframe</span>
+<span class="hl com"># with an extra category indicating the game number</span>
+<span class="hl std">all_games</span> <span class="hl kwb">&lt;-</span> <span class="hl std">games[[</span><span class="hl num">1</span><span class="hl std">]]</span> <span class="hl opt">%&gt;%</span>
+  <span class="hl kwd">mutate</span><span class="hl std">(</span><span class="hl kwc">game</span> <span class="hl std">=</span> <span class="hl num">1</span><span class="hl std">)</span>
+<span class="hl kwa">for</span> <span class="hl std">(index</span> <span class="hl kwa">in</span> <span class="hl num">2</span><span class="hl opt">:</span><span class="hl num">10</span><span class="hl std">) {</span>
+  <span class="hl std">all_games</span> <span class="hl kwb">=</span> <span class="hl kwd">rbind</span><span class="hl std">(all_games, games[[index]]</span> <span class="hl opt">%&gt;%</span> <span class="hl kwd">mutate</span><span class="hl std">(</span><span class="hl kwc">game</span> <span class="hl std">= index))</span>
+<span class="hl std">}</span>
+
+<span class="hl com"># Converts some of the categoricals in the just-made dataframe into  </span>
+<span class="hl com"># indicator functions. The way I'm doing grades is clunky but I</span>
+<span class="hl com"># couldn't find a better way</span>
+
+
+<span class="hl com"># Identify all unique sports</span>
+<span class="hl std">previous_sports_col</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">distinct</span><span class="hl std">(</span><span class="hl kwd">select</span><span class="hl std">(all_games,</span> <span class="hl str">'previous competitive sports'</span><span class="hl std">))</span>
+</pre></div>
+<div class="error"><pre class="knitr r">## Error in select(all_games, &quot;previous competitive sports&quot;): unused argument (&quot;previous competitive sports&quot;)
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl std">unique_sports_list</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">as.list</span><span class="hl std">(previous_sports_col)[[</span><span class="hl num">1</span><span class="hl std">]]</span>
+</pre></div>
+<div class="error"><pre class="knitr r">## Error in as.list(previous_sports_col): object 'previous_sports_col' not found
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com"># Generate indicator columns</span>
+<span class="hl std">columns</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">c</span><span class="hl std">()</span>
+
+<span class="hl kwa">for</span><span class="hl std">(i</span> <span class="hl kwa">in</span> <span class="hl kwd">seq</span><span class="hl std">(</span><span class="hl kwd">length</span><span class="hl std">(unique_sports_list))){</span>
+  <span class="hl std">sport</span> <span class="hl kwb">&lt;-</span> <span class="hl std">unique_sports_list[[i]]</span>
+  <span class="hl kwd">print</span><span class="hl std">(sport)</span>
+  <span class="hl std">col</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">match_sport</span><span class="hl std">(all_games</span><span class="hl opt">$</span><span class="hl str">'previous competitive sports'</span><span class="hl std">, sport)</span>
+  <span class="hl std">columns[[i]]</span> <span class="hl kwb">&lt;-</span> <span class="hl std">col</span>
+
+<span class="hl std">}</span>
+</pre></div>
+<div class="error"><pre class="knitr r">## Error in seq(length(unique_sports_list)): object 'unique_sports_list' not found
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com"># Add all sports indicator columns</span>
+<span class="hl std">all_games</span> <span class="hl kwb">&lt;-</span> <span class="hl std">all_games</span> <span class="hl opt">%&gt;%</span>
+  <span class="hl kwd">mutate</span><span class="hl std">(</span><span class="hl kwc">curling</span> <span class="hl std">= columns[[</span><span class="hl num">1</span><span class="hl std">]],</span> <span class="hl kwc">gymnastics</span> <span class="hl std">= columns[[</span><span class="hl num">2</span><span class="hl std">]],</span> <span class="hl kwc">baseball</span> <span class="hl std">= columns[[</span><span class="hl num">3</span><span class="hl std">]],</span>
+         <span class="hl kwc">martial_arts</span> <span class="hl std">= columns[[</span><span class="hl num">4</span><span class="hl std">]],</span> <span class="hl kwc">frisbee</span> <span class="hl std">= columns[[</span><span class="hl num">5</span><span class="hl std">]],</span> <span class="hl kwc">table_tennis</span> <span class="hl std">= columns[[</span><span class="hl num">6</span><span class="hl std">]],</span>
+         <span class="hl kwc">basketball</span> <span class="hl std">= columns[[</span><span class="hl num">7</span><span class="hl std">]],</span> <span class="hl kwc">football</span> <span class="hl std">= columns[[</span><span class="hl num">8</span><span class="hl std">]])</span>
+
+
+<span class="hl std">all_games</span> <span class="hl kwb">&lt;-</span> <span class="hl std">all_games</span> <span class="hl opt">%&gt;%</span>
+  <span class="hl kwd">mutate</span><span class="hl std">(</span><span class="hl kwc">evening</span> <span class="hl std">=</span> <span class="hl kwd">as.integer</span><span class="hl std">(`game scheduled`</span> <span class="hl opt">==</span> <span class="hl str">&quot;evening&quot;</span><span class="hl std">),</span>
+         <span class="hl kwc">morning</span> <span class="hl std">=</span> <span class="hl kwd">as.integer</span><span class="hl std">(`game scheduled`</span> <span class="hl opt">==</span> <span class="hl str">&quot;morning&quot;</span><span class="hl std">),</span>
+         <span class="hl kwc">`west coast`</span> <span class="hl std">=</span> <span class="hl kwd">as.integer</span><span class="hl std">(coast</span> <span class="hl opt">==</span> <span class="hl str">&quot;west coast&quot;</span><span class="hl std">),</span>
+         <span class="hl kwc">`university year`</span> <span class="hl std">=</span> <span class="hl kwd">ifelse</span><span class="hl std">(`university year`</span><span class="hl opt">==</span><span class="hl str">&quot;frosh&quot;</span><span class="hl std">,</span><span class="hl num">1</span><span class="hl std">,</span>
+                                    <span class="hl kwd">ifelse</span><span class="hl std">(`university year`</span><span class="hl opt">==</span><span class="hl str">&quot;sophomore&quot;</span><span class="hl std">,</span><span class="hl num">2</span><span class="hl std">,</span>
+                                           <span class="hl kwd">ifelse</span><span class="hl std">(`university year`</span><span class="hl opt">==</span><span class="hl str">&quot;junior&quot;</span><span class="hl std">,</span><span class="hl num">3</span><span class="hl std">,</span>
+                                                  <span class="hl kwd">ifelse</span><span class="hl std">(`university year`</span><span class="hl opt">==</span><span class="hl str">&quot;senior&quot;</span><span class="hl std">,</span><span class="hl num">4</span><span class="hl std">,</span><span class="hl num">NA</span><span class="hl std">)))),</span>
+         <span class="hl kwc">night_owl</span> <span class="hl std">=</span> <span class="hl kwd">as.integer</span><span class="hl std">(`early bird/night owl`</span> <span class="hl opt">==</span> <span class="hl str">&quot;night owl&quot;</span><span class="hl std">))</span>
+
+<span class="hl com">#mutate(`winning team` = as_factor(`winning team`)) %&gt;% # Previously used but breaks averages</span>
+
+<span class="hl com"># NICK CODE: Write to CSV</span>
+<span class="hl kwd">write.csv</span><span class="hl std">(all_games,</span> <span class="hl str">&quot;../PROCESSED_DATA/processed_all_games.csv&quot;</span><span class="hl std">,</span> <span class="hl kwc">row.names</span> <span class="hl std">=</span> <span class="hl num">FALSE</span><span class="hl std">)</span>
+
+<span class="hl com"># Creates a dataframe that has information in one row for each player</span>
+<span class="hl com"># TODO: Fix evening score and morning score (they are currently broken)</span>
+<span class="hl com"># TODO: Add variances on each covariate? Could be good for confidence intervals</span>
+<span class="hl com"># TODO: Add indicator function for previous sports once added to all_games</span>
+<span class="hl std">player_means</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">distinct</span><span class="hl std">(all_games</span> <span class="hl opt">%&gt;%</span>
+                           <span class="hl kwd">group_by</span><span class="hl std">(`student label`)</span> <span class="hl opt">%&gt;%</span>
+                           <span class="hl kwd">summarize</span><span class="hl std">(</span><span class="hl kwc">`game score`</span> <span class="hl std">=</span> <span class="hl kwd">mean</span><span class="hl std">(`game score`),</span>
+                                     <span class="hl kwc">`evening score`</span> <span class="hl std">=</span> <span class="hl kwd">sum</span><span class="hl std">(`game score`</span> <span class="hl opt">*</span> <span class="hl std">evening)</span><span class="hl opt">/</span><span class="hl kwd">sum</span><span class="hl std">(evening),</span>
+                                     <span class="hl kwc">`morning score`</span> <span class="hl std">=</span> <span class="hl kwd">sum</span><span class="hl std">(morning</span> <span class="hl opt">*</span> <span class="hl std">`game score`)</span><span class="hl opt">/</span><span class="hl kwd">sum</span><span class="hl std">(morning),</span>
+                                     <span class="hl kwc">`percent training sessions attended`</span> <span class="hl std">=</span> <span class="hl kwd">mean</span><span class="hl std">(`percent training sessions attended`),</span>
+                                     <span class="hl kwc">`overall fitness score`</span> <span class="hl std">=</span> <span class="hl kwd">mean</span><span class="hl std">(`overall fitness score`),</span>
+                                     <span class="hl kwc">`# extra strategy sessions attended`</span> <span class="hl std">=</span> <span class="hl kwd">mean</span><span class="hl std">(`# extra strategy sessions attended`),</span>
+                                     <span class="hl kwc">`hours of sleep the night before game`</span> <span class="hl std">=</span> <span class="hl kwd">mean</span><span class="hl std">(`hours of sleep the night before game`),</span>
+                                     <span class="hl kwc">`previous competitive sports`</span> <span class="hl std">=</span> <span class="hl kwd">Mode</span><span class="hl std">(`previous competitive sports`),</span>
+                                     <span class="hl kwc">`# meals on day prior to game`</span> <span class="hl std">=</span> <span class="hl kwd">mean</span><span class="hl std">(`# meals on day prior to game`),</span>
+                                     <span class="hl kwc">`university year`</span> <span class="hl std">=</span> <span class="hl kwd">Mode</span><span class="hl std">(`university year`),</span>
+                                     <span class="hl kwc">evening</span> <span class="hl std">=</span> <span class="hl kwd">mean</span><span class="hl std">(evening),</span>
+                                     <span class="hl kwc">morning</span> <span class="hl std">=</span> <span class="hl kwd">mean</span><span class="hl std">(morning),</span>
+                                     <span class="hl kwc">night_owl</span> <span class="hl std">=</span> <span class="hl kwd">Mode</span><span class="hl std">(night_owl)))</span>
+
+<span class="hl com"># Normalized version of all_games, except for indicator function variables</span>
+<span class="hl com"># Useful for the 'how best to coach a player' portion, we can compare</span>
+<span class="hl com"># beta values directly with this.</span>
+<span class="hl std">normalized_games</span> <span class="hl kwb">&lt;-</span> <span class="hl std">all_games</span> <span class="hl opt">%&gt;%</span>
+  <span class="hl kwd">mutate</span><span class="hl std">(</span><span class="hl kwc">`percent training sessions attended`</span> <span class="hl std">=</span> <span class="hl kwd">normalize</span><span class="hl std">(`percent training sessions attended`),</span>
+         <span class="hl kwc">`overall fitness score`</span> <span class="hl std">=</span> <span class="hl kwd">normalize</span><span class="hl std">(`overall fitness score`),</span>
+         <span class="hl kwc">`# extra strategy sessions attended`</span> <span class="hl std">=</span> <span class="hl kwd">normalize</span><span class="hl std">(`# extra strategy sessions attended`),</span>
+         <span class="hl kwc">`hours of sleep the night before game`</span> <span class="hl std">=</span> <span class="hl kwd">normalize</span><span class="hl std">(`hours of sleep the night before game`),</span>
+         <span class="hl kwc">`# meals on day prior to game`</span> <span class="hl std">=</span> <span class="hl kwd">normalize</span><span class="hl std">(`# meals on day prior to game`),</span>
+         <span class="hl kwc">`university year`</span> <span class="hl std">=</span> <span class="hl kwd">normalize</span><span class="hl std">(`university year`))</span>
+
+<span class="hl std">match_ups</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">read_csv</span><span class="hl std">(</span><span class="hl str">&quot;../RAW_DATA/season_match_up.csv&quot;</span><span class="hl std">)</span>
+</pre></div>
+<div class="message"><pre class="knitr r">## Rows: 1 Columns: 21
+## ── Column specification ──────────────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr  (1): team label
+## dbl (20): 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl std">previous_results</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">read_csv</span><span class="hl std">(</span><span class="hl str">&quot;../RAW_DATA/previous_season_results.csv&quot;</span><span class="hl std">)</span>
+</pre></div>
+<div class="message"><pre class="knitr r">## Rows: 200 Columns: 4
+## ── Column specification ──────────────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## dbl (4): game label, team 1 score, team 2 score, winning team
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl kwd">write.csv</span><span class="hl std">(all_games,</span> <span class="hl str">&quot;../PROCESSED_DATA/processed_normalized_all_games.csv&quot;</span><span class="hl std">,</span> <span class="hl kwc">row.names</span> <span class="hl std">=</span> <span class="hl num">FALSE</span><span class="hl std">)</span>
+
+<span class="hl com"># Add a score difference variable</span>
+<span class="hl std">previous_results</span> <span class="hl kwb">&lt;-</span> <span class="hl std">previous_results</span> <span class="hl opt">%&gt;%</span>
+  <span class="hl kwd">mutate</span><span class="hl std">(</span><span class="hl kwc">score_dif</span> <span class="hl std">= `team 1 score`</span> <span class="hl opt">-</span> <span class="hl std">`team 2 score`)</span>
+
+<span class="hl kwd">write.csv</span><span class="hl std">(previous_results,</span> <span class="hl str">&quot;../PROCESSED_DATA/processed_previous_results.csv&quot;</span><span class="hl std">,</span> <span class="hl kwc">row.names</span> <span class="hl std">=</span> <span class="hl num">FALSE</span><span class="hl std">)</span>
+</pre></div>
+</div></div>
+
+  <p>The R session information (including the OS info, R version and all
+    packages used):</p>
+
+<div class="chunk" id="session-info"><div class="rcode"><div class="source"><pre class="knitr r">    <span class="hl kwd">sessionInfo</span><span class="hl std">()</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## R version 4.2.2 (2022-10-31)
+## Platform: aarch64-apple-darwin20 (64-bit)
+## Running under: macOS Monterey 12.6
+## 
+## Matrix products: default
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/lib/libRlapack.dylib
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+##  [1] tinytex_0.43    MASS_7.3-58.1   rstudioapi_0.14 haven_2.5.1     lubridate_1.9.2
+##  [6] forcats_1.0.0   stringr_1.5.0   dplyr_1.1.0     purrr_1.0.1     readr_2.1.4    
+## [11] tidyr_1.3.0     tibble_3.1.8    ggplot2_3.4.1   tidyverse_2.0.0
+## 
+## loaded via a namespace (and not attached):
+##  [1] highr_0.10       pillar_1.8.1     compiler_4.2.2   tools_4.2.2      bit_4.0.5       
+##  [6] evaluate_0.19    lattice_0.20-45  nlme_3.1-160     lifecycle_1.0.3  gtable_0.3.1    
+## [11] timechange_0.2.0 mgcv_1.8-41      pkgconfig_2.0.3  rlang_1.0.6      Matrix_1.5-1    
+## [16] cli_3.6.0        parallel_4.2.2   xfun_0.36        knitr_1.41       withr_2.5.0     
+## [21] generics_0.1.3   vctrs_0.5.2      hms_1.1.2        bit64_4.0.5      grid_4.2.2      
+## [26] tidyselect_1.2.0 glue_1.6.2       R6_2.5.1         fansi_1.0.3      vroom_1.6.0     
+## [31] farver_2.1.1     tzdb_0.3.0       magrittr_2.0.3   splines_4.2.2    scales_1.2.1    
+## [36] ellipsis_0.3.2   colorspace_2.0-3 labeling_0.4.2   utf8_1.2.2       stringi_1.7.12  
+## [41] munsell_0.5.0    crayon_1.5.2
+</pre></div>
+<div class="source"><pre class="knitr r">    <span class="hl kwd">Sys.time</span><span class="hl std">()</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] &quot;2023-03-20 00:09:42 PDT&quot;
+</pre></div>
+</div></div>
+
+
+</body>
+</html>
